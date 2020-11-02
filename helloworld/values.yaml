@@ -48,7 +48,7 @@ ingress:
   hosts:
     - host: api-temp3.dev.greenlight.coop
       paths:
-        - hello
+        - /hello
   tls:
    - secretName: letsencrypt-production
      hosts:
