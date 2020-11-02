@@ -1,0 +1,6 @@
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/greenlight-coop/argocd-apps.git
+    targetRevision: HEAD
