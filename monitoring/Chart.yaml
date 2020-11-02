@@ -29,6 +29,6 @@ dependencies:
 - name: grafana
   version: 3.4.7
   repository: https://charts.bitnami.com/bitnami
-- name: prometheus
+- name: kube-prometheus
   version: 2.2.2
   repository: https://charts.bitnami.com/bitnami
