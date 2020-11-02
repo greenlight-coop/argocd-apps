@@ -15,7 +15,7 @@ grafana:
     type: LoadBalancer
   datasources:
     datasources.yaml:
-      apiVersion: 1
+      apiVersion: v2
       datasources:
       - name: Loki
         type: loki
