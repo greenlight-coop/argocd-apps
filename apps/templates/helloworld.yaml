@@ -14,8 +14,10 @@ spec:
     path: helloworld
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    # helm:
-    #   parameters:
+    helm:
+      parameters:
+        - name: replica-count
+          value: 2
       # - name: "ingress.hosts"
       #   value: "{host=api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop}"
       # - name: "ingress.annotations.cert-manager\.io/cluster-issuer"
