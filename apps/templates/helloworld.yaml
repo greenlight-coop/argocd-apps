@@ -16,11 +16,11 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       parameters:
-      - name: "global.ingress.hosts[0].host"
+      - name: "ingress.hosts[0].host"
         value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
-      - name: "global.ingress.annotations.cert-manager.io/cluster-issuer"
+      - name: "ingress.annotations.cert-manager.io/cluster-issuer"
         value: {{ .Values.global.tlsCertIssuer }}
-      - name: "global.ingress.tls[0].hosts[0]"
+      - name: "ingress.tls[0].hosts[0]"
         value: {{ .Values.global.tlsSecretName }}
   syncPolicy:
     automated:
