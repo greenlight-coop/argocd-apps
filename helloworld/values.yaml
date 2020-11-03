@@ -47,7 +47,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: api-temp3.dev.greenlight.coop
+    - host: api.dev.greenlight.coop
       paths:
         - /hello
   tls:
