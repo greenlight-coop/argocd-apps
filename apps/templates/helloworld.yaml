@@ -18,8 +18,8 @@ spec:
       parameters:
       - name: "ingress.hosts[0].host"
         value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
-      - name: "ingress.annotations.cert-manager.io/cluster-issuer"
-        value: {{ .Values.global.tlsCertIssuer }}
+      # - name: "ingress.annotations.cert-manager.io/cluster-issuer"
+      #   value: {{ .Values.global.tlsCertIssuer }}
       - name: "ingress.tls[0].hosts[0]"
         value: {{ .Values.global.tlsSecretName }}
   syncPolicy:
