@@ -22,6 +22,9 @@ version: 0.1.1
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 0.1.0
 
+# Get grafana admin password:
+#   kubectl get secret --namespace monitoring monitoring-grafana-admin -o jsonpath="{.data.GF_SECURITY_ADMIN_PASSWORD}" | base64 --decode ; echo
+
 dependencies:
 - name: loki
   version: 2.0.0
