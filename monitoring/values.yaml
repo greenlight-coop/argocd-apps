@@ -10,8 +10,6 @@ grafana:
   - secretName: letsencrypt-production
     hosts:
       - grafana-temp3.dev.greenlight.coop  
-  service:
-    type: ClusterIP
   datasources:
     datasources.yaml:
       apiVersion: v2
