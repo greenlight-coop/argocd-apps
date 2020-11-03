@@ -10,6 +10,8 @@ grafana:
   - secretName: letsencrypt-production
     hosts:
       - grafana-temp3.dev.greenlight.coop  
+  service:
+    type: LoadBalancer
   datasources:
     datasources.yaml:
       apiVersion: v2
