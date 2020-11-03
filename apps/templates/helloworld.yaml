@@ -14,9 +14,9 @@ spec:
     path: helloworld
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
-    # helm:
-    #   parameters:
-    #   - name: "global.workspaceSuffix"
-    #     value: {{ .Values.spec.source.helm.global.workspaceSuffix }}
-    #   - name: "ingress.tls[0].secretName"
-    #     value: ${tls_secret_name}
+    helm:
+      parameters:
+      - name: "global.ingress.hosts[0].host"
+        value: api{{ .Values.spec.source.helm.global.workspaceSuffix }}.dev.greenlight.coop
+      - name: "global.ingress.tls[0].hosts[0]"
+        value: {{ .Values.spec.source.helm.global.tlsSecretName }}
