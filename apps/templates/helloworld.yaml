@@ -17,6 +17,6 @@ spec:
     helm:
       parameters:
       - name: "global.ingress.hosts[0].host"
-        value: api{{ .Values.spec.source.helm.global.workspaceSuffix }}.dev.greenlight.coop
+        value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
       - name: "global.ingress.tls[0].hosts[0]"
-        value: {{ .Values.spec.source.helm.global.tlsSecretName }}
+        value: {{ .Values.global.tlsSecretName }}
