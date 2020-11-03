@@ -53,7 +53,7 @@ ingress:
   tls:
    - secretName: letsencrypt-production
      hosts:
-       - api-temp3.dev.greenlight.coop
+       - api.dev.greenlight.coop
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
