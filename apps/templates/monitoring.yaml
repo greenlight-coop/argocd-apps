@@ -14,6 +14,18 @@ spec:
     path: monitoring
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      parameters:
+        - name: "admin.password"
+          value: {{ .Values.global.adminPassword }}
+        - name: "ingress.annotations.cert-manager\\.io/cluster-issuer"
+          value: {{ .Values.global.tlsCertIssuer }}
+        - name: "ingress.hosts[0].name"
+          value: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+        - name: "ingress.hosts[0].tls"
+          value: true
+        - name: "ingress.hosts[0].tlsSecret"
+          value: {{ .Values.global.tlsSecretName }}
   syncPolicy:
     automated:
       prune: true
