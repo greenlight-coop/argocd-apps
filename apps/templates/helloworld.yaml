@@ -4,7 +4,7 @@ metadata:
   name: helloworld
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: staging
@@ -16,6 +16,8 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       parameters:
+        - name: "ingress.annotations\.cert-manager\.io/cluster-issuer"
+          value: {{ .Values.global.tlsCertIssuer }}
         - name: "ingress.hosts[0].host"
           value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
         - name: "ingress.hosts[0].paths[0]"
@@ -29,8 +31,8 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-    - Validate=false
-    - CreateNamespace=true
+      - Validate=false
+      - CreateNamespace=true
     retry:
       limit: 5
       backoff:
