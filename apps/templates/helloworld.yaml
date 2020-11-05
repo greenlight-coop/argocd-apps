@@ -18,8 +18,8 @@ spec:
       parameters:
         - name: replicaCount
           value: 2
-        - name: ingress
-          value: hosts[0].host=api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+        # - name: ingress
+        #   value: hosts[0].host=api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
       # - name: "ingress.annotations.cert-manager\.io/cluster-issuer"
       #   value: {{ .Values.global.tlsCertIssuer }}
       # - name: "ingress.tls[0].hosts[0]"
