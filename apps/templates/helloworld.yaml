@@ -20,6 +20,8 @@ spec:
           value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
         - name: "ingress.hosts[0].paths[0]"
           value: /hello
+        - name: "ingress.tls[0].secretName"
+          value: {{ .Values.global.tlsSecretName }}
         - name: "ingress.tls[0].hosts[0]"
           value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
   syncPolicy:
