@@ -50,10 +50,10 @@ ingress:
     - host: api.dev.greenlight.coop
       paths:
         - /hello
-  tls:
-   - secretName: letsencrypt-production
-     hosts:
-       - api.dev.greenlight.coop
+  # tls:
+  #  - secretName: letsencrypt-production
+  #    hosts:
+  #      - api.dev.greenlight.coop
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
