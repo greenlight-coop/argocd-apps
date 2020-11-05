@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helloworld
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: staging
+    server: {{ .Values.spec.destination.server }}
+  project: greenlight-project
+  source:
+    path: helloworld
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      parameters:
+        - name: replicaCount
+          value: 2
+        - name: ingress
+          value: hosts[0].host=api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+      # - name: "ingress.annotations.cert-manager\.io/cluster-issuer"
+      #   value: {{ .Values.global.tlsCertIssuer }}
+      # - name: "ingress.tls[0].hosts[0]"
+      #   value: {{ .Values.global.tlsSecretName }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - Validate=false
+    - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
