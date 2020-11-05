@@ -16,8 +16,8 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       parameters:
-        - name: "ingress.annotations\.cert-manager\.io/cluster-issuer"
-          value: {{ .Values.global.tlsCertIssuer }}
+        # - name: "ingress.annotations\.cert-manager\.io/cluster-issuer"
+        #   value: {{ .Values.global.tlsCertIssuer }}
         - name: "ingress.hosts[0].host"
           value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
         - name: "ingress.hosts[0].paths[0]"
