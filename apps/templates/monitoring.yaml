@@ -14,10 +14,10 @@ spec:
     path: monitoring
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    # helm:
-    #   parameters:
-    #     - name: "grafana.ingress.annotations.cert-manager\\.io/cluster-issuer"
-    #       value: {{ .Values.global.tlsCertIssuer }}
+    helm:
+      parameters:
+        - name: "grafana.ingress.annotations.cert-manager\\.io/cluster-issuer"
+          value: {{ .Values.global.tlsCertIssuer }}
     #     - name: "grafana.ingress.hosts[0].name"
     #       value: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
     #     - name: "grafana.ingress.hosts[0].tls"
