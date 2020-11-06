@@ -14,17 +14,17 @@ spec:
     path: monitoring
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    # helm:
-    #   values: |
-        # grafana:
-        #   ingress:
-        #     enabled: true
-        #     annotations:
-        #       cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
-        #     hosts:
-        #       - name: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
-        #         tls: true
-        #         tlsSecret: {{ .Values.global.tlsSecretName }}
+    helm:
+      values: |
+        grafana:
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+            hosts:
+              - name: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+                tls: true
+                tlsSecret: {{ .Values.global.tlsSecretName }}
   syncPolicy:
     automated:
       prune: true
