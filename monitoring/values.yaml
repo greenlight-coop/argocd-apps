@@ -1,7 +1,15 @@
-loki-stack:
-  fluent-bit:
+grafana:
+  admin:
+    existingSecret: admin-password-secret
+    existingSecretPasswordKey: password
+  ingress:
     enabled: true
-  grafana:
-    enabled: true
-  prometheus:
-    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx 
+      cert-manager.io/cluster-issuer: letsencrypt-production
+    hosts:
+      - name: grafana.dev.greenlight.coop
+        tls: true
+        tlsSecret: letsencrypt-production
+  datasources:
+    secretName: grafana-datasources
