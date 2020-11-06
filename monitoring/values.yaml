@@ -1,4 +1,7 @@
 grafana:
+  admin:
+    existingSecret: admin-password-secret
+    existingSecretPasswordKey: password
   ingress:
     enabled: true
     annotations:
