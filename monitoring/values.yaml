@@ -13,3 +13,4 @@ grafana:
         tlsSecret: letsencrypt-production
   datasources:
     secretName: grafana-datasources
+  replicaCount: 2
