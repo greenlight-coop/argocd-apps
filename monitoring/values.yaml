@@ -1,15 +1,13 @@
-grafana:
-  admin:
-    existingSecret: admin-password-secret
-    existingSecretPasswordKey: password
-  ingress:
+loki-stack:
+  fluent-bit:
     enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx 
-      cert-manager.io/cluster-issuer: letsencrypt-production
-    hosts:
-      - name: grafana-feat-3.dev.greenlight.coop
-        tls: true
-        tlsSecret: letsencrypt-production
-  datasources:
-    secretName: grafana-datasources
+  grafana:
+    enabled: true
+  prometheus:
+    enabled: true
+    alertmanager:
+      persistentVolume:
+        enabled=false
+    server:
+      persistentVolume:
+        enabled=false
