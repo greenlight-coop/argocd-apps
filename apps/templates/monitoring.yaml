@@ -18,12 +18,12 @@ spec:
       parameters:
         - name: "grafana.ingress.annotations.cert-manager\\.io/cluster-issuer"
           value: {{ .Values.global.tlsCertIssuer }}
-    #     - name: "grafana.ingress.hosts[0].name"
-    #       value: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
-    #     - name: "grafana.ingress.hosts[0].tls"
-    #       value: true
-    #     - name: "grafana.ingress.hosts[0].tlsSecret"
-    #       value: {{ .Values.global.tlsSecretName }}
+        - name: "grafana.ingress.hosts[0].name"
+          value: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+        - name: "grafana.ingress.hosts[0].tls"
+          value: true
+        - name: "grafana.ingress.hosts[0].tlsSecret"
+          value: {{ .Values.global.tlsSecretName }}
   syncPolicy:
     automated:
       prune: true
