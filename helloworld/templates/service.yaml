@@ -11,7 +11,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: autoscale-go
+  name: helloworld
   namespace: default
 spec:
   template:
