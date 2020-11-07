@@ -21,4 +21,4 @@ spec:
         autoscaling.knative.dev/target: "10"
     spec:
       containers:
-      - image: gcr.io/knative-samples/autoscale-go:0.1
+      - image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
