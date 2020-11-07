@@ -22,7 +22,7 @@ spec:
             annotations:
               cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
             hosts:
-              - name: grafana{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+              - name: grafana.{{ .Values.global.appsDomainName }}
                 tls: true
                 tlsSecret: {{ .Values.global.tlsSecretName }}
   syncPolicy:

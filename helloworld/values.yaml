@@ -47,13 +47,13 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-production
     nginx.ingress.kubernetes.io/rewrite-target: /
   hosts:
-    - host: api.dev.greenlight.coop
+    - host: api.greenlightcoop.dev
       paths:
         - /hello
   tls:
    - secretName: letsencrypt-production
      hosts:
-       - api.dev.greenlight.coop
+       - api.greenlightcoop.dev
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

@@ -19,13 +19,13 @@ spec:
         - name: "ingress.annotations.cert-manager\\.io/cluster-issuer"
           value: {{ .Values.global.tlsCertIssuer }}
         - name: "ingress.hosts[0].host"
-          value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+          value: {{ .Values.global.apiDomainName }}
         - name: "ingress.hosts[0].paths[0]"
           value: /hello
         - name: "ingress.tls[0].secretName"
           value: {{ .Values.global.tlsSecretName }}
         - name: "ingress.tls[0].hosts[0]"
-          value: api{{ .Values.global.workspaceSuffix }}.dev.greenlight.coop
+          value: {{ .Values.global.apiDomainName }}
   syncPolicy:
     automated:
       prune: true
