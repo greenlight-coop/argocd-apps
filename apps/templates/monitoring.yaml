@@ -4,13 +4,42 @@ metadata:
   name: monitoring
   namespace: argocd
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: monitoring
+    namespace: default
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
     path: monitoring
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      values: |
+        grafana:
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+            hosts:
+              - name: grafana.{{ .Values.global.appsDomainName }}
+                tls: true
+                tlsSecret: {{ .Values.global.tlsSecretName }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - Validate=false
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
