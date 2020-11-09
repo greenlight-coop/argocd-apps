@@ -14,6 +14,20 @@ spec:
     path: continuous-integration/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      parameters:
+      - name: "global.apiDomainName"
+        value: ${api_domain_name}
+      - name: "global.appsDomainName"
+        value: ${apps_domain_name}
+      - name: "global.knativeDomainName"
+        value: ${knative_domain_name}
+      - name: "global.tlsCertIssuer"
+        value: ${tls_cert_issuer}
+      - name: "global.tlsSecretName"
+        value: ${tls_secret_name}
+      - name: "global.targetRevision"
+        value: ${target_revision}
   syncPolicy:
     automated:
       prune: true
