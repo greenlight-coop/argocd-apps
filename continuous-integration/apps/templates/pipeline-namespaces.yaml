@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: staging
+  name: greenlight-pipelines
   annotations:
     argocd.argoproj.io/sync-wave: "-1"
     
