@@ -5,3 +5,4 @@ resources:
   - aes-crds.yaml
   - aes.yaml
   - certificate-configuration.yaml
+  - ambassador-tls-ambassador-service.yml
