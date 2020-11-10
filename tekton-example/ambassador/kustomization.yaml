@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - aes-crds.yaml
   - aes.yaml
+  - certificate-configuration.yaml
