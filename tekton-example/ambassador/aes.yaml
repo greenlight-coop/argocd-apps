@@ -247,8 +247,20 @@ metadata:
   labels:
     product: aes
     app.kubernetes.io/component: ambassador-service
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind: Module
+      name: tls
+      config:
+        server:
+          enabled: True
+          redirect_cleartext_from: 80
+          secret: ambassador-certs
 spec:
   type: LoadBalancer
+  externalTrafficPolicy: Local
   ports:
   - name: http
     port: 80
