@@ -472,7 +472,6 @@ metadata:
     version: "v0.17.3"
 spec:
   group: tekton.dev
-  preserveUnknownFields: false
   versions:
     - &version
       name: v1alpha1
