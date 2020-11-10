@@ -10,7 +10,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: tekton-pipelines
+    namespace: greenlight-pipelines
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
