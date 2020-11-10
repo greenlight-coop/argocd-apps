@@ -13,7 +13,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: continuous-integration/tekton-pipelines
+    path: continuous-integration/tekton-triggers
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
