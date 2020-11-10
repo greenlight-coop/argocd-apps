@@ -8,5 +8,4 @@ commonLabels:
 
 resources:
   - resources/pipeline-admin-role.yaml
-  - resources/secrets/tekton_basic_auth_docker.yaml
-  - resources/secrets/tekton_basic_auth_git.yaml
+  - resources/secrets.yaml
