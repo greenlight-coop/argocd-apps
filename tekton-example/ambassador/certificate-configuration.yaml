@@ -29,7 +29,7 @@ spec:
     name: letsencrypt-ambassador-prod
     kind: ClusterIssuer
   dnsNames:
-  - ambassador.api-feature-10.greenlightcoop.dev.
+  - ambassador.api-feature-10.greenlightcoop.dev
 
 ---
 apiVersion: getambassador.io/v2
