@@ -13,7 +13,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: tekton-example/tekton-pipeline-example-pipeline
+    path: tekton-pipeline
     repoURL: https://github.com/greenlight-coop/tekton-pipeline-example-app.git
     targetRevision: HEAD
   syncPolicy:
