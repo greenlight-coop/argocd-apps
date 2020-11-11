@@ -9,7 +9,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: tekton-argocd-example-resources
+    namespace: tekton-argocd-example
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
