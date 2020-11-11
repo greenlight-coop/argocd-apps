@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tekton-argocd-example
+  name: tekton-argocd-example-resources
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -9,7 +9,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: tekton-argocd-example
+    namespace: tekton-argocd-example-resources
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
