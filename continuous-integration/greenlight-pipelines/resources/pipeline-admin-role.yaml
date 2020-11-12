@@ -13,9 +13,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: pipeline-role
 rules:
-- apiGroups: ["extensions", "apps", ""]
-  resources: ["services", "deployments", "pods"]
-  verbs: ["get", "create", "update", "patch", "list", "delete"]
+  - apiGroups: ["extensions", "apps", ""]
+    resources: ["services", "deployments", "pods"]
+    verbs: ["get", "create", "update", "patch", "list", "delete"]
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -27,6 +27,6 @@ roleRef:
   kind: Role
   name: pipeline-role
 subjects:
-- kind: ServiceAccount
-  name: pipeline-sa
-  namespace: greenlight-pipelines
+  - kind: ServiceAccount
+    name: pipeline-sa
+    namespace: greenlight-pipelines

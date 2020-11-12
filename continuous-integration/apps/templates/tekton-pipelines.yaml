@@ -4,7 +4,7 @@ metadata:
   name: tekton-pipelines
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "-10"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -21,7 +21,6 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - Validate=false
       - CreateNamespace=true
     retry:
       limit: 5
@@ -29,8 +28,3 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-  ignoreDifferences:
-  - group: apps
-    kind: Deployment
-    jsonPointers:
-    - /spec/replicas

@@ -7,4 +7,5 @@ commonLabels:
   deploy: argocd
 
 resources:
-  - resources/pipeline-admin-role.yaml
+- resources/pipeline-admin-role.yaml
+- resources/triggers-admin-role.yaml

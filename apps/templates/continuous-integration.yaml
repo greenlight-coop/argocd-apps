@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: continuous-integration
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -32,17 +34,9 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - Validate=false
-      - CreateNamespace=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
         maxDuration: 3m
-  ignoreDifferences:
-  - group: apps
-    kind: Deployment
-    jsonPointers:
-    - /spec/replicas

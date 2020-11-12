@@ -6,30 +6,30 @@ metadata:
 spec:
   resources:
     inputs:
-      - name: git-app-repo
-        type: git
+    - name: git-app-repo
+      type: git
     outputs:
-      - name: image-registry
-        type: image
+    - name: image-registry
+      type: image
   params:
-    - name: pathToDockerFile
-      description: Path to Dockerfile
-      default: Dockerfile
-    - name: pathToContext
-      description: The build context used by Kaniko
-      default: /workspace/git-app-repo
+  - name: pathToDockerFile
+    description: Path to Dockerfile
+    default: Dockerfile
+  - name: pathToContext
+    description: The build context used by Kaniko
+    default: /workspace/git-app-repo
 
   # Get our Docker image details from the build-task-configmap configmap
   stepTemplate:
     envFrom:
-      - configMapRef:
-          name: build-task-configmap
+    - configMapRef:
+        name: build-task-configmap
   steps:
     - name: build-and-push
       image: gcr.io/kaniko-project/executor:v0.10.0
       env:
-        - name: "DOCKER_CONFIG"
-          value: "/builder/home/.docker/"
+      - name: "DOCKER_CONFIG"
+        value: "/builder/home/.docker/"
       command:
         - /kaniko/executor
       args:
