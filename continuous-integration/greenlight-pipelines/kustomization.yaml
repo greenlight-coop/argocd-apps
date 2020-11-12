@@ -8,4 +8,3 @@ commonLabels:
 
 resources:
   - resources/pipeline-admin-role.yaml
-  - resources/secrets.yaml
