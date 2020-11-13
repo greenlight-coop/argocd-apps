@@ -8,7 +8,7 @@ spec:
     name: create-webhook
   params:
   - name: GitHubOrg
-    value: "greenlightcoop"
+    value: "greenlight-coop"
   - name: GitHubUser
     value: "greenlight-coop-bot"
   - name: GitHubRepo
