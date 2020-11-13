@@ -13,6 +13,16 @@ spec:
 
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: echo-hello-world-trigger-binding
+spec:
+  params:
+    - name: git-repo-url
+      value: ${body.repository.url}
+
+---
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
   name: echo-hello-world-event-listener
@@ -22,7 +32,8 @@ spec:
     - name: echo-hello-world-trigger
       template:
         ref: echo-hello-world-trigger-template
-
+      bindings:
+        ref: echo-hello-world-trigger-binding
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
