@@ -11,6 +11,6 @@ resources:
   - rbac/webhook-role.yaml
   - create-ingress.yaml
   - create-webhook.yaml
-  - nginx-webook.yaml
+  - nginx-ingress.yaml
   - pipeline.yaml
   - triggers.yaml
