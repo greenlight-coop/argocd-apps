@@ -30,6 +30,10 @@ spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
     - name: echo-hello-world-trigger
+      interceptors:
+      - github:
+          eventTypes:
+            - pull_request
       template:
         ref: echo-hello-world-trigger-template
       bindings:
