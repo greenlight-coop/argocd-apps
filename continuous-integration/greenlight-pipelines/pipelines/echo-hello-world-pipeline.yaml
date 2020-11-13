@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: tekton-argocd-example-build-deploy-pipeline
+  name: echo-hello-world-pipeline
 spec:
   tasks:
     - name: echo-hello-world
