@@ -35,10 +35,10 @@ spec:
           eventTypes:
             - pull_request
       template:
-        name: echo-hello-world-trigger-template
+        ref: echo-hello-world-trigger-template
       bindings:
-        ref: echo-hello-world-trigger-binding
-
+        - ref: echo-hello-world-trigger-binding
+        
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
