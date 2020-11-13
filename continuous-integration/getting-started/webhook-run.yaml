@@ -8,11 +8,11 @@ spec:
     name: create-webhook
   params:
   - name: GitHubOrg
-    value: "iancoffey"
+    value: "greenlightcoop"
   - name: GitHubUser
-    value: "iancoffey"
+    value: "greenlight-coop-bot"
   - name: GitHubRepo
-    value: "ulmaceae"
+    value: "helloworld"
   - name: GitHubSecretName
     value: webhook-secret
   - name: GitHubAccessTokenKey
@@ -20,6 +20,6 @@ spec:
   - name: GitHubSecretStringKey
     value: secret
   - name: ExternalDomain
-    value: demo.iancoffey.com
+    value: api-feature-10.greenlightcoop.dev
   timeout: 1000s
   serviceAccountName: tekton-triggers-createwebhook

@@ -9,8 +9,9 @@ commonLabels:
 resources:
   - rbac/admin-role.yaml
   - rbac/webhook-role.yaml
-  - create-ingress.yaml
   - create-webhook.yaml
   - nginx-ingress.yaml
   - pipeline.yaml
   - triggers.yaml
+  - webhook-run.yaml
+  - webhook-secret.yaml
