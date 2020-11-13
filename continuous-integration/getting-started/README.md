@@ -45,9 +45,9 @@ your cluster, you will need this for your Webhook in later steps.
 you will need to export it, and reimport it to the _getting-started_ namespace.
 The following is a general example of what you'd need to do.
   - ```bash
-	kubectl get secret <name> --namespace=<namespace> -o yaml |\
+	kubectl get secret letsencrypt-production --namespace=default -o yaml |\
 	   grep -v '^\s*namespace:\s' |\
-	   kubectl apply --namespace=<new namespace> -f -
+	   kubectl apply --namespace=getting-started -f -
 	```
 - [Create the create-webhook user, role and rolebinding](./rbac/webhook-role.yaml)
   - `kubectl apply -f ./docs/getting-started/rbac/webhook-role.yaml`
@@ -71,7 +71,15 @@ Our Pipeline will do a few things.
 
 If your cluster doesn't have access to your docker registry you may
 need to add the secret to your Kubernetes cluster and `pipeline.yaml`.
-For that please follow the instructions [here](https://github.com/tektoncd/pipeline/blob/master/docs/tutorial.md#configuring-task-execution-credentials) and also add
+For that please follow the instructions [here](https://github.com/tektoncd/pipeline/blob/master/docs/tutorial.md#configuring-task-execution-credentials) 
+
+  kubectl create secret docker-registry regcred \
+                    --docker-server=docker.io \
+                    --docker-username=greenlightcoopbot \
+                    --docker-password=<your-pword> \
+                    --docker-email=bot@greenlight.coop
+
+and also add
 ```
   env:
     - name: "DOCKER_CONFIG"

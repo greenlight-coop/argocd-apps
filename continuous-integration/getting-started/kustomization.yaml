@@ -8,3 +8,6 @@ commonLabels:
 
 resources:
   - rbac/admin-role.yaml
+  - rbac/webhook-role.yaml
+  - pipeline.yaml
+  - triggers.yaml
