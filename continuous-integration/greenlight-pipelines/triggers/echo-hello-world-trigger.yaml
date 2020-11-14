@@ -5,6 +5,7 @@ metadata:
 spec:
   params:
     - name: git-repo-url
+      default: a-repo
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -35,8 +36,8 @@ spec:
     - name: echo-hello-world-trigger
       template:
         ref: echo-hello-world-trigger-template
-      bindings:
-        - ref: echo-hello-world-trigger-binding
+      # bindings:
+      #   - ref: echo-hello-world-trigger-binding
         
 ---
 apiVersion: extensions/v1beta1
