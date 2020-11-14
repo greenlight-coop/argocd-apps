@@ -4,6 +4,6 @@ metadata:
   name: echo-hello-world-pipeline
 spec:
   tasks:
-    - name: echo-hello-world
+    - name: echo-hello-world-step
       taskRef:
-        name: echo-hello-world
+        name: echo-hello-world-task

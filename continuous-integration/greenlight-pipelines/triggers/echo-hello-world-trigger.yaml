@@ -19,8 +19,8 @@ metadata:
 spec:
   params:
     - name: git-repo-url
-      value: $(body.repository.url)
-      # value: hardcoded-value
+      # value: $(body.repository.url)
+      value: hardcoded-value
 
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
