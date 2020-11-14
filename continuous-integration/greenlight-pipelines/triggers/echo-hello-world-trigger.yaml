@@ -1,43 +1,43 @@
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: TriggerTemplate
-metadata:
-  name: echo-hello-world-trigger-template
-spec:
-  params:
-    - name: git-repo-url
-      default: a-repo
-  resourcetemplates:
-    - apiVersion: tekton.dev/v1beta1
-      kind: PipelineRun
-      metadata:
-        generateName: echo-hello-world-pipeline-run-
-      spec:
-        pipelineRef: echo-hello-world-pipeline
+# apiVersion: triggers.tekton.dev/v1alpha1
+# kind: TriggerTemplate
+# metadata:
+#   name: echo-hello-world-trigger-template
+# spec:
+#   params:
+#     - name: git-repo-url
+#       default: a-repo
+#   resourcetemplates:
+#     - apiVersion: tekton.dev/v1beta1
+#       kind: PipelineRun
+#       metadata:
+#         generateName: echo-hello-world-pipeline-run-
+#       spec:
+#         pipelineRef: echo-hello-world-pipeline
 
----
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: TriggerBinding
-metadata:
-  name: echo-hello-world-trigger-binding
-spec:
-  params:
-    - name: git-repo-url
-      # value: $(body.repository.url)
-      value: hardcoded-value
+# ---
+# apiVersion: triggers.tekton.dev/v1alpha1
+# kind: TriggerBinding
+# metadata:
+#   name: echo-hello-world-trigger-binding
+# spec:
+#   params:
+#     - name: git-repo-url
+#       # value: $(body.repository.url)
+#       value: hardcoded-value
 
----
-apiVersion: triggers.tekton.dev/v1alpha1
-kind: EventListener
-metadata:
-  name: echo-hello-world-event-listener
-spec:
-  serviceAccountName: tekton-triggers-admin
-  triggers:
-    - name: echo-hello-world-trigger
-      template:
-        ref: echo-hello-world-trigger-template
-      # bindings:
-      #   - ref: echo-hello-world-trigger-binding
+# ---
+# apiVersion: triggers.tekton.dev/v1alpha1
+# kind: EventListener
+# metadata:
+#   name: echo-hello-world-event-listener
+# spec:
+#   serviceAccountName: tekton-triggers-admin
+#   triggers:
+#     - name: echo-hello-world-trigger
+#       template:
+#         ref: echo-hello-world-trigger-template
+#       bindings:
+#         - ref: echo-hello-world-trigger-binding
         
 ---
 apiVersion: extensions/v1beta1
