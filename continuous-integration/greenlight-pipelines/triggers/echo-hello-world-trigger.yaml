@@ -3,6 +3,8 @@ kind: TriggerTemplate
 metadata:
   name: echo-hello-world-trigger-template
 spec:
+  params:
+    - name: git-repo-url
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
