@@ -74,9 +74,10 @@ need to add the secret to your Kubernetes cluster and `pipeline.yaml`.
 For that please follow the instructions [here](https://github.com/tektoncd/pipeline/blob/master/docs/tutorial.md#configuring-task-execution-credentials) 
 
   kubectl create secret docker-registry regcred \
-                    --docker-server=docker.io \
+                    --namespace=getting-started \
+                    '--docker-server=https://index.docker.io/v1/' \
                     --docker-username=greenlightcoopbot \
-                    --docker-password=<your-pword> \
+                    '--docker-password=<your-pword>' \
                     --docker-email=bot@greenlight.coop
 
 and also add
