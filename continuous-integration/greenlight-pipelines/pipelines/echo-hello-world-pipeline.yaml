@@ -5,5 +5,9 @@ metadata:
 spec:
   tasks:
     - name: echo-hello-world
+      resources:
+        inputs:
+          - name: git-repo-url
+            resource: git-repo-url
       taskRef:
         name: echo-hello-world
