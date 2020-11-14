@@ -18,7 +18,7 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: false
     retry:
       limit: 5
