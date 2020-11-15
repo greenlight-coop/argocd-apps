@@ -5,7 +5,7 @@ metadata:
   name: pipeline-sa
 secrets:
   - name: docker-registry-credentials
-  - name: greenlight-pipelines-git-auth
+  - name: git-auth
 
 ---
 kind: Role
