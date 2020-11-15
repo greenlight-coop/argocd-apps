@@ -8,6 +8,7 @@ spec:
       description: The build directory for the image
       default: /workspace/source-repo
     - name: pathToDockerFile
+      type: string
       description: The path to the Dockerfile to build
       default: $(resources.inputs.source-repo.path)/Dockerfile
   resources:
