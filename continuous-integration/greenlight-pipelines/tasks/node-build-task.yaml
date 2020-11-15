@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: node-build
+spec:
+  description: >-
+    This Task runs a standard Node.js build process by invoking:
+      npm install
+      npx standard
+      npm test
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: node:14.15
+  workspaces:
+    - name: source
+  stepTemplate:
+      image: $(params.node-image)
+  steps:
+    - name: npm-install
+      script: |
+        npm install
+        npx standard
+        npm test
