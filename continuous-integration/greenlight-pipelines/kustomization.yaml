@@ -11,4 +11,4 @@ resources:
   - tasks/build-docker-image-task.yaml
   - resources/pipeline-admin-role.yaml
   - resources/triggers-admin-role.yaml
-  - triggers/helloworld-build-trigger.yaml
+  # - triggers/helloworld-build-trigger.yaml
