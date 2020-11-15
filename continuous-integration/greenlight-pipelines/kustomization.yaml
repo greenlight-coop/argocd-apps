@@ -7,7 +7,7 @@ commonLabels:
   deploy: argocd
 
 resources:
-  - pipelines/helloworld-build-pipeline.yaml
+  - pipelines/node-build-pipeline.yaml
   - tasks/node-build-task.yaml
   - resources/pipeline-admin-role.yaml
   - resources/triggers-admin-role.yaml
