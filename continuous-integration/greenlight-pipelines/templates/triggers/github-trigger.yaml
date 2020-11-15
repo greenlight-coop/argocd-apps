@@ -1,4 +1,10 @@
----
+# ---
+# apiVersion: triggers.tekton.dev/v1alpha1
+# kind: TriggerTemplate
+# metadata:
+#   name: greenlight-pipelines
+
+# ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -16,7 +22,7 @@ spec:
           - backend:
               serviceName: el-github-event-listener
               servicePort: 8080
-            path: /tekton/webhook
+            path: /webhook/github
   tls:
     - hosts:
         - tekton.{{ .Values.global.appsDomainName }}
