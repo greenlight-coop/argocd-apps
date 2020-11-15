@@ -24,12 +24,16 @@ spec:
     - name: node-build
       taskRef:
         name: node-build
+      runAfter:
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
     - name: build-and-push-image
       taskRef:
         name: kaniko
+      runAfter:
+        - node-build
       params:
         - name: IMAGE
           value: $(params.image-name)
