@@ -24,11 +24,6 @@ spec:
     - name: node-build
       taskRef:
         name: node-build
-      params:
-        - name: url
-          value: $(params.git-url)
-        - name: revision
-          value: $(params.git-revision)
       workspaces:
         - name: output
           workspace: git-source
