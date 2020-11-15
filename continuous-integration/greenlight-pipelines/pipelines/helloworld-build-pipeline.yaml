@@ -25,7 +25,7 @@ spec:
       taskRef:
         name: node-build
       workspaces:
-        - name: output
+        - name: source
           workspace: git-source
     - name: build-and-push-image
       taskRef:
