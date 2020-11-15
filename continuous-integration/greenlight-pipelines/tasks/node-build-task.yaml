@@ -14,10 +14,9 @@ spec:
       default: node:14.15
   workspaces:
     - name: source
-  stepTemplate:
-      image: $(params.node-image)
   steps:
     - name: npm-install
+      image: $(params.node-image)
       script: |
         npm install
         npx standard
