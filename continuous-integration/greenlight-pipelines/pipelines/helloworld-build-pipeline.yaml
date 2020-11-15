@@ -12,16 +12,13 @@ spec:
   workspaces:
     - name: git-source
   tasks:
-    - name: build-docker-image
-      taskRef:
-        name: build-docker-image
+    - name: clone-git-repo
+      taskRef: git-clone
       params:
-        - name: pathToContext
-        - value: /workspace/source-repo
-      resources:
-        inputs:
-          - name: source-repo
-            resource: source-repo
-        outputs:
-          - name: builtImage
-            resource: image-source
+        - name: url
+          value: $(params.git-url)
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
