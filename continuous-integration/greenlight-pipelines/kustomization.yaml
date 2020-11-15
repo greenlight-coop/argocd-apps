@@ -8,7 +8,7 @@ commonLabels:
 
 resources:
   - pipelines/helloworld-build-pipeline.yaml
-  - tasks/build-docker-image-task.yaml
+  - tasks/node-build-task.yaml
   - resources/pipeline-admin-role.yaml
   - resources/triggers-admin-role.yaml
   # - triggers/helloworld-build-trigger.yaml
