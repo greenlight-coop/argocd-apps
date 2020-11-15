@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: node-build-pipeline
+  namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name

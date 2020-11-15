@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: greenlight-projects
+  namespace: greenlight-pipelines
 data:
   # Data that follow are the project name followed by the current tag version of
   # corresponding image in Docker Hub. These will be used as the basis for pull

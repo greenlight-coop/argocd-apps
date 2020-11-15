@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: node-build
+  namespace: greenlight-pipelines
 spec:
   description: >-
     This Task runs a standard Node.js build process by invoking:
