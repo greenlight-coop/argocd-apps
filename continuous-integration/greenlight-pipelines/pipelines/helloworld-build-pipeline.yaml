@@ -3,11 +3,14 @@ kind: Pipeline
 metadata:
   name: helloworld-build-pipeline
 spec:
-  resources:
-    - name: source-repo
-      type: git
-    - name: image-source
-      type: image
+  params:
+    - name: git-url
+    - name: git-revision
+    - name: image-name
+    - name: path-to-image-context
+      default: /workspace/git-source
+  workspaces:
+    - name: git-source
   tasks:
     - name: build-docker-image
       taskRef:
