@@ -1,2 +1,6 @@
 resources:
+  - argocd-task-sync-and-wait/0.1/argocd-task-sync-and-wait.yaml
   - git-cli/0.1/git-cli.yaml
+  - kaniko/0.1/kaniko.yaml
+  - kn/0.1/kn.yaml
+  - knctl-deploy/0.1/knctl-deploy.yaml
