@@ -42,7 +42,7 @@ metadata:
 spec:
   params:
     - name: project-name
-      value: $(body.pull_request.repo.name)
+      value: $(body.repository.name)
     - name: git-revision
       value: $(body.pull_request.head.ref)
 ---
