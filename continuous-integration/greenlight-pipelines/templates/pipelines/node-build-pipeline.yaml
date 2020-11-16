@@ -20,7 +20,7 @@ spec:
           value: $(params.project-name)
       workspaces:
         - name: project-info
-          value: project-info
+          workspace: project-info
     - name: clone-git-repo
       when:
         - input: $(tasks.evaluate-project.results.is-pipeline-project)
