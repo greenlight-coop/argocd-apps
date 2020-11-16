@@ -22,7 +22,7 @@ spec:
       when:
         - input: $(tasks.evaluate-project.results.is-pipeline-project)
           operator: in
-          values: [true]
+          values: ["true"]
       taskRef:
         name: git-clone
       params:
