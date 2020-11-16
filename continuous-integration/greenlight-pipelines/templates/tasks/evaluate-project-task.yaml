@@ -25,8 +25,5 @@ spec:
       script: |
         #!/usr/bin/env node
         const fs = require('fs')
-        console.log("Hello from Node!")
         fs.writeFileSync('$(results.project-info.is-pipeline-project.path)', 'true')
-    - name: pause
-      image: node:14.15
-      args: ["sleep", "600"]
+        console.log('Wrote to $(results.project-info.is-pipeline-project.path)')
