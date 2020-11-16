@@ -4,6 +4,11 @@ kind: TriggerTemplate
 metadata:
   name: github-trigger-template
 spec:
+  params:
+    - name: project-name
+      description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: git-revision
+      description: The revision to clone and build
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -16,9 +21,9 @@ spec:
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
-            value: helloworld
+            value: $(tt.params.project-name)
           - name: git-revision
-            value: HEAD  
+            value: $(tt.params.git-revision)  
         workspaces:
           - name: git-source
             volumeClaimTemplate:
@@ -28,6 +33,18 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: github-trigger-binding
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+      value: ${body.repo.name}
+    - name: git-revision
+      value: ${body.head.ref}
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
