@@ -39,7 +39,7 @@ spec:
 
         function generateImageTag () {
           const PATCH_VERSION_INDEX = 2
-          const currentVersion = fs.readFileSync(versionFilePath)
+          const currentVersion = fs.readFileSync(versionFilePath, 'utf8')
           console.log('Current version: %s', currentVersion)
           if (branch === 'main' || branch === 'master') {
             versionParts = currentVersion.split('.')
