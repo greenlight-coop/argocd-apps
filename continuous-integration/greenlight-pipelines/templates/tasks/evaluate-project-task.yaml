@@ -4,11 +4,6 @@ metadata:
   name: evaluate-project
   namespace: greenlight-pipelines
 spec:
-  results:
-  - name: IMAGE-DIGEST
-    description: Digest of the image just built.
-  - name: is-pipeline-project
-    description: true if listed in the greenlight-projects configMap
   description: >-
     Determines if the project is to be run based on whether configuration information is present
     in the greenlight-pipelines configmap, determines whether a branch or main build and generates
@@ -21,6 +16,9 @@ spec:
       default: main
   workspaces:
     - name: project-info
+  results:
+    - name: is-pipeline-project
+      description: true if listed in the greenlight-projects configMap
   steps:
     - name: evaulate-project-attributes
       image: node:14.15
@@ -29,3 +27,4 @@ spec:
         const fs = require('fs')
         console.log("Hello from Node!")
         fs.writeFileSync('$(results.project-info.is-pipeline-project.path)', 'true')
+  
