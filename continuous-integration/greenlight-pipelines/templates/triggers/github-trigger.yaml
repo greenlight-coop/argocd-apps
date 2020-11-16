@@ -31,7 +31,7 @@ spec:
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
-metadata:gc
+metadata:
   name: github-event-listener
   namespace: greenlight-pipelines
 spec:
