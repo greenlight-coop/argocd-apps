@@ -8,15 +8,15 @@ spec:
     Determines if the project is to be run based on whether configuration information is present
     in the greenlight-pipelines configmap, determines whether a branch or main build and generates
     a version tag to be applied to the resulting Docker image.
+  results:
+    - name: is-pipeline-project
+      description: 'true' if listed in the greenlight-projects configMap
   params:
     - name: project-name
       description: the repo name, also used as the Docker image name
     - name: branch
       description: the git branch associated with the current build
       default: main
-  results:
-    - name: is-pipeline-project
-      description: 'true' if listed in the greenlight-projects configMap
   workspaces:
     - name: project-info
   steps:
