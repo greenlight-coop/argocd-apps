@@ -17,7 +17,7 @@ spec:
   workspaces:
     - name: project-info
   results:
-    - name: is_pipeline_project
+    - name: is-pipeline-project
       description: 'true' if listed in the greenlight-projects configMap
   steps:
     - name: evaulate-project-attributes
@@ -26,4 +26,4 @@ spec:
         #!/usr/bin/env node
         const fs = require('fs')
         console.log("Hello from Node!")
-        fs.writeFileSync('$(results.project-info.is_pipeline_project.path)', 'true')
+        fs.writeFileSync('$(results.project-info.is-pipeline-project.path)', 'true')

@@ -20,7 +20,7 @@ spec:
           value: $(params.project-name)
     - name: clone-git-repo
       when:
-        - input: $(tasks.evaluate-project.results.is_pipeline_project)
+        - input: $(tasks.evaluate-project.results.is-pipeline-project)
           operator: in
           values: [true]
       taskRef:
