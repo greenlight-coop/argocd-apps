@@ -1,10 +1,42 @@
-# ---
-# apiVersion: triggers.tekton.dev/v1alpha1
-# kind: TriggerTemplate
-# metadata:
-#   name: greenlight-pipelines
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: github-trigger-template
+spec:
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: helloworld-build-pipeline-run
+        namespace: greenlight-pipelines
+      spec:
+        pipelineRef:
+          name: node-build-pipeline
+        serviceAccountName: pipeline-sa
+        params:
+          - name: project-name
+            value: helloworld
+          - name: git-revision
+            value: HEAD  
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: github-event-listener
+  namespace: greenlight-pipelines
+spec:
+  serviceAccountName: tekton-triggers-admin
+  interceptors:
+    - github:
+        eventTypes:
+          - pull_request
+  triggers:
+    - name: github-push-trigger
+      template:
+        ref: github-trigger-template
 
-# ---
+---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
