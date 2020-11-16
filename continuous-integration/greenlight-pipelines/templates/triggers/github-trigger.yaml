@@ -57,6 +57,8 @@ spec:
     - name: github-trigger
       template:
         ref: github-trigger-template
+      bindings:
+        - ref: github-trigger-binding
       interceptors:
         - github:
             eventTypes:
