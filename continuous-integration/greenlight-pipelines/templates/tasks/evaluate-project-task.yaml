@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: evaluate-project
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Determines if the project is to be run based on whether configuration information is present
+    in the greenlight-pipelines configmap, determines whether a branch or main build and generates
+    a version tag to be applied to the resulting Docker image.
+  params:
+    - name: project-name
+      description: the repo name, also used as the Docker image name
+    - name: branch
+      description: the git branch associated with the current build
+      default: main
+  workspaces:
+    - name: project-info
+  results:
+    - name: is_pipeline_project
+      description: 'true' if listed in the greenlight-projects configMap
+  steps:
+    - name: evaulate-project-attributes
+      image: node:14.15
+      script: |
+        #!/usr/bin/env node
+        const fs = require('fs')
+        console.log("Hello from Node!")
+        fs.writeFileSync('$(results.project-info.is_pipeline_project.path)', 'true')

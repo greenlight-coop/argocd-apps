@@ -10,8 +10,19 @@ spec:
     - name: git-revision
   workspaces:
     - name: git-source
+    - name: project-info
   tasks:
+    - name: evaluate-project
+      taskRef:
+        name: evaluate-project
+      params:
+        - name: project-name
+          value: $(params.project-name)
     - name: clone-git-repo
+      when:
+        - input: $(tasks.evaluate-project.results.is_pipeline_project)
+          operator: in
+          values: [true]
       taskRef:
         name: git-clone
       params:
