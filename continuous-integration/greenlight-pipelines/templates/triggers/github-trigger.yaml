@@ -28,7 +28,7 @@ metadata:
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: github-push-trigger
+    - name: github-trigger
       template:
         ref: github-trigger-template
       interceptors:
