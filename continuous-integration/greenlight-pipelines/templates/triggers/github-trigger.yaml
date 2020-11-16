@@ -27,14 +27,14 @@ metadata:
   namespace: greenlight-pipelines
 spec:
   serviceAccountName: tekton-triggers-admin
-  interceptors:
-    - github:
-        eventTypes:
-          - pull_request
   triggers:
     - name: github-push-trigger
       template:
         ref: github-trigger-template
+      interceptors:
+        - github:
+            eventTypes:
+              - pull_request
 
 ---
 apiVersion: extensions/v1beta1
