@@ -19,10 +19,19 @@ spec:
             value: helloworld
           - name: git-revision
             value: HEAD  
+        workspaces:
+          - name: git-source
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
-metadata:
+metadata:gc
   name: github-event-listener
   namespace: greenlight-pipelines
 spec:
