@@ -28,6 +28,8 @@ spec:
           values: ["true"]
       taskRef:
         name: git-clone
+      runAfter:
+        - evaluate-project
       params:
         - name: url
           value: git@github.com:greenlight-coop/$(params.project-name).git
