@@ -60,13 +60,3 @@ spec:
         } else {
           console.log('Project %s is not a pipeline project', projectName)
         }
-
-    - name: list-workspace
-      image: ubuntu
-      command:
-      - /bin/bash
-      args:
-      - -c
-      - |
-        set -ex
-        find /workspace
