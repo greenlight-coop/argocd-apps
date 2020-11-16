@@ -51,7 +51,7 @@ spec:
         }
 
         const isPipelineProject = projectExists()
-        fs.writeFileSync('$(results.is-pipeline-project.path)', isPipelineProject)
+        fs.writeFileSync('$(results.is-pipeline-project.path)', isPipelineProject.toString())
         if (isPipelineProject) {
           console.log('Project %s is a configured project, running pipeline', projectName)
           const imageTag = generateImageTag()
