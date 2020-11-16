@@ -6,7 +6,7 @@ metadata:
 spec:
   results:
   - name: IMAGE-DIGEST
-  description: Digest of the image just built.
+    description: Digest of the image just built.
   - name: is-pipeline-project
     description: 'true' if listed in the greenlight-projects configMap
   description: >-
