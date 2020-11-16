@@ -27,3 +27,21 @@ spec:
         const fs = require('fs')
         fs.writeFileSync('$(results.is-pipeline-project.path)', 'true')
         console.log('Wrote to $(results.is-pipeline-project.path)')
+    - name: list-workspace
+      image: ubuntu
+      command:
+      - /bin/bash
+      args:
+      - -c
+      - |
+        set -ex
+        find /workspace | xargs cat
+    - name: inspect-workspace
+      image: ubuntu
+      command:
+      - /bin/bash
+      args:
+      - -c
+      - |
+        set -ex
+        find /workspace | xargs cat
