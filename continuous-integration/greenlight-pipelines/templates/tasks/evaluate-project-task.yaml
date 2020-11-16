@@ -25,5 +25,5 @@ spec:
       script: |
         #!/usr/bin/env node
         const fs = require('fs')
-        fs.writeFileSync('$(results.project-info.is-pipeline-project.path)', 'true')
-        console.log('Wrote to $(results.project-info.is-pipeline-project.path)')
+        fs.writeFileSync('$(results.is-pipeline-project.path)', 'true')
+        console.log('Wrote to $(results.is-pipeline-project.path)')
