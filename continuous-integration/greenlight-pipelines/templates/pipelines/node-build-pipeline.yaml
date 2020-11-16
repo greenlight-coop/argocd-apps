@@ -6,7 +6,6 @@ metadata:
 spec:
   params:
     - name: project-name
-    # - name: image-version
     - name: git-revision
   workspaces:
     - name: git-source
@@ -46,14 +45,15 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    # - name: build-and-push-image
-    #   taskRef:
-    #     name: kaniko
-    #   runAfter:
-    #     - node-build
-    #   params:
-    #     - name: IMAGE
-    #       value: greenlightcoop/$(params.project-name):$(params.image-version)
-    #   workspaces:
-    #     - name: source
-    #       workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - node-build
+      params:
+        - name: IMAGE
+          value: greenlightcoop/$(params.project-name):$(tasks.evaluate-project.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
+
