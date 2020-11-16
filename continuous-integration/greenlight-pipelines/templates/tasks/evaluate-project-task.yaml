@@ -5,8 +5,10 @@ metadata:
   namespace: greenlight-pipelines
 spec:
   results:
-    - name: is-pipeline-project
-      description: 'true' if listed in the greenlight-projects configMap
+  - name: IMAGE-DIGEST
+  description: Digest of the image just built.
+  - name: is-pipeline-project
+    description: 'true' if listed in the greenlight-projects configMap
   description: >-
     Determines if the project is to be run based on whether configuration information is present
     in the greenlight-pipelines configmap, determines whether a branch or main build and generates
