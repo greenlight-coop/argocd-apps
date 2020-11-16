@@ -13,7 +13,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: helloworld-build-pipeline-run
+        name: $(tt.params.project-name)-build-pipeline-run
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
