@@ -35,7 +35,7 @@ spec:
       - -c
       - |
         set -ex
-        find /workspace | xargs cat
+        find /workspace
     - name: inspect-workspace
       image: ubuntu
       command:
