@@ -42,9 +42,9 @@ metadata:
 spec:
   params:
     - name: project-name
-      value: $(body.repo.name)
+      value: $(body.pull_request.repo.name)
     - name: git-revision
-      value: $(body.head.ref)
+      value: $(body.pull_request.head.ref)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
