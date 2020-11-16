@@ -14,11 +14,11 @@ spec:
     - name: branch
       description: the git branch associated with the current build
       default: main
-  workspaces:
-    - name: project-info
   results:
     - name: is-pipeline-project
       description: 'true' if listed in the greenlight-projects configMap
+  workspaces:
+    - name: project-info
   steps:
     - name: evaulate-project-attributes
       image: node:14.15
