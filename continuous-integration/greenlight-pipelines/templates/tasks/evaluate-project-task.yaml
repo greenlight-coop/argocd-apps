@@ -19,14 +19,48 @@ spec:
   results:
     - name: is-pipeline-project
       description: true if listed in the greenlight-projects configMap
+    - name: image-tag
+      description: tag value to use for pushed Docker image, based on current version and branch type
   steps:
     - name: evaulate-project-attributes
       image: node:14.15
       script: |
         #!/usr/bin/env node
         const fs = require('fs')
-        fs.writeFileSync('$(results.is-pipeline-project.path)', 'true')
-        console.log('Wrote to $(results.is-pipeline-project.path)')
+        const projectName = '$(params.project-name)'
+        const branch = '$(params.branch)'
+        const versionFilePath = `/workspace/project-info/${projectName}.version`
+        console.log('Project name: %s', projectName)
+        console.log('Branch: %s', branch)
+
+        function projectExists () {
+          return fs.existsSync(versionFilePath)
+        }
+
+        function generateImageTag () {
+          const PATCH_VERSION_INDEX = 2
+          const currentVersion = fs.readFileSync(versionFilePath)
+          console.log('Current version: %s', currentVersion)
+          if (branch === 'main' || branch === 'master') {
+            versionParts = currentVersion.split('.')
+            versionParts[PATCH_VERSION_INDEX] = parseInt(versionParts[PATCH_VERSION_INDEX]) + 1
+            return versionParts.join('.')
+          } else {
+            return currentVersion + "-" + branch.replace('/', '-') + '-0'
+          }
+        }
+
+        const isPipelineProject = projectExists()
+        fs.writeFileSync('$(results.is-pipeline-project.path)', isPipelineProject)
+        if (isPipelineProject) {
+          console.log('Project %s is a configured project, running pipeline', projectName)
+          const imageTag = generateImageTag()
+          console.log('Generated image tag: %s', imageTag)
+          fs.writeFileSync('$(results.image-tag.path)', imageTag)
+        } else {
+          console.log('Project %s is not a pipeline project', projectName)
+        }
+
     - name: list-workspace
       image: ubuntu
       command:
@@ -36,12 +70,3 @@ spec:
       - |
         set -ex
         find /workspace
-    - name: inspect-workspace
-      image: ubuntu
-      command:
-      - /bin/bash
-      args:
-      - -c
-      - |
-        set -ex
-        find /workspace | xargs cat
