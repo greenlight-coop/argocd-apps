@@ -84,7 +84,7 @@ spec:
       template:
         name: 'node-remove-pr-pipeline-temp-trigger-template'
         spec:
-          resourceTemplates:
+          resourcetemplates:
             - apiVersion: tekton.dev/v1beta1
               kind: TaskRun
               metadata:
@@ -107,7 +107,7 @@ spec:
       template:
         name: node-build-main-pipeline-temp-trigger-template
         spec:
-          resourceTemplates:
+          resourcetemplates:
             - apiVersion: tekton.dev/v1beta1
               kind: TaskRun
               metadata:
