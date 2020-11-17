@@ -2,7 +2,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: node-pipeline-trigger-template
+  name: node-build-pr-pipeline-trigger-template
 spec:
   params:
     - name: project-name
@@ -13,7 +13,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: $(tt.params.project-name)-build-pipeline-run-
+        generateName: $(tt.params.project-name)-node-build-pr-pipeline-run-
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
@@ -40,7 +40,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: node-pipeline-trigger-binding
+  name: pull-request-pipeline-trigger-binding
   namespace: greenlight-pipelines
 spec:
   params:
