@@ -69,7 +69,8 @@ spec:
       template:
         ref: node-build-pr-pipeline-trigger-template
       bindings:
-        - ref: pull-request-pipeline-trigger-binding
+        - kind: TriggerBinding
+          ref: pull-request-pipeline-trigger-binding
       interceptors:
         - github:
             secretRef:
@@ -81,6 +82,7 @@ spec:
             filter: "body.action in ['opened', 'synchronize', 'reopened']"
     - name: node-remove-pr-pipeline-trigger
       template:
+        name: 'node-remove-pr-pipeline-temp-trigger-template'
         spec:
           resourceTemplates:
             - apiVersion: tekton.dev/v1beta1
@@ -103,6 +105,7 @@ spec:
             filter: "body.action in ['closed']"
     - name: node-build-main-pipeline-trigger
       template:
+        name: node-build-main-pipeline-temp-trigger-template
         spec:
           resourceTemplates:
             - apiVersion: tekton.dev/v1beta1
