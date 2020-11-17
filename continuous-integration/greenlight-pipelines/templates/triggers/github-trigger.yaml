@@ -64,6 +64,9 @@ spec:
         - ref: node-pipeline-trigger-binding
       interceptors:
         - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
             eventTypes:
               - pull_request
 
