@@ -40,6 +40,18 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
+  name: push-pipeline-trigger-binding
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+      value: $(body.repository.name)
+    - name: git-revision
+      value: $(body.after)
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
   name: pull-request-pipeline-trigger-binding
   namespace: greenlight-pipelines
 spec:
@@ -54,8 +66,6 @@ spec:
       value: $(body.pull_request.base.ref)
     - name: git-pr-action
       value: $(body.action)
-    - name: git-merged
-      value: $(body.merged)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
