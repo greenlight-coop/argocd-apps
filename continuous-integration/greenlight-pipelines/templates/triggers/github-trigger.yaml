@@ -47,7 +47,15 @@ spec:
     - name: project-name
       value: $(body.repository.name)
     - name: git-revision
+      value: $(body.pull_request.head.sha)
+    - name: git-head-branch
       value: $(body.pull_request.head.ref)
+    - name: git-base-branch
+      value: $(body.pull_request.base.ref)
+    - name: git-pr-action
+      value: $(body.action)
+    - name: git-merged
+      value: $(body.merged)
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
@@ -57,11 +65,11 @@ metadata:
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: node-pipeline-trigger
+    - name: node-build-pr-pipeline-trigger
       template:
-        ref: node-pipeline-trigger-template
+        ref: node-build-pr-pipeline-trigger-template
       bindings:
-        - ref: node-pipeline-trigger-binding
+        - ref: pull-request-pipeline-trigger-binding
       interceptors:
         - github:
             secretRef:
@@ -69,7 +77,52 @@ spec:
               secretKey: webhookSecretValue
             eventTypes:
               - pull_request
-
+        - cel:
+            filter: "body.action in ['opened', 'synchronize', 'reopened']"
+    - name: node-remove-pr-pipeline-trigger
+      template:
+        spec:
+          resourceTemplates:
+            - apiVersion: tekton.dev/v1beta1
+              kind: TaskRun
+              metadata:
+                generateName: node-remove-pr-temp-task-run-
+              spec:
+                taskSpec:
+                  steps:
+                    - image: ubuntu
+                      script: echo 'TBD - handle removal of PR build resources'
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['closed']"
+    - name: node-build-main-pipeline-trigger
+      template:
+        spec:
+          resourceTemplates:
+            - apiVersion: tekton.dev/v1beta1
+              kind: TaskRun
+              metadata:
+                generateName: node-build-main-temp-task-run-
+              spec:
+                taskSpec:
+                  steps:
+                    - image: ubuntu
+                      script: echo 'TBD - handle push to main'
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - push
+        - cel:
+            filter: "body.ref == 'refs/heads/main'"
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress

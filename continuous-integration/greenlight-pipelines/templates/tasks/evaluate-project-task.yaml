@@ -26,6 +26,15 @@ spec:
       image: node:14.15
       script: |
         #!/usr/bin/env node
+
+        /*
+         * Emits:
+         * 
+         * results.is-pipeline-project
+         * results.image-tag
+         * results.
+         * results.is-merge-to-main
+         */ 
         const fs = require('fs')
         const projectName = '$(params.project-name)'
         const branch = '$(params.branch)'
