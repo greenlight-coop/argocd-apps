@@ -29,8 +29,6 @@ spec:
     - name: clone-git-repo
       taskRef:
         name: git-clone
-      runAfter:
-        - evaluate-project
       params:
         - name: url
           value: git@github.com:greenlight-coop/$(params.project-name).git
@@ -52,6 +50,7 @@ spec:
         name: kaniko
       runAfter:
         - node-build
+        - generate-image-tag
       params:
         - name: IMAGE
           value: greenlightcoop/$(params.project-name):$(tasks.evaluate-project.results.image-tag)
