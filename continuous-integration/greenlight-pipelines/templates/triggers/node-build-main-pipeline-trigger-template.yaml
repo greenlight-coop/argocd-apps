@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: node-build-pr-pipeline-trigger-template
+  name: node-build-main-pipeline-trigger-template
 spec:
   params:
     - name: project-name
@@ -18,7 +18,7 @@ spec:
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: node-build-pipeline
+          name: node-build-main-pipeline
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
