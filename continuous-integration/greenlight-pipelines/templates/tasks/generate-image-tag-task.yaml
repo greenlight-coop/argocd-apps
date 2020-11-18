@@ -38,7 +38,7 @@ spec:
 
         const versionFilePath = `/workspace/greenlight-projects/${projectName}.version`
         let tagBase = '0.1.0'
-        if (fs.existsSync(versionFilePath)) {
+        if (fs.existsSync(versionFilePath )) {
           const PATCH_VERSION_INDEX = 2
           const currentVersion = fs.readFileSync(versionFilePath, 'utf8')
           console.log('Current version: %s', currentVersion)
