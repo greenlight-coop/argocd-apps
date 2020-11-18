@@ -5,3 +5,4 @@ resources:
   - kaniko/0.1/kaniko.yaml
   - kn/0.1/kn.yaml
   - knctl-deploy/0.1/knctl-deploy.yaml
+  - kubernetes-actions/0.1/kubernetes-actions.yaml
