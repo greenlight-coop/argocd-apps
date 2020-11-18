@@ -55,7 +55,7 @@ spec:
           workspace: git-source
     - name: update-version
       taskRef:
-        name: kubectl-run
+        name: kubernetes-actions
       params:
         - name: SCRIPT
           value: |
