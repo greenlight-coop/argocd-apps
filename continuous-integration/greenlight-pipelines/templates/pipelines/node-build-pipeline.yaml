@@ -56,7 +56,7 @@ spec:
         - generate-image-tag
       params:
         - name: IMAGE
-          value: greenlightcoop/$(params.project-name):$(tasks.evaluate-project.results.image-tag)
+          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
         - name: source
           workspace: git-source
