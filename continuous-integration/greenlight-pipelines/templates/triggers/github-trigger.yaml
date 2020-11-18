@@ -9,6 +9,12 @@ spec:
       description: The repo name in GitHub, also used as the name for the Kaniko image
     - name: git-revision
       description: The revision to clone and build
+    - name: git-branch
+      description: the branch being built, either main|master or a feature branch (e.g. feature/5)
+    - name: git-pr-number
+      description: GitHub pull request number
+    - name: git-pr-commit-number
+      description: ascending count of commit in a pull request
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun

@@ -7,6 +7,9 @@ spec:
   params:
     - name: project-name
     - name: git-revision
+    - name: git-branch
+    - name: git-pr-number
+    - name: git-pr-commit-number
   workspaces:
     - name: git-source
     - name: greenlight-projects
