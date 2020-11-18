@@ -11,6 +11,8 @@ spec:
   workspaces:
     - name: git-source
     - name: greenlight-projects
+    - name: kubeconfig-dir
+    - name: manifest-dir
   tasks:
     - name: generate-image-tag
       taskRef:
