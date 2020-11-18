@@ -36,7 +36,7 @@ spec:
         const pullRequestNumber = '$(params.pull-request-number)'
         const commitNumber = '$(params.pull-request-commit-number)'
 
-        const versionFile = const versionFilePath = `/workspace/greenlight-projects/${projectName}.version`
+        const versionFilePath = `/workspace/greenlight-projects/${projectName}.version`
         let tagBase = '0.1.0'
         if (fs.existsSync(versionFile)) {
           const PATCH_VERSION_INDEX = 2
