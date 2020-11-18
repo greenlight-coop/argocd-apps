@@ -1,0 +1,73 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: node-build-main-pipeline
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+    - name: git-revision
+    - name: git-branch
+  workspaces:
+    - name: git-source
+    - name: greenlight-projects
+    - name: kubeconfig-dir
+    - name: manifest-dir
+  tasks:
+    - name: generate-image-tag
+      taskRef:
+        name: generate-image-tag
+      params:
+        - name: project-name
+          value: $(params.project-name)
+        - name: branch-name
+          value: $(params.git-branch)
+      workspaces:
+        - name: greenlight-projects
+          workspace: greenlight-projects
+    - name: clone-git-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/$(params.project-name).git
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: node-build
+      taskRef:
+        name: node-build
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - node-build
+      params:
+        - name: IMAGE
+          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: update-version
+      taskRef:
+        name: kubernetes-actions
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: script
+          value: |
+            kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
+              -p '{"data": {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}}' 
+            kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir

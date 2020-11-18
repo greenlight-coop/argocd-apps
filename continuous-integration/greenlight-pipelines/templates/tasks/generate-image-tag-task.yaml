@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: generate-image-tag
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Provides the Docker image tag to use for the generated image for both main branch builds (e.g. v0.1.0) and
+    pull request branch builds (e.g. v0.1.0-feature-5-pr-1-commit-2). Version information is pulled from the 
+    greenlight-projects config map if available and assumed to be v0.1.0 if not yet registered.
+  params:
+    - name: project-name
+      description: the repo name, also used as the Docker image name
+    - name: branch-name
+      description: the branch being built, either main|master or a feature branch (e.g. feature/5)
+    - name: pull-request-number
+      description: GitHub pull request number
+      default: n/a
+    - name: pull-request-commit-number
+      description: ascending count of commit in a pull request
+      default: n/a
+  workspaces:
+    - name: greenlight-projects
+  results:
+    - name: image-tag
+      description: the tag to use for the generated image in Docker hub
+  steps:
+    - name: generate-image-tag
+      image: node:14.15
+      script: |
+        #!/usr/bin/env node
+        const fs = require('fs')
+
+        const projectName = '$(params.project-name)'
+        const branchName = '$(params.branch-name)'
+        const pullRequestNumber = '$(params.pull-request-number)'
+        const commitNumber = '$(params.pull-request-commit-number)'
+
+        const versionFilePath = `/workspace/greenlight-projects/${projectName}.version`
+        let tagBase = '0.1.0'
+        if (fs.existsSync(versionFilePath )) {
+          const PATCH_VERSION_INDEX = 2
+          const currentVersion = fs.readFileSync(versionFilePath, 'utf8')
+          console.log('Current version: %s', currentVersion)
+          versionParts = currentVersion.split('.')
+          versionParts[PATCH_VERSION_INDEX] = parseInt(versionParts[PATCH_VERSION_INDEX]) + 1
+          tagBase = versionParts.join('.')
+        }
+
+        let imageTag = tagBase
+        if (branchName !== 'main' && branchName !== 'master') {
+          imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
+        }
+
+        console.log('Generated image tag version: %s', imageTag)
+        fs.writeFileSync('$(results.image-tag.path)', imageTag)

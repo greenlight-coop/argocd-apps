@@ -1,0 +1,63 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: node-pipeline-event-listener
+  namespace: greenlight-pipelines
+spec:
+  serviceAccountName: tekton-triggers-admin
+  triggers:
+    - name: node-build-pr-pipeline-trigger
+      template:
+        ref: node-build-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['opened', 'synchronize', 'reopened']"
+    - name: node-remove-pr-pipeline-trigger
+      template:
+        spec:
+          resourcetemplates:
+            - apiVersion: tekton.dev/v1beta1
+              kind: TaskRun
+              metadata:
+                generateName: node-remove-pr-temp-task-run-
+              spec:
+                taskSpec:
+                  steps:
+                    - image: ubuntu
+                      script: echo 'TBD - handle removal of PR build resources'
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['closed']"
+    - name: node-build-main-pipeline-trigger
+      template:
+        ref: node-build-main-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: push-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - push
+        - cel:
+            filter: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
+            overlays:
+            - key: extensions.branch_name
+              expression: "body.ref.split('/')[2]"

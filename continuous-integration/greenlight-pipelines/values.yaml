@@ -1,0 +1,6 @@
+# Default values for helloworld.
+
+image:
+  repository: greenlightcoop/helloworld
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
