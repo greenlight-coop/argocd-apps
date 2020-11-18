@@ -10,5 +10,5 @@ spec:
     - name: git-revision
       value: $(body.after)
     - name: git-branch
-      value: $(extensions.branch_name)
+      value: $(body.extensions.branch_name)
 
