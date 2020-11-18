@@ -45,8 +45,7 @@ spec:
             filter: "body.action in ['closed']"
     - name: node-build-main-pipeline-trigger
       template:
-        spec:
-          ref: node-build-main-pipeline-trigger-template
+        ref: node-build-main-pipeline-trigger-template
       interceptors:
         - github:
             secretRef:
