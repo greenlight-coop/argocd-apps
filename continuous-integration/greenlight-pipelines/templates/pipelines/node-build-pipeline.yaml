@@ -53,7 +53,6 @@ spec:
         name: kaniko
       runAfter:
         - node-build
-        - generate-image-tag
       params:
         - name: IMAGE
           value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
