@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  name: node-pipeline-trigger-ingress
+  namespace: greenlight-pipelines
+spec:
+  rules:
+    - host: tekton.{{ .Values.global.appsDomainName }}
+      http:
+        paths:
+          - backend:
+              serviceName: el-node-pipeline-event-listener
+              servicePort: 8080
+            path: /webhook/node-pipeline
+  tls:
+    - hosts:
+        - tekton.{{ .Values.global.appsDomainName }}
+      secretName: {{ .Values.global.tlsCertIssuer }}

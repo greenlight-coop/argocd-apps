@@ -1,0 +1,21 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerBinding
+metadata:
+  name: pull-request-trigger-binding
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+      value: $(body.repository.name)
+    - name: git-revision
+      value: $(body.pull_request.head.sha)
+    - name: git-branch
+      value: $(body.pull_request.head.ref)
+    - name: git-base-branch
+      value: $(body.pull_request.base.ref)
+    - name: git-pr-action
+      value: $(body.action)
+    - name: git-pr-number
+      value: $(body.number)
+    - name: git-pr-commit-number
+      value: $(body.pull_request.commits)
