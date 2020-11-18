@@ -46,6 +46,9 @@ spec:
     - name: node-build-main-pipeline-trigger
       template:
         ref: node-build-main-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: push-trigger-binding
       interceptors:
         - github:
             secretRef:
