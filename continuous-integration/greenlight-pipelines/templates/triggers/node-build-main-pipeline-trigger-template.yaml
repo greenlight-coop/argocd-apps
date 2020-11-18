@@ -39,3 +39,7 @@ spec:
           - name: greenlight-projects
             configMap:
               name: greenlight-projects
+          - name: kubeconfig-dir
+            emptyDir: {}
+          - name: manifest-dir
+            emptyDir: {}

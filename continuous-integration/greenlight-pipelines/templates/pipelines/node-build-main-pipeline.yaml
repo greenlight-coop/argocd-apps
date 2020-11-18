@@ -66,6 +66,6 @@ spec:
             kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
       workspaces:
         - name: kubeconfig-dir
-          emptyDir: {}
+          workspace: kubeconfig-dir
         - name: manifest-dir
-          emptyDir: {}
+          workspace: manifest-dir
