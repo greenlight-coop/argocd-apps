@@ -57,7 +57,7 @@ spec:
       taskRef:
         name: kubernetes-actions
       params:
-        - name: SCRIPT
+        - name: script
           value: |
             kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
               -p '{"data: {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}"}' 
