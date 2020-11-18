@@ -53,4 +53,13 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: update-version
+      taskRef:
+        name: kubectl-run
+      params:
+        - name: SCRIPT
+          value: |
+            kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
+              -p '{"data: {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}"}' 
+            kubectl -n greenlight-pipelines get configmap greenlight-projects
 
