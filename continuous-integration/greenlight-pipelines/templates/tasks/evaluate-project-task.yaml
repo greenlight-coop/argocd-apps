@@ -32,8 +32,6 @@ spec:
          * 
          * results.is-pipeline-project
          * results.image-tag
-         * results.
-         * results.is-merge-to-main
          */ 
         const fs = require('fs')
         const projectName = '$(params.project-name)'
