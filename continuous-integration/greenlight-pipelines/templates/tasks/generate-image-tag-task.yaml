@@ -52,5 +52,5 @@ spec:
           imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
         }
 
-        console.log('Generated image tag: %s', imageTag)
+        console.log('Generated image tag version: %s', imageTag)
         fs.writeFileSync('$(results.image-tag.path)', imageTag)
