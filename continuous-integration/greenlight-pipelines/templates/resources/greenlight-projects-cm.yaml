@@ -8,4 +8,4 @@ data:
   # corresponding image in Docker Hub. These will be used as the basis for pull
   # request generated image tags and incremented as new versions are released from
   # the main branch
-  helloworld.version: 0.1.7
+  helloworld.version: 0.1.8
