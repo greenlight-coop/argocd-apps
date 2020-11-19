@@ -15,7 +15,7 @@ metadata:
 data:
   plugins.yaml: |
     plugins:
-      {{ .Values.global.tlsCertIssuer }}:
+      greenlight-coop:
       - approve
       - assign
       - blunderbuss
@@ -87,11 +87,12 @@ data:
     plank:
       job_url_prefix_config:
         # TODO: Remove the gcs suffix once https://github.com/kubernetes/test-infra/pull/17779 is in
-        "*": https://prow.{{ .Values.global.appsDomainName }}/view/gcs
+        "*": https://prow.apps-feature-10.greenlightcoop.dev/view/gcs
       report_templates:
         '*': >-
-            [Full PR test history](https://prow.{{ .Values.global.appsDomainName }}/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
-            [Your PR dashboard](https://prow.{{ .Values.global.appsDomainName }}/pr?query=is:pr+state:open+author:{{with index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+            [Full PR test history](https://prow.apps-feature-10.greenlightcoop.dev/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
+            [Your PR dashboard](https://prow.apps-feature-10.greenlightcoop.dev/pr?query=is:pr+state:open+author:{{with
+            index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
       default_decoration_configs:
         "*":
           gcs_configuration:
@@ -115,7 +116,7 @@ data:
         - do-not-merge/work-in-progress
         - do-not-merge/invalid-owners-file
         orgs:
-        - {{ .Values.github.organization }}
+        - greenlight-coop
 
     decorate_all_jobs: true
     periodics:
@@ -543,7 +544,7 @@ metadata:
   annotations:
     # Change this to your issuer when using cert-manager. Does
     # nothing when not using cert-manager.
-    cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+    cert-manager.io/cluster-issuer: letsencrypt-production
     kubernetes.io/ingress.class: nginx
 spec:
   backend:
@@ -551,7 +552,7 @@ spec:
     serviceName: deck
     servicePort: 80
   rules:
-  - host: prow.{{ .Values.global.appsDomainName }}
+  - host: prow.apps-feature-10.greenlightcoop.dev
     http:
       paths:
       - path: /
@@ -564,7 +565,7 @@ spec:
           servicePort: 8888
   tls:
   - hosts:
-    - prow.{{ .Values.global.appsDomainName }}
+    - prow.apps-feature-10.greenlightcoop.dev
     secretName: prow-ingress-tls
 ---
 apiVersion: apps/v1
