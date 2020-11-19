@@ -4,3 +4,8 @@ spec:
   source:    # These values overridden in the argocd-apps-apps Application definition
     repoURL: git@github.com:greenlight-coop/argocd-apps.git
     targetRevision: HEAD
+github:
+  organization: greenlight-coop
+ingress:
+  host: prow.apps.greenlightcoop.dev
+  certIssuer: letsencrypt-production
