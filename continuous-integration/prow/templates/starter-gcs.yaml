@@ -96,7 +96,7 @@ data:
       default_decoration_configs:
         "*":
           gcs_configuration:
-            bucket: gs://bucket-name
+            bucket: gs://greenlight-prow-artifacts-feature-10
             path_strategy: explicit
           gcs_credentials_secret: gcs-credentials
           utility_images:
