@@ -14,7 +14,17 @@ spec:
   workspaces:
     - name: git-source
     - name: greenlight-projects
+    - name: status-workspace
   tasks:
+    - name: set-default-outcome-github-status
+      taskRef:
+        name: set-outcome-github-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
     - name: publish-pending-status-to-github
       taskRef:
         name: github-set-status
@@ -78,7 +88,22 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: set-success-outcome-github-status
+      taskRef:
+        name: set-outcome-github-status
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
   finally:
+    - name: get-outcome-github-status
+      taskRef:
+        name: get-outcome-github-status
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
     - name: publish-completion-status-to-github
       taskRef:
         name: github-set-status
@@ -92,8 +117,8 @@ spec:
         - name: GITHUB_TOKEN_SECRET_KEY
           value: botGithubTokenValue
         - name: STATE
-          value: success
+          value: $(tasks.get-outcome-github-status.results.status)
         - name: DESCRIPTION
-          value: Build succeeded
+          value: Build status - $(tasks.get-outcome-github-status.results.status)
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(params.pipeline-run-name)

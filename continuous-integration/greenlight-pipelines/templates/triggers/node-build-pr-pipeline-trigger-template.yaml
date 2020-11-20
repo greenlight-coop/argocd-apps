@@ -49,3 +49,5 @@ spec:
           - name: greenlight-projects
             configMap:
               name: greenlight-projects
+          - name: status-workspace
+            emptyDir: {}
