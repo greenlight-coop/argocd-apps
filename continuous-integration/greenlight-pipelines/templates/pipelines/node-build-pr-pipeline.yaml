@@ -72,3 +72,7 @@ spec:
               value: webhook-secret
             - name: GITHUB_TOKEN_SECRET_KEY
               value: webhookSecretValue
+            - name: STATE
+              value: success
+            - name: DESCRIPTION
+              value: Build succeeded
