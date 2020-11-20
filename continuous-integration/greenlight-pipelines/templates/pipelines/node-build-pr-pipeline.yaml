@@ -60,37 +60,21 @@ spec:
         - name: source
           workspace: git-source
   finally:
-    - name: echo-hello-world
+    - name: publish-status-to-github
       taskRef:
-        name: echo-hello-world
-    # - name: publish-status-to-github
-    #   taskRef:
-    #     name: github-set-status
-    #   params:
-    #     - name: REPO_FULL_NAME
-    #       value: greenlight-coop/$(params.project-name)
-    #     - name: SHA
-    #       value: $(params.git-revision)
-    #     - name: GITHUB_TOKEN_SECRET_NAME
-    #       value: webhook-secret
-    #     - name: GITHUB_TOKEN_SECRET_KEY
-    #       value: webhookSecretValue
-    #     - name: STATE
-    #       value: success
-    #     - name: DESCRIPTION
-    #       value: Build succeeded
-    #     - name: TARGET_URL
-    #       value: https://dashboard.apps-feature-10.greenlightcoop.dev
----
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: echo-hello-world
-spec:
-  steps:
-    - name: echo
-      image: ubuntu
-      command:
-        - echo
-      args:
-        - "Hello World from finally block"
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: webhook-secret
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: webhookSecretValue
+        - name: STATE
+          value: success
+        - name: DESCRIPTION
+          value: Build succeeded
+        - name: TARGET_URL
+          value: https://dashboard.apps-feature-10.greenlightcoop.dev
