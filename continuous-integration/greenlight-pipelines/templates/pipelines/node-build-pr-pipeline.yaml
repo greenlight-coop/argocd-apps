@@ -61,7 +61,7 @@ spec:
           workspace: git-source
   finally:
     - name: publish-status-to-github
-      taskref:
+      taskRef:
         - name: github-set-status
           params:
             - name: REPO_FULL_NAME
