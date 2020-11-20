@@ -128,5 +128,5 @@ spec:
             print("Error: %d" % (resp.status))
             print(resp.read())
         else:
-          print("GitHub status '$(params.STATE)' has been set on "
+          print("GitHub status '" + status + "' has been set on "
                 "$(params.REPO_FULL_NAME)#$(params.SHA) ")
