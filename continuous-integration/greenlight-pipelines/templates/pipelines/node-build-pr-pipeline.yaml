@@ -60,12 +60,12 @@ spec:
         - name: source
           workspace: git-source
   finally:
-    - name:
+    - name: echo-hello-world
       taskRef:
         name: echo-hello-world
     # - name: publish-status-to-github
     #   taskRef:
-    #     - Name: github-set-status
+    #     name: github-set-status
     #   params:
     #     - name: REPO_FULL_NAME
     #       value: greenlight-coop/$(params.project-name)
