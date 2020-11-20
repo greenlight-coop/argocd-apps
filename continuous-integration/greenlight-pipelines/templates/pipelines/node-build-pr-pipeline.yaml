@@ -63,16 +63,16 @@ spec:
     - name: publish-status-to-github
       taskRef:
         - name: github-set-status
-          params:
-            - name: REPO_FULL_NAME
-              value: greenlight-coop/$(params.project-name)
-            - name: SHA
-              value: $(params.git-revision)
-            - name: GITHUB_TOKEN_SECRET_NAME
-              value: webhook-secret
-            - name: GITHUB_TOKEN_SECRET_KEY
-              value: webhookSecretValue
-            - name: STATE
-              value: success
-            - name: DESCRIPTION
-              value: Build succeeded
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: webhook-secret
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: webhookSecretValue
+        - name: STATE
+          value: success
+        - name: DESCRIPTION
+          value: Build succeeded
