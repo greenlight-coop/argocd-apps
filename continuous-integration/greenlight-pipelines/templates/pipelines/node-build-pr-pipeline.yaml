@@ -69,9 +69,9 @@ spec:
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME
-          value: webhook-secret
+          value: bot-github-token
         - name: GITHUB_TOKEN_SECRET_KEY
-          value: webhookSecretValue
+          value: botGithubTokenValue
         - name: STATE
           value: success
         - name: DESCRIPTION
