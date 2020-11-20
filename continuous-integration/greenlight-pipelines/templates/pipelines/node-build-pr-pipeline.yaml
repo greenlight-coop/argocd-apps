@@ -10,10 +10,29 @@ spec:
     - name: git-branch
     - name: git-pr-number
     - name: git-pr-commit-number
+    - name: pipeline-run-name
   workspaces:
     - name: git-source
     - name: greenlight-projects
   tasks:
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(params.pipeline-run-name)
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -60,7 +79,7 @@ spec:
         - name: source
           workspace: git-source
   finally:
-    - name: publish-status-to-github
+    - name: publish-completion-status-to-github
       taskRef:
         name: github-set-status
       params:
@@ -77,4 +96,4 @@ spec:
         - name: DESCRIPTION
           value: Build succeeded
         - name: TARGET_URL
-          value: https://dashboard.apps-feature-10.greenlightcoop.dev
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(params.pipeline-run-name)
