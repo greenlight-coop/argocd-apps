@@ -90,9 +90,9 @@ data:
         "*": https://prow.apps-feature-10.greenlightcoop.dev/view/gcs
       report_templates:
         '*': >-
-            [Full PR test history](https://prow.apps-feature-10.greenlightcoop.dev/pr-history?org={{.Spec.Refs.Org}}&repo={{.Spec.Refs.Repo}}&pr={{with index .Spec.Refs.Pulls 0}}{{.Number}}{{end}}).
-            [Your PR dashboard](https://prow.apps-feature-10.greenlightcoop.dev/pr?query=is:pr+state:open+author:{{with
-            index .Spec.Refs.Pulls 0}}{{.Author}}{{end}}).
+            [Full PR test history](https://prow.apps-feature-10.greenlightcoop.dev/pr-history?org={{ "{{" }}.Spec.Refs.Org{{ "}}" }}&repo={{ "{{" }}.Spec.Refs.Repo{{ "}}" }}&pr={{ "{{" }}with index .Spec.Refs.Pulls 0{{ "}}" }}{{ "{{" }}.Number{{ "}}" }}{{ "{{" }}end{{ "}}" }}).
+            [Your PR dashboard](https://prow.apps-feature-10.greenlightcoop.dev/pr?query=is:pr+state:open+author:{{ "{{" }}with
+            index .Spec.Refs.Pulls 0{{ "}}" }}{{ "{{" }}.Author{{ "}}" }}{{ "{{" }}end{{ "}}" }}).
       default_decoration_configs:
         "*":
           gcs_configuration:
