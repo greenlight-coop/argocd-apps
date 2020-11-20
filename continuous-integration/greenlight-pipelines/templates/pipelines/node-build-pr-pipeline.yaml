@@ -10,7 +10,6 @@ spec:
     - name: git-branch
     - name: git-pr-number
     - name: git-pr-commit-number
-    - name: pipeline-run-name
   workspaces:
     - name: git-source
     - name: greenlight-projects
@@ -42,7 +41,7 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(params.pipeline-run-name)
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -118,4 +117,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(params.pipeline-run-name)
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
