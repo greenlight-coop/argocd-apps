@@ -40,3 +40,10 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+  ignoreDifferences:
+    - group: greenlight-projects
+      kind: ConfigMap
+      name: greenlight-projects
+      namespace: greenlight-projects
+      jsonPointers:
+        - /data
