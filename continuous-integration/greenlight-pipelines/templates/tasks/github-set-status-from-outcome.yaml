@@ -78,7 +78,7 @@ spec:
     default: "continuous-integration/tekton"
     type: string
 
-  workspace:
+  workspaces:
     - name: status-workspace
       description: status is saved into this workspace
 

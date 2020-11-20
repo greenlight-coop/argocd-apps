@@ -8,7 +8,7 @@ spec:
     Sets the final status notification outcome for use in the finally block at the end of
     a Pipeline. General expected usage is to set initially to 'failure' at the start of the run
     and then set to success as the final step of the Pipeline prior to the finally block.
-  workspace:
+  workspaces:
     - name: status-workspace
       description: status is saved into this workspace
   params:
