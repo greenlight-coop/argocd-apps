@@ -59,4 +59,16 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-
+  finally:
+    - name: publish-status-to-github
+      taskref:
+        - name: github-set-status
+          params:
+            - name: REPO_FULL_NAME
+              value: greenlight-coop/$(params.project-name)
+            - name: SHA
+              value: $(params.git-revision)
+            - name: GITHUB_TOKEN_SECRET_NAME
+              value: webhook-secret
+            - name: GITHUB_TOKEN_SECRET_KEY
+              value: webhookSecretValue

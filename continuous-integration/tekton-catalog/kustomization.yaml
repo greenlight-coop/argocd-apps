@@ -6,3 +6,6 @@ resources:
   - kn/0.1/kn.yaml
   - knctl-deploy/0.1/knctl-deploy.yaml
   - kubernetes-actions/0.1/kubernetes-actions.yaml
+  - github-add-comment/0.2/github-add-comment.yaml
+  - github-add-labels/0.1/github-add-labels.yaml
+  - github-set-status/0.2/github-set-status.yaml
