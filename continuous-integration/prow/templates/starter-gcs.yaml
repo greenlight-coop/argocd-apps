@@ -96,7 +96,7 @@ data:
       default_decoration_configs:
         "*":
           gcs_configuration:
-            bucket: gs://greenlight-prow-artifacts-feature-10
+            bucket: gs://prow-artifacts-greenlight-feature-10
             path_strategy: explicit
           gcs_credentials_secret: gcs-credentials
           utility_images:
@@ -497,8 +497,8 @@ spec:
         - --github-endpoint=https://api.github.com
         - --github-graphql-endpoint=http://ghproxy/graphql
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
-        - --status-path=gs://tide/tide-status
-        - --history-uri=gs://tide/tide-history.json
+        - --status-path=gs://tide-greenlight-feature-10/tide-status
+        - --history-uri=gs://tide-greenlight-feature-10/tide-history.json
         ports:
           - name: http
             containerPort: 8888
@@ -599,7 +599,7 @@ spec:
         - --github-endpoint=http://ghproxy
         - --github-endpoint=https://api.github.com
         - --gcs-credentials-file=/etc/gcs-credentials/service-account.json
-        - --status-path=gs://status-reconciler/status-reconciler-status
+        - --status-path=gs://status-reconciler-greenlight-feature-10/status-reconciler-status
         volumeMounts:
         - name: github-token
           mountPath: /etc/github
