@@ -62,7 +62,7 @@ spec:
   finally:
     - name: publish-status-to-github
       taskRef:
-        - name: github-set-status
+        - Name: github-set-status
       params:
         - name: REPO_FULL_NAME
           value: greenlight-coop/$(params.project-name)
