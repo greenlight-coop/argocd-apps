@@ -62,7 +62,7 @@ spec:
   finally:
     - name:
       taskRef:
-        - name: echo-hello-world
+        name: echo-hello-world
     # - name: publish-status-to-github
     #   taskRef:
     #     - Name: github-set-status
