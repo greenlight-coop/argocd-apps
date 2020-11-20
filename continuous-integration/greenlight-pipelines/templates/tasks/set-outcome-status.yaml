@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: set-outcome-github-status
+  name: set-outcome-status
   namespace: greenlight-pipelines
 spec:
   description: >-
