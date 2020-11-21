@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: argocd
     server: {{ .Values.spec.destination.server }}
-  project: istio
+  project: greenlight-project
   source:
     path: istio/apps
     repoURL: {{ .Values.spec.source.repoURL }}

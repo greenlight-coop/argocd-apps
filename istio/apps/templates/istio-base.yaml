@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: istio-system
     server: {{ .Values.spec.destination.server }}
-  project: istio-base
+  project: greenlight-project
   source:
     path: istio/istio-1.8.0/manifests/charts/base
     repoURL: {{ .Values.spec.source.repoURL }}
