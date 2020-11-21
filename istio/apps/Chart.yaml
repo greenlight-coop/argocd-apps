@@ -5,7 +5,8 @@ description: >-
   https://istio.io/latest/docs/setup/install/helm/
 
   Istio distribution (1.8.0) downloaded by running: 
-  curl -L https://istio.io/downloadIstio | sh -
+  curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.8.0 TARGET_ARCH=x86_64 sh -
+
 
 # A chart can be either an 'application' or a 'library' chart.
 #
