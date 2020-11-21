@@ -18,18 +18,12 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       parameters:
-      - name: "global.apiDomainName"
-        value: {{ .Values.global.apiDomainName }}
       - name: "global.appsDomainName"
         value: {{ .Values.global.appsDomainName }}
-      - name: "global.knativeDomainName"
-        value: {{ .Values.global.knativeDomainName }}
       - name: "global.tlsCertIssuer"
         value: {{ .Values.global.tlsCertIssuer }}
       - name: "global.tlsSecretName"
         value: {{ .Values.global.tlsSecretName }}
-      - name: "global.targetRevision"
-        value: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true
