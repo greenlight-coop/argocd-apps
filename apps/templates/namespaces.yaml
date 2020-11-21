@@ -3,5 +3,5 @@ kind: Namespace
 metadata:
   name: staging
   annotations:
-    argocd.argoproj.io/sync-wave: "-20"
+    argocd.argoproj.io/sync-wave: "-40"
     
