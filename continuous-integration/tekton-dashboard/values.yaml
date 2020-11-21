@@ -1,4 +1,4 @@
-# Default values for greenlight-pipelines
+# Default values for tekton-dashboard
 
 global:
   appsDomainName: apps.greenlightcoop.dev

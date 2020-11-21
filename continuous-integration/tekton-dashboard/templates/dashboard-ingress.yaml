@@ -2,13 +2,13 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
     kubernetes.io/ingress.class: nginx
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
   rules:
-  - host: dashboard.apps-feature-10.greenlightcoop.dev
+  - host: dashboard.{{ .Values.global.appsDomainName }}
     http:
       paths:
       - backend:
@@ -17,6 +17,6 @@ spec:
         path: /
   tls:
   - hosts:
-    - dashboard.apps-feature-10.greenlightcoop.dev
-    secretName: letsencrypt-production
+    - dashboard.{{ .Values.global.appsDomainName }}
+    secretName: {{ .Values.global.tlsSecretName }}
 
