@@ -13,7 +13,35 @@ spec:
     - name: greenlight-projects
     - name: kubeconfig-dir
     - name: manifest-dir
+    - name: status-workspace
   tasks:
+    - name: set-default-outcome
+      taskRef:
+        name: set-outcome-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -70,4 +98,35 @@ spec:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
         - name: manifest-dir
-          workspace: manifest-dir
+          workspace: manifest-dir    
+    - name: set-success-outcome
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+  finally:
+    - name: publish-outcome-status-to-github
+      taskRef:
+        name: github-set-status-from-outcome
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: DESCRIPTION
+          value: Build complete
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

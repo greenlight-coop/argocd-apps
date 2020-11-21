@@ -18,7 +18,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: $(tt.params.project-name)-node-build-pr-pipeline-run-
+        name: $(tt.params.project-name)-node-build-pr-pipeline-run-$(uid)
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
@@ -27,6 +27,8 @@ spec:
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: pipeline-run-name
+            value: $(tt.params.project-name)-node-build-pr-pipeline-run-$(uid)
           - name: git-revision
             value: $(tt.params.git-revision)  
           - name: git-branch
@@ -44,6 +46,14 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+          - name: status-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Ki
           - name: greenlight-projects
             configMap:
               name: greenlight-projects

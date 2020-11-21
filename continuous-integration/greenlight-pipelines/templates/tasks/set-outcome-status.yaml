@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: set-outcome-status
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Sets the final status notification outcome for use in the finally block at the end of
+    a Pipeline. General expected usage is to set initially to 'failure' at the start of the run
+    and then set to success as the final step of the Pipeline prior to the finally block.
+  workspaces:
+    - name: status-workspace
+      description: status is saved into this workspace
+  params:
+    - name: status
+      description: the status value to set
+  steps:
+    - name: set-outcome-status
+      image: node:14.15
+      script: |
+        #!/usr/bin/env node
+        const fs = require('fs')
+        fs.writeFileSync('$(workspaces.status-workspace.path)/status', '$(params.status)')

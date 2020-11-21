@@ -36,6 +36,14 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+          - name: status-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Ki
           - name: greenlight-projects
             configMap:
               name: greenlight-projects
