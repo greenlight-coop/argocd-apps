@@ -32,4 +32,4 @@ spec:
     - group: tekton.dev
       kind: CustomResourceDefinition
       jsonPointers:
-        - /preserveUnknownFields
+        - /spec/preserveUnknownFields

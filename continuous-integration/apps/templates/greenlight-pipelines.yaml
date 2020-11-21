@@ -46,4 +46,4 @@ spec:
       name: greenlight-projects
       namespace: greenlight-projects
       jsonPointers:
-        - /data
+        - /spec/data
