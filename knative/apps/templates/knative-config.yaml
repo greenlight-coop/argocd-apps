@@ -16,6 +16,17 @@ spec:
     path: knative/knative-config
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      parameters:
+      - name: "global.knativeDomainName"
+        value: {{ .Values.global.knativeDomainName }}
+      - name: "global.tlsCertIssuer"
+        value: {{ .Values.global.tlsCertIssuer }}
+      - name: "global.tlsSecretName"
+        value: {{ .Values.global.tlsSecretName }}
+      - name: "global.targetRevision"
+        value: {{ .Values.global.targetRevision }}
+
   syncPolicy:
     automated:
       prune: true
