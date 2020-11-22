@@ -32,4 +32,4 @@ spec:
       - group: networking.istio.io
         kind: ValidatingWebhookConfiguration
         jsonPointers:
-        - /webhooks/0/clientConfig
+        - /webhooks/0/clientConfig/caBundle
