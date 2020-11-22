@@ -16,19 +16,19 @@ spec:
     path: istio/istio-1.8.0/manifests/charts/base
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-    retry:
-      limit: 5
-      backoff:
-        duration: 5s
-        factor: 2
-        maxDuration: 3m
-    ignoreDifferences:
-      - kind: ValidatingWebhookConfiguration
-        jsonPointers:
-        - /webhooks/0/failurePolicy
+  syncPolicy: {}
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    # syncOptions:
+    #   - CreateNamespace=true
+    # retry:
+    #   limit: 5
+    #   backoff:
+    #     duration: 5s
+    #     factor: 2
+    #     maxDuration: 3m
+    # ignoreDifferences:
+    #   - kind: ValidatingWebhookConfiguration
+    #     jsonPointers:
+    #     - /webhooks/0/failurePolicy
