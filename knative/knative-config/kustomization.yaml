@@ -1,0 +1,2 @@
+resources:
+  - knative-serving-permissive.yaml
