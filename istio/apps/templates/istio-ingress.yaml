@@ -13,7 +13,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-1.7.5/manifests/charts/gateways/istio-egress
+    path: istio/istio-1.7.5/manifests/charts/gateways/istio-ingress
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
