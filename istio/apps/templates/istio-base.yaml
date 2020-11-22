@@ -31,4 +31,4 @@ spec:
     ignoreDifferences:
       - kind: ValidatingWebhookConfiguration
         jsonPointers:
-        - /webhooks/0/clientConfig/caBundle
+        - /webhooks/0/failurePolicy
