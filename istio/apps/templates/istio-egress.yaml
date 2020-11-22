@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-discovery
+  name: istio-egress
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "-40"
@@ -13,7 +13,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-1.7.5/manifests/charts/istio-control/istio-discovery
+    path: istio/istio-1.7.5/manifests/charts/gateways/istio-egress
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
