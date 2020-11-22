@@ -1,0 +1,2 @@
+resources:
+  - knative-serving-crds-0.19.0.yaml
