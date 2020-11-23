@@ -1,5 +1,5 @@
 apiVersion: v2
-name: apps
+name: infrastructure
 description: Defines the applications to be deployed by Argo CD.
 
 # A chart can be either an 'application' or a 'library' chart.
