@@ -118,7 +118,6 @@ data:
   issuerRef: |
     kind: ClusterIssuer
     name: {{ .Values.global.tlsCertIssuer }}
-  
 ---
 # Copyright 2020 The Knative Authors
 #
