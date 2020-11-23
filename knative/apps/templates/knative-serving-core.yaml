@@ -16,7 +16,7 @@ spec:
     path: knative/knative-serving-core
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-        helm:
+    helm:
       parameters:
       - name: "global.knativeDomainName"
         value: {{ .Values.global.knativeDomainName }}
