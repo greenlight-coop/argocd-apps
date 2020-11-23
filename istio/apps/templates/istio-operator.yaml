@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-30"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: istio-system
+    server: {{ .Values.spec.destination.server }}
+  project: greenlight-project
+  source:
+    path: istio/istio-1.7.5/manifests/charts/istio-operator
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      values: |
+        global:
+          hub: docker.io/istio
+          tag: 1.7.5
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
