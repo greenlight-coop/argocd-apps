@@ -1,6 +1,6 @@
 spec:
   destination:
     server: https://kubernetes.default.svc
-  source:    # These values overridden in the argocd-apps-apps Application definition
-    repoURL: git@github.com:greenlight-coop/argocd-apps.git
+  source:    # These values overridden in the infrastructure Application definition
+    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructuregit
     targetRevision: HEAD
