@@ -28,6 +28,8 @@ spec:
     automated:
       prune: true
       selfHeal: false
+    syncOptions:
+    - CreateNamespace=true
     retry:
       limit: 5
       backoff:
