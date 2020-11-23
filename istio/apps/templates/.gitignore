@@ -1,2 +1,4 @@
 # Temporarily remove applications
-istio-ingress.yaml
+istio-base.yaml
+istio-discovery.yaml
+istio-operator.yaml
