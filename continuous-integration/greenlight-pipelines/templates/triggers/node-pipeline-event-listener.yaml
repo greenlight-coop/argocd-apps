@@ -22,8 +22,8 @@ spec:
         - cel:
             filter: "body.action in ['opened', 'reopened']"
             overlays:
-              - key: extensions.preview_namespace
-                expression: "body.pull_request.head.ref.split('/').join('-')"
+              - key: extensions.branch-with-hyphen
+                expression: "body.pull_request.head.ref.split('/')[0] + '-' + body.pull_request.head.ref.split('/')[1]"
     - name: node-pr-pipeline-trigger
       template:
         ref: node-pr-pipeline-trigger-template
