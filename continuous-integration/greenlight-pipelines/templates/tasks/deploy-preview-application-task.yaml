@@ -1,0 +1,61 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-preview-application
+spec:
+  description: >-
+    Deploys a preview version of a service for isolated integration testing. Based on tekton-catalog kuberenets-actions
+    task.
+  params:
+    - name: project-name
+      description: The project name for the application to install (should match GitHub repo and Docker image name)
+      type: string
+    - name: namespace
+      description: The namespace to install the preview into
+      type: string
+    - name: image-version
+      description: Version of the Docker image to deploy
+      type: string
+    - name: kubectl-image
+      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
+      description: Kubectl wrapper image
+  steps:
+    - name: deploy-application-to-argocd
+      image: $(params.kubectl-image)
+      script: |
+        #!/usr/bin/env bash
+
+        cat <<EOF | kubectl apply -f -
+        apiVersion: argoproj.io/v1alpha1
+        kind: Application
+        metadata:
+          name: $(params.project-name)-$(params.namespace)
+          namespace: argocd
+          finalizers:
+            - resources-finalizer.argocd.argoproj.io
+        spec:
+          destination:
+            namespace: $(params.namespace)
+            server: https://kubernetes.default.svc
+          project: greenlight-project
+          source:
+            path: $(params.project-name)/charts/helloworld
+            repoURL: git@github.com:greenlight-coop/argocd-greenlight-software.git
+            targetRevision: HEAD
+            helm:
+              parameters:
+              - name: namespace
+                value: $(params.namespace)
+              - name: image.tag
+                value: $(params.image-version)
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            retry:
+              limit: 5
+              backoff:
+                duration: 5s
+                factor: 2
+                maxDuration: 3m
+        EOF
