@@ -119,7 +119,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - build-and-push-image
+        - deploy-preview-application
       params:
         - name: status
           value: success
