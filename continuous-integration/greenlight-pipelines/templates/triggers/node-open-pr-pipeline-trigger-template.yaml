@@ -1,0 +1,63 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: node-open-pr-pipeline-trigger-template
+spec:
+  params:
+    - name: project-name
+      description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: git-revision
+      description: The revision to clone and build
+    - name: git-branch
+      description: the branch being built, either main|master or a feature branch (e.g. feature/5)
+    - name: git-pr-number
+      description: GitHub pull request number
+    - name: git-pr-commit-number
+      description: ascending count of commit in a pull request
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        name: $(tt.params.project-name)-node-open-pr-pipeline-run-$(uid)
+        namespace: greenlight-pipelines
+      spec:
+        pipelineRef:
+          name: node-open-pr-pipeline
+        serviceAccountName: pipeline-sa
+        params:
+          - name: project-name
+            value: $(tt.params.project-name)
+          - name: pipeline-run-name
+            value: $(tt.params.project-name)-node-pr-pipeline-run-$(uid)
+          - name: git-revision
+            value: $(tt.params.git-revision)  
+          - name: git-branch
+            value: $(tt.params.git-branch)  
+          - name: git-pr-number
+            value: $(tt.params.git-pr-number)  
+          - name: git-pr-commit-number
+            value: $(tt.params.git-pr-commit-number)  
+        workspaces:
+          - name: git-source
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+          - name: status-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Ki
+          - name: greenlight-projects
+            configMap:
+              name: greenlight-projects
+          - name: kubeconfig-dir
+            emptyDir: {}
+          - name: manifest-dir
+            emptyDir: {}
