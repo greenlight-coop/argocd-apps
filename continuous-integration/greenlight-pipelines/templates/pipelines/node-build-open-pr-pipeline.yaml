@@ -114,7 +114,7 @@ spec:
           value: preview-$(git-branch)-pr-$(git-pr-number)
         - name: image-version
           value: $(tasks.generate-image-tag.results.image-tag)
-     - name: set-success-outcome
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
