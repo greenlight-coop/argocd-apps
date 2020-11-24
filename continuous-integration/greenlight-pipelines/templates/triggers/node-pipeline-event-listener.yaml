@@ -6,9 +6,9 @@ metadata:
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: node-build-open-pr-pipeline-trigger
+    - name: node-open-pr-pipeline-trigger
       template:
-        ref: node-build-open-pr-pipeline-trigger-template
+        ref: node-open-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -21,9 +21,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['opened', 'reopened']"
-    - name: node-build-pr-pipeline-trigger
+    - name: node-pr-pipeline-trigger
       template:
-        ref: node-build-pr-pipeline-trigger-template
+        ref: node-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -58,9 +58,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
-    - name: node-build-main-pipeline-trigger
+    - name: node-main-pipeline-trigger
       template:
-        ref: node-build-main-pipeline-trigger-template
+        ref: node-main-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: push-trigger-binding
