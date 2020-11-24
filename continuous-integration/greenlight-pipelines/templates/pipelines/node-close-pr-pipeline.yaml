@@ -61,7 +61,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - deploy-preview-application
+        - delete-pr-namespace
       params:
         - name: status
           value: success
