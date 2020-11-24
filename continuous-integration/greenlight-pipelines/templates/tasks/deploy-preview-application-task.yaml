@@ -39,7 +39,7 @@ spec:
             server: https://kubernetes.default.svc
           project: greenlight-project
           source:
-            path: $(params.project-name)/charts/helloworld
+            path: $(params.project-name)/charts/preview
             repoURL: git@github.com:greenlight-coop/argocd-greenlight-software.git
             targetRevision: HEAD
             helm:

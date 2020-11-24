@@ -20,5 +20,5 @@ spec:
     - name: git-pr-commit-number
       value: $(body.pull_request.commits)
     - name: preview-namespace
-      value: preview-$(body.extensions.branch-with-hyphen)-pr-$(body.number)
+      value: prvw-pr-$(body.number)
       

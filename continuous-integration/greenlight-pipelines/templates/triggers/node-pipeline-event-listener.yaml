@@ -21,12 +21,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['opened', 'reopened']"
-            overlays:
-              - key: extensions.branch-with-hyphen
-                expression: "body.pull_request.head.ref.split('/')[0] + '-' + body.pull_request.head.ref.split('/')[1]"
-    - name: node-pr-pipeline-trigger
+    - name: node-update-pr-pipeline-trigger
       template:
-        ref: node-pr-pipeline-trigger-template
+        ref: node-update-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -39,22 +36,12 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['synchronize']"
-            overlays:
-              - key: extensions.preview_namespace
-                expression: "body.pull_request.head.ref.split('/').join('-')"
-    - name: node-remove-pr-pipeline-trigger
+    - name: node-close-pr-pipeline-trigger
       template:
-        spec:
-          resourcetemplates:
-            - apiVersion: tekton.dev/v1beta1
-              kind: TaskRun
-              metadata:
-                generateName: node-remove-pr-temp-task-run-
-              spec:
-                taskSpec:
-                  steps:
-                    - image: ubuntu
-                      script: echo 'TBD - handle removal of PR build resources'
+        ref: node-close-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
       interceptors:
         - github:
             secretRef:
@@ -64,9 +51,6 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
-            overlays:
-              - key: extensions.preview_namespace
-                expression: "body.pull_request.head.ref.split('/').join('-')"
     - name: node-main-pipeline-trigger
       template:
         ref: node-main-pipeline-trigger-template
