@@ -21,6 +21,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['opened', 'reopened']"
+            overlays:
+              - key: extensions.preview_namespace
+                expression: "body.pull_request.head.ref.split('/').join('-')"
     - name: node-pr-pipeline-trigger
       template:
         ref: node-pr-pipeline-trigger-template
@@ -36,6 +39,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['synchronize']"
+            overlays:
+              - key: extensions.preview_namespace
+                expression: "body.pull_request.head.ref.split('/').join('-')"
     - name: node-remove-pr-pipeline-trigger
       template:
         spec:
@@ -58,6 +64,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
+            overlays:
+              - key: extensions.preview_namespace
+                expression: "body.pull_request.head.ref.split('/').join('-')"
     - name: node-main-pipeline-trigger
       template:
         ref: node-main-pipeline-trigger-template
@@ -74,5 +83,5 @@ spec:
         - cel:
             filter: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
             overlays:
-            - key: extensions.branch_name
-              expression: "body.ref.split('/')[2]"
+              - key: extensions.branch_name
+                expression: "body.ref.split('/')[2]"

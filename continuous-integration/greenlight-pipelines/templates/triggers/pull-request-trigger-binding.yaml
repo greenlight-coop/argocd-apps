@@ -19,3 +19,6 @@ spec:
       value: $(body.number)
     - name: git-pr-commit-number
       value: $(body.pull_request.commits)
+    - name: preview-namespace
+      value: $(body.extensions.preview_namespace)
+      

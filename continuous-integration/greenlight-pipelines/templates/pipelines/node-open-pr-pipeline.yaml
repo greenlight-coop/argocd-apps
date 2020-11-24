@@ -10,6 +10,7 @@ spec:
     - name: git-branch
     - name: git-pr-number
     - name: git-pr-commit-number
+    - name: preview-namespace
   workspaces:
     - name: git-source
     - name: greenlight-projects
@@ -50,7 +51,7 @@ spec:
       params:
         - name: script
           value: |
-            kubectl create namespace preview-$(params.git-branch)-pr-$(params.git-pr-number)
+            kubectl create namespace $(params.preview-namespace)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
@@ -111,7 +112,7 @@ spec:
         - name: project-name
           value: $(params.project-name)
         - name: namespace
-          value: preview-$(git-branch)-pr-$(git-pr-number)
+          value: $(params.preview-namespace)
         - name: image-version
           value: $(tasks.generate-image-tag.results.image-tag)
     - name: set-success-outcome
