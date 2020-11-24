@@ -10,6 +10,7 @@ spec:
     - name: git-branch
     - name: git-pr-number
     - name: git-pr-commit-number
+    - name: preview-namespace
   workspaces:
     - name: git-source
     - name: greenlight-projects
@@ -87,6 +88,18 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: deploy-preview-application
+      taskRef:
+        name: deploy-preview-application
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: project-name
+          value: $(params.project-name)
+        - name: namespace
+          value: $(params.preview-namespace)
+        - name: image-version
+          value: $(tasks.generate-image-tag.results.image-tag)
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
