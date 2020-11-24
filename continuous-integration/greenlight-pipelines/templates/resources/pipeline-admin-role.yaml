@@ -9,13 +9,13 @@ secrets:
   - name: git-auth
 
 ---
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   name: pipeline-role
 rules:
   - apiGroups: ["extensions", "apps", ""]
-    resources: ["services", "deployments", "pods", "configmaps", "namespaces"]
+    resources: ["services", "deployments", "pods", "configmaps"]
     verbs: ["get", "create", "update", "patch", "list", "delete"]
 
 ---
@@ -31,3 +31,13 @@ subjects:
   - kind: ServiceAccount
     name: pipeline-sa
     namespace: greenlight-pipelines
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pipeline-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "create", "update", "patch", "list", "delete"]
