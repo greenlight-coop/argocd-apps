@@ -15,7 +15,7 @@ metadata:
   name: pipeline-role
 rules:
   - apiGroups: ["extensions", "apps", ""]
-    resources: ["services", "deployments", "pods", "configmaps"]
+    resources: ["services", "deployments", "pods", "configmaps", "namespaces"]
     verbs: ["get", "create", "update", "patch", "list", "delete"]
 
 ---
