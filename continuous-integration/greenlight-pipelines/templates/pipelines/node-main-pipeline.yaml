@@ -88,22 +88,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: update-version
-      taskRef:
-        name: kubernetes-actions
-      runAfter:
-        - build-and-push-image
-      params:
-        - name: script
-          value: |
-            # kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
-            #   -p '{"data": {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}}' 
-            # kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
