@@ -45,6 +45,13 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: delete-preview-application
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace $(params.preview-namespace) applications.argoproj.io $(params.project-name)-$(params.preview-namespace)
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions
@@ -62,6 +69,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - delete-pr-namespace
+        - delete-preview-application
       params:
         - name: status
           value: success
