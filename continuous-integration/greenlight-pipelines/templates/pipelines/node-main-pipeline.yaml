@@ -52,6 +52,11 @@ spec:
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
+        - name: docker-hub-token
+          value: $(tasks.get-docker-hub-authentication-token.results.token)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
