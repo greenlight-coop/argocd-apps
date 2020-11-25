@@ -32,7 +32,6 @@ spec:
         async function saveToken () {
           const token = await getToken()
           fs.writeFileSync('$(results.token.path)', token)
-          console.log('Docker Hub token: %s', token)
         }
 
         async function getToken () {
@@ -46,13 +45,11 @@ spec:
           }
           const url = api + 'users/login/'
           console.log('Making authentication request to %s', url)
-          console.log('POST data: %s', JSON.stringify(data, null, 2))
           const response = await axios.post(url, data, config)
           return response.data.token
         }
 
         async function getAuth () {
           const config = JSON.parse(fs.readFileSync('/tekton/home/.docker/config.json', 'utf8'))
-          console.log('Docker auth config: %s', JSON.stringify(config, null, 2))
           return config.auths[api]
         } 

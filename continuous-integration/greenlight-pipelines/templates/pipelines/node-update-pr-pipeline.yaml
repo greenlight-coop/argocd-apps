@@ -14,6 +14,7 @@ spec:
   workspaces:
     - name: git-source
     - name: status-workspace
+    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -59,6 +60,9 @@ spec:
           value: $(params.git-pr-commit-number)
         - name: docker-hub-token
           value: $(tasks.get-docker-hub-authentication-token.results.token)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
