@@ -72,7 +72,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-triggers-admin-binding
-    namespace: greenlight-pipelines
+  namespace: greenlight-pipelines
 subjects:
   - kind: ServiceAccount
     name: tekton-triggers-admin
@@ -87,7 +87,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-pipelineruns-admin-binding
-    namespace: greenlight-pipeline-runs
+  namespace: greenlight-pipeline-runs
 subjects:
   - kind: ServiceAccount
     name: tekton-triggers-admin
