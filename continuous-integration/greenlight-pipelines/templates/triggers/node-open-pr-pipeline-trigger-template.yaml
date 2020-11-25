@@ -58,9 +58,9 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
-          - name: greenlight-projects
+          - name: node-modules
             configMap:
-              name: greenlight-projects
+              name: node-modules
           - name: kubeconfig-dir
             emptyDir: {}
           - name: manifest-dir

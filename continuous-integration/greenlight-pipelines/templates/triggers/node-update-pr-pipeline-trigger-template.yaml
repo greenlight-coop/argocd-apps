@@ -58,6 +58,3 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
-          - name: greenlight-projects
-            configMap:
-              name: greenlight-projects

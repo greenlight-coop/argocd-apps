@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: get-docker-hub-authentication-token
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Authenticates with Docker Hub using a username and password passed via a secret and results in a token
+    that can be used in subsequent requests.
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.0
+    - name: docker-hub-api-url
+      description: Docker Hub API
+      default: https://hub.docker.com/v2/
+  results:
+    - name: token
+      description: the token to be used for further Docker Hub API interactions
+  steps:
+    - name: get-docker-hub-authentication-token
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env node
+        const fs = require('fs')
+        const axios = require('axios')
+
+        const api = '$(params.docker-hub-api-url)'
+        
+        saveToken()
+
+        async function saveToken () {
+          const token = await getToken()
+          fs.writeFileSync('$(results.token.path)', token)
+          console.log('Docker Hub token: %s', token)
+        }
+
+        async function getToken () {
+          const config = {
+            headers: {'Content-Type': 'application/json'}
+          }
+          const auth = getAuth()
+          const data = {
+            username: auth.username,
+            password: auth.password
+          }
+          const response = await axios.post(api + 'users/login', data, config)
+          return response.data.token
+        }
+
+        async function getAuth () {
+          const config = JSON.parse(fs.readFileSync('/tekton/home/.docker/config.json', 'utf8'))
+          return config.auths[api]
+        } 

@@ -13,7 +13,6 @@ spec:
     - name: preview-namespace
   workspaces:
     - name: git-source
-    - name: greenlight-projects
     - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
@@ -45,6 +44,9 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: get-docker-hub-authentication-token
+      taskRef:
+        name: get-docker-hub-authentication-token
     - name: delete-preview-application
       taskRef:
         name: kubernetes-actions

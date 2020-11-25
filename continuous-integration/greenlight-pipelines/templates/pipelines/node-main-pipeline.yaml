@@ -10,7 +10,6 @@ spec:
     - name: git-branch
   workspaces:
     - name: git-source
-    - name: greenlight-projects
     - name: kubeconfig-dir
     - name: manifest-dir
     - name: status-workspace
@@ -42,6 +41,9 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: get-docker-hub-authentication-token
+      taskRef:
+        name: get-docker-hub-authentication-token
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -50,9 +52,6 @@ spec:
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
-      workspaces:
-        - name: greenlight-projects
-          workspace: greenlight-projects
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -91,9 +90,9 @@ spec:
       params:
         - name: script
           value: |
-            kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
-              -p '{"data": {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}}' 
-            kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
+            # kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
+            #   -p '{"data": {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}}' 
+            # kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir

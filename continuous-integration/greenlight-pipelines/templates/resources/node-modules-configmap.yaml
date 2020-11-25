@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: node-modules
+  namespace: greenlight-pipelines
+data:
+  docker-functions.js: |
+    const axios = require('axios')
+
+    async function getTags (token, api, repository) {
+      const tags = []
+      const config = {
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        }
+      }
+      let url = `${api}repositories/${repository}/tags`
+      let response
+      do {
+        if (response) {
+          url = response.data.next
+        }
+        response = await axios.get(url, config)
+        tags.push(...response.data.results)
+      } while (response.data.next)
+      return tags
+    }
+
+    function getReleaseTags (tags) {
+      const releaseTags = tags.filter(tag => isReleaseVersionTagName(tag.name))
+      releaseTags.sort((tag1, tag2) => getSemanticVersion(tag1.name).compare(getSemanticVersion(tag2.name)))
+      return releaseTags
+    }
+
+    function getPullRequestTags (tags, pullRequestNumber) {
+      return tags.filter(tag => isPullRequestVersionTagName(tag.name, pullRequestNumber))
+    }
+
+    function isReleaseVersionTagName (tagName) {
+      const versionRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
+      return versionRegex.test(tagName)
+    }
+
+    function isPullRequestVersionTagName (tagName, pullRequestNumber) {
+      const versionRegex = new RegExp('^(0|[1-9]\d*)\\.(0|[1-9]\d*)\\.(0|[1-9]\\d*)-([a-z]|[0-9]|-)*-pr-' + pullRequestNumber + '-([a-z]|[0-9]|-)*$')
+      return versionRegex.test(tagName)
+    }
+
+    function getSemanticVersion(tag) {
+      const parts = tag.split('.')
+      return {
+        major: parseInt(parts[0]),
+        minor: parseInt(parts[1]),
+        patch: parseInt(parts[2]),
+        compare: function (otherVersion) {
+          if (this.major != otherVersion.major) {
+            return this.major - otherVersion.major
+          } else if (this.minor != otherVersion.minor) {
+            return this.minor - otherVersion.minor
+          } else {
+            return this.patch - otherVersion.patch
+          } 
+        },
+        toString: function () {
+          return this.major + '.' + this.minor + '.' + this.patch
+        }
+      }
+    }
+
+    module.exports = {
+      getTags,
+      getReleaseTags,
+      getPullRequestTags,
+      getSemanticVersion
+    }

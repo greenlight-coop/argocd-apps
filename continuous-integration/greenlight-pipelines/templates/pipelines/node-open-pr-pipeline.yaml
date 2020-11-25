@@ -13,8 +13,8 @@ spec:
     - name: preview-namespace
   workspaces:
     - name: git-source
-    - name: greenlight-projects
     - name: status-workspace
+    - name: node-modules
     - name: kubeconfig-dir
     - name: manifest-dir
   tasks:
@@ -45,6 +45,9 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: get-docker-hub-authentication-token
+      taskRef:
+        name: get-docker-hub-authentication-token
     - name: create-pr-namespace
       taskRef:
         name: kubernetes-actions
@@ -69,9 +72,11 @@ spec:
           value: $(params.git-pr-number)
         - name: pull-request-commit-number
           value: $(params.git-pr-commit-number)
+        - name: docker-hub-token
+          value: $(tasks.get-docker-hub-authentication-token.results.token)
       workspaces:
-        - name: greenlight-projects
-          workspace: greenlight-projects
+        - name: node-modules
+          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone

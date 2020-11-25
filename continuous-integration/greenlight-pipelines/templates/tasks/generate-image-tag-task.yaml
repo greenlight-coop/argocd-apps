@@ -8,7 +8,19 @@ spec:
     Provides the Docker image tag to use for the generated image for both main branch builds (e.g. v0.1.0) and
     pull request branch builds (e.g. v0.1.0-feature-5-pr-1-commit-2). Version information is pulled from the 
     greenlight-projects config map if available and assumed to be v0.1.0 if not yet registered.
+    and then set to success as the final step of the Pipeline prior to the finally block.
+  workspaces:
+    - name: node-modules
+      description: modules with useful shared behavior
   params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.0
+    - name: docker-hub-api-url
+      description: Docker Hub API
+      default: https://hub.docker.com/v2/
+    - name: docker-hub-token
+      description: Authentication token used to access Docker Hub API
     - name: project-name
       description: the repo name, also used as the Docker image name
     - name: branch-name
@@ -19,35 +31,34 @@ spec:
     - name: pull-request-commit-number
       description: ascending count of commit in a pull request
       default: n/a
-  workspaces:
-    - name: greenlight-projects
   results:
     - name: image-tag
       description: the tag to use for the generated image in Docker hub
   steps:
     - name: generate-image-tag
-      image: node:14.15
+      image: $(params.node-image)
       script: |
         #!/usr/bin/env node
         const fs = require('fs')
+        const _ = require('lodash')
+        const { getTags, getSemanticVersion, getReleaseTags } = require('$(workspaces.node-modules.path)/docker-functions')
 
         const projectName = '$(params.project-name)'
         const branchName = '$(params.branch-name)'
         const pullRequestNumber = '$(params.pull-request-number)'
         const commitNumber = '$(params.pull-request-commit-number)'
 
-        const versionFilePath = `/workspace/greenlight-projects/${projectName}.version`
-        let tagBase = '0.1.0'
-        if (fs.existsSync(versionFilePath )) {
-          const PATCH_VERSION_INDEX = 2
-          const currentVersion = fs.readFileSync(versionFilePath, 'utf8')
-          console.log('Current version: %s', currentVersion)
-          versionParts = currentVersion.split('.')
-          versionParts[PATCH_VERSION_INDEX] = parseInt(versionParts[PATCH_VERSION_INDEX]) + 1
-          tagBase = versionParts.join('.')
-        }
+        const api = '$(params.docker-hub-api-url)'
+        const token = 'TBD'
+        const repository = `greenlightcoop/${projectName}`
+        const tags = getTags(token, api, repository)
+        const releaseTags = getReleaseTags(tags)
 
-        let imageTag = tagBase
+        const mostRecentTag = _.last(releaseTags)
+        const semanticVersion = getSemanticVersion(mostRecentTag)
+        semanticVersion.patch = semanticVersion.patch + 1
+
+        let imageTag = semanticVersion.toString()
         if (branchName !== 'main' && branchName !== 'master') {
           imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
         }

@@ -13,7 +13,6 @@ spec:
     - name: preview-namespace
   workspaces:
     - name: git-source
-    - name: greenlight-projects
     - name: status-workspace
   tasks:
     - name: set-default-outcome
@@ -43,6 +42,9 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: get-docker-hub-authentication-token
+      taskRef:
+        name: get-docker-hub-authentication-token
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -55,9 +57,6 @@ spec:
           value: $(params.git-pr-number)
         - name: pull-request-commit-number
           value: $(params.git-pr-commit-number)
-      workspaces:
-        - name: greenlight-projects
-          workspace: greenlight-projects
     - name: clone-git-repo
       taskRef:
         name: git-clone
