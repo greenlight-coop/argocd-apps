@@ -44,9 +44,9 @@ spec:
             targetRevision: HEAD
             helm:
               parameters:
-              - name: namespace
+              - name: preview.namespace
                 value: $(params.namespace)
-              - name: image.tag
+              - name: preview.image.tag
                 value: $(params.image-version)
           syncPolicy:
             automated:
