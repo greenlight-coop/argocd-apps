@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: node-modules
-  namespace: greenlight-pipelines
+  namespace: greenlight-pipeline-runs
 data:
   docker-functions.js: |
     const axios = require('axios')
