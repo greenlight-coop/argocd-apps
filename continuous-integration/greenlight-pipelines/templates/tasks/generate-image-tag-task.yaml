@@ -51,17 +51,22 @@ spec:
         const api = '$(params.docker-hub-api-url)'
         const token = 'TBD'
         const repository = `greenlightcoop/${projectName}`
-        const tags = getTags(token, api, repository)
-        const releaseTags = getReleaseTags(tags)
 
-        const mostRecentTag = _.last(releaseTags)
-        const semanticVersion = getSemanticVersion(mostRecentTag)
-        semanticVersion.patch = semanticVersion.patch + 1
+        generateImageTag()
 
-        let imageTag = semanticVersion.toString()
-        if (branchName !== 'main' && branchName !== 'master') {
-          imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
+        async function generateImageTag () {
+          const tags = await getTags(token, api, repository)
+          const releaseTags = getReleaseTags(tags)
+
+          const mostRecentTag = _.last(releaseTags)
+          const semanticVersion = getSemanticVersion(mostRecentTag)
+          semanticVersion.patch = semanticVersion.patch + 1
+
+          let imageTag = semanticVersion.toString()
+          if (branchName !== 'main' && branchName !== 'master') {
+            imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
+          }
+
+          console.log('Generated image tag version: %s', imageTag)
+          fs.writeFileSync('$(results.image-tag.path)', imageTag)
         }
-
-        console.log('Generated image tag version: %s', imageTag)
-        fs.writeFileSync('$(results.image-tag.path)', imageTag)
