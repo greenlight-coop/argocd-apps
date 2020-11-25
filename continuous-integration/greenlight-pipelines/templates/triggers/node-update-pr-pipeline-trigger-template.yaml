@@ -58,3 +58,6 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
+          - name: node-modules
+            configMap:
+              name: node-modules
