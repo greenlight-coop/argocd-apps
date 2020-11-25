@@ -59,7 +59,7 @@ spec:
           const releaseTags = getReleaseTags(tags)
 
           const mostRecentTag = _.last(releaseTags)
-          const semanticVersion = getSemanticVersion(mostRecentTag)
+          const semanticVersion = getSemanticVersion(mostRecentTag.name)
           semanticVersion.patch = semanticVersion.patch + 1
 
           let imageTag = semanticVersion.toString()
