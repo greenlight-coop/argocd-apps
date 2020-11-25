@@ -44,7 +44,10 @@ spec:
             username: auth.username,
             password: auth.password
           }
-          const response = await axios.post(api + 'users/login', data, config)
+          const url = api + 'users/login/'
+          console.log('Making authentication request to %s', url)
+          console.log('POST data: %s', JSON.stringify(data))
+          const response = await axios.post(url, data, config)
           return response.data.token
         }
 

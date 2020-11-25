@@ -57,6 +57,8 @@ spec:
           value: $(params.git-pr-number)
         - name: pull-request-commit-number
           value: $(params.git-pr-commit-number)
+        - name: docker-hub-token
+          value: $(tasks.get-docker-hub-authentication-token.results.token)
     - name: clone-git-repo
       taskRef:
         name: git-clone
