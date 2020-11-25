@@ -15,7 +15,7 @@ spec:
       kind: PipelineRun
       metadata:
         generateName: $(tt.params.project-name)-node-main-pipeline-run-
-        namespace: greenlight-pipeline-runs
+        namespace: greenlight-pipelines
       spec:
         pipelineRef:
           name: node-main-pipeline

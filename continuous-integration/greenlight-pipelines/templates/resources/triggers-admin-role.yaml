@@ -27,13 +27,6 @@ rules:
       - get
       - list
       - watch
----
-kind: Role
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: tekton-pipelineruns-admin
-  namespace: greenlight-pipeline-runs
-rules:
   # Permissions to create resources in associated TriggerTemplates
   - apiGroups:
       - tekton.dev
@@ -49,50 +42,23 @@ rules:
       - serviceaccounts
     verbs:
       - impersonate
-  - apiGroups:
-      - ""
-    # secrets are only needed for GitHub/GitLab interceptors
-    resources:
-      - configmaps
-      - secrets
-    verbs:
-      - get
-      - list
-      - watch
 
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: tekton-triggers-admin
-  namespace: greenlight-pipeline-runs
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: tekton-triggers-admin-binding
-  namespace: greenlight-pipelines
 subjects:
   - kind: ServiceAccount
     name: tekton-triggers-admin
-    namespace: greenlight-pipeline-runs
+    namespace: greenlight-pipelines
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: tekton-triggers-admin
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: tekton-pipelineruns-admin-binding
-  namespace: greenlight-pipeline-runs
-subjects:
-  - kind: ServiceAccount
-    name: tekton-triggers-admin
-    namespace: greenlight-pipeline-runs
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: tekton-pipelineruns-admin

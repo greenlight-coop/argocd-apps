@@ -21,7 +21,7 @@ spec:
       kind: PipelineRun
       metadata:
         name: $(tt.params.project-name)-node-close-pr-pipeline-run-$(uid)
-        namespace: greenlight-pipeline-runs
+        namespace: greenlight-pipelines
       spec:
         pipelineRef:
           name: node-close-pr-pipeline
