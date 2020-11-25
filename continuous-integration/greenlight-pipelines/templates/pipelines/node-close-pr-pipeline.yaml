@@ -52,6 +52,11 @@ spec:
         - name: script
           value: |
             kubectl delete --namespace $(params.preview-namespace) applications.argoproj.io $(params.project-name)-$(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions
