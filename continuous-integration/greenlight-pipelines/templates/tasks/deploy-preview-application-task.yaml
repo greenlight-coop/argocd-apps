@@ -40,7 +40,7 @@ spec:
           project: greenlight-project
           source:
             path: $(params.project-name)/charts/preview
-            repoURL: git@github.com:greenlight-coop/argocd-greenlight-software.git
+            repoURL: git@github.com:greenlight-coop/greenlight-helm-charts.git
             targetRevision: HEAD
             helm:
               parameters:
