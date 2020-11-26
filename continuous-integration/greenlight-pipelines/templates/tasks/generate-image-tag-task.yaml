@@ -67,7 +67,7 @@ spec:
 
           const releaseTags = await api.getReleaseTags()
           const mostRecentTag = _.last(releaseTags)
-          const semanticVersion = docker.getSemanticVersion(mostRecentTag.name)
+          const semanticVersion = docker.getSemanticVersion(mostRecentTag)
 
           semanticVersion.patch = semanticVersion.patch + 1
           let imageTag = semanticVersion.toString()
