@@ -1,0 +1,117 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: node-close-pr-pipeline
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+    - name: git-revision
+    - name: git-branch
+    - name: git-pr-number
+    - name: git-pr-commit-number
+    - name: preview-namespace
+  workspaces:
+    - name: git-source
+    - name: status-workspace
+    - name: kubeconfig-dir
+    - name: manifest-dir
+    - name: node-modules
+  tasks:
+    - name: set-default-outcome
+      taskRef:
+        name: set-outcome-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: delete-preview-application
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.project-name)-$(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pr-namespace
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pull-request-images
+      taskRef:
+        name: delete-pull-request-images
+      params:
+        - name: organization
+          value: greenlightcoop
+        - name: repository
+          value: $(params.project-name)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
+    - name: set-success-outcome
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - delete-pr-namespace
+        - delete-preview-application
+        - delete-pull-request-images
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+  finally:
+    - name: publish-outcome-status-to-github
+      taskRef:
+        name: github-set-status-from-outcome
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: DESCRIPTION
+          value: Build complete
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

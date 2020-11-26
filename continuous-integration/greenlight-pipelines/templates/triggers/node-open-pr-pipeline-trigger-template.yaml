@@ -1,11 +1,13 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: node-build-pr-pipeline-trigger-template
+  name: node-open-pr-pipeline-trigger-template
 spec:
   params:
     - name: project-name
       description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: preview-namespace
+      description: The namespace to use to deploy preview services for isolated integration testing
     - name: git-revision
       description: The revision to clone and build
     - name: git-branch
@@ -18,17 +20,19 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(tt.params.project-name)-node-build-pr-pipeline-run-$(uid)
+        name: $(tt.params.project-name)-node-open-pr-pipeline-run-$(uid)
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: node-build-pr-pipeline
+          name: node-open-pr-pipeline
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: preview-namespace
+            value: $(tt.params.preview-namespace)
           - name: pipeline-run-name
-            value: $(tt.params.project-name)-node-build-pr-pipeline-run-$(uid)
+            value: $(tt.params.project-name)-node-pr-pipeline-run-$(uid)
           - name: git-revision
             value: $(tt.params.git-revision)  
           - name: git-branch
@@ -54,6 +58,10 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
-          - name: greenlight-projects
+          - name: node-modules
             configMap:
-              name: greenlight-projects
+              name: node-modules
+          - name: kubeconfig-dir
+            emptyDir: {}
+          - name: manifest-dir
+            emptyDir: {}

@@ -6,9 +6,9 @@ metadata:
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: node-build-pr-pipeline-trigger
+    - name: node-open-pr-pipeline-trigger
       template:
-        ref: node-build-pr-pipeline-trigger-template
+        ref: node-open-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -20,20 +20,28 @@ spec:
             eventTypes:
               - pull_request
         - cel:
-            filter: "body.action in ['opened', 'synchronize', 'reopened']"
-    - name: node-remove-pr-pipeline-trigger
+            filter: "body.action in ['opened', 'reopened']"
+    - name: node-update-pr-pipeline-trigger
       template:
-        spec:
-          resourcetemplates:
-            - apiVersion: tekton.dev/v1beta1
-              kind: TaskRun
-              metadata:
-                generateName: node-remove-pr-temp-task-run-
-              spec:
-                taskSpec:
-                  steps:
-                    - image: ubuntu
-                      script: echo 'TBD - handle removal of PR build resources'
+        ref: node-update-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['synchronize']"
+    - name: node-close-pr-pipeline-trigger
+      template:
+        ref: node-close-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
       interceptors:
         - github:
             secretRef:
@@ -43,9 +51,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
-    - name: node-build-main-pipeline-trigger
+    - name: node-main-pipeline-trigger
       template:
-        ref: node-build-main-pipeline-trigger-template
+        ref: node-main-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: push-trigger-binding
@@ -59,5 +67,5 @@ spec:
         - cel:
             filter: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
             overlays:
-            - key: extensions.branch_name
-              expression: "body.ref.split('/')[2]"
+              - key: extensions.branch_name
+                expression: "body.ref.split('/')[2]"

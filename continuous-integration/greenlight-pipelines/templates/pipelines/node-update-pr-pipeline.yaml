@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-build-pr-pipeline
+  name: node-update-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -10,10 +10,11 @@ spec:
     - name: git-branch
     - name: git-pr-number
     - name: git-pr-commit-number
+    - name: preview-namespace
   workspaces:
     - name: git-source
-    - name: greenlight-projects
     - name: status-workspace
+    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -46,7 +47,9 @@ spec:
       taskRef:
         name: generate-image-tag
       params:
-        - name: project-name
+        - name: organization
+          value: greenlightcoop
+        - name: repository
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
@@ -55,8 +58,8 @@ spec:
         - name: pull-request-commit-number
           value: $(params.git-pr-commit-number)
       workspaces:
-        - name: greenlight-projects
-          workspace: greenlight-projects
+        - name: node-modules
+          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -87,6 +90,18 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: deploy-preview-application
+      taskRef:
+        name: deploy-preview-application
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: project-name
+          value: $(params.project-name)
+        - name: namespace
+          value: $(params.preview-namespace)
+        - name: image-version
+          value: $(tasks.generate-image-tag.results.image-tag)
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status

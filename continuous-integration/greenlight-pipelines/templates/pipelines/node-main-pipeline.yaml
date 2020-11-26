@@ -1,0 +1,118 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: node-main-pipeline
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+    - name: git-revision
+    - name: git-branch
+  workspaces:
+    - name: git-source
+    - name: kubeconfig-dir
+    - name: manifest-dir
+    - name: status-workspace
+    - name: node-modules
+  tasks:
+    - name: set-default-outcome
+      taskRef:
+        name: set-outcome-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: generate-image-tag
+      taskRef:
+        name: generate-image-tag
+      params:
+        - name: organization
+          value: greenlightcoop
+        - name: repository
+          value: $(params.project-name)
+        - name: branch-name
+          value: $(params.git-branch)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
+    - name: clone-git-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/$(params.project-name).git
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: node-build
+      taskRef:
+        name: node-build
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: kaniko
+      runAfter:
+        - node-build
+      params:
+        - name: IMAGE
+          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: set-success-outcome
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+  finally:
+    - name: publish-outcome-status-to-github
+      taskRef:
+        name: github-set-status-from-outcome
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: DESCRIPTION
+          value: Build complete
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

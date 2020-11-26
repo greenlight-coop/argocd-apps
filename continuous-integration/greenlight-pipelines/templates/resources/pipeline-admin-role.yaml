@@ -9,8 +9,8 @@ secrets:
   - name: git-auth
 
 ---
-kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
   name: pipeline-role
 rules:
@@ -27,6 +27,33 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: pipeline-role
+subjects:
+  - kind: ServiceAccount
+    name: pipeline-sa
+    namespace: greenlight-pipelines
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pipeline-cluster-role
+rules:
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["get", "create", "update", "patch", "list", "delete"]
+  - apiGroups: ["argoproj.io"]
+    resources: ["applications"]
+    verbs: ["get", "create", "update", "patch", "list", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pipeline-cluster-role-binding
+roleRef:
+  kind: ClusterRole
+  name: pipeline-cluster-role
+  apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
     name: pipeline-sa

@@ -1,19 +1,22 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-build-main-pipeline
+  name: node-open-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name
     - name: git-revision
     - name: git-branch
+    - name: git-pr-number
+    - name: git-pr-commit-number
+    - name: preview-namespace
   workspaces:
     - name: git-source
-    - name: greenlight-projects
+    - name: status-workspace
+    - name: node-modules
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: status-workspace
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -42,17 +45,35 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: create-pr-namespace
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl create namespace $(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir    
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
       params:
-        - name: project-name
+        - name: organization
+          value: greenlightcoop
+        - name: repository
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+        - name: pull-request-commit-number
+          value: $(params.git-pr-commit-number)
       workspaces:
-        - name: greenlight-projects
-          workspace: greenlight-projects
+        - name: node-modules
+          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -83,27 +104,24 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: update-version
+    - name: deploy-preview-application
       taskRef:
-        name: kubernetes-actions
+        name: deploy-preview-application
       runAfter:
         - build-and-push-image
+        - create-pr-namespace
       params:
-        - name: script
-          value: |
-            kubectl -n greenlight-pipelines patch configmap greenlight-projects --type merge \
-              -p '{"data": {"$(params.project-name).version": "$(tasks.generate-image-tag.results.image-tag)"}}' 
-            kubectl -n greenlight-pipelines get configmap greenlight-projects -o yaml
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
+        - name: project-name
+          value: $(params.project-name)
+        - name: namespace
+          value: $(params.preview-namespace)
+        - name: image-version
+          value: $(tasks.generate-image-tag.results.image-tag)
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - build-and-push-image
+        - deploy-preview-application
       params:
         - name: status
           value: success
