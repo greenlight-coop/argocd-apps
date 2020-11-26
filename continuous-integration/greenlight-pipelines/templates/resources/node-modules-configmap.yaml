@@ -7,44 +7,163 @@ data:
   docker-functions.js: |
     const axios = require('axios')
 
-    async function getTags (token, api, repository) {
-      const tags = []
-      const config = {
-        headers: {
-          'Authorization': token,
-          'Content-Type': 'application/json'
+    function getHubAPI (config) {
+      const { dockerHubDomain, organization, repository, username, password } = config
+      let token
+      async function getToken () {
+        if (!token) {
+          const config = {
+            headers: {'Content-Type': 'application/json'}
+          }
+          const data = {
+            username: username,
+            password: password
+          }
+          const url = `https://${dockerHubDomain}/v2/users/login/`
+          console.log('Making authentication request to %s', url)
+          const response = await axios.post(url, data, config)
+          token = response.data.token
         }
+        return token
       }
-      let url = `${api}repositories/${repository}/tags`
-      let response
-      do {
-        if (response) {
-          url = response.data.next
+
+      async function getTags () {
+        const tags = []
+        const config = {
+          headers: {
+            'Authorization': 'JWT ' + await getToken(),
+            'Content-Type': 'application/json'
+          }
         }
-        response = await axios.get(url, config)
-        tags.push(...response.data.results)
-      } while (response.data.next)
-      return tags
+        let url = `https://${dockerHubDomain}/v2/repositories/${organization}/${repository}/tags`
+        let response
+        do {
+          if (response) {
+            url = response.data.next
+          }
+          response = await axios.get(url, config)
+          tags.push(...response.data.results)
+        } while (response.data.next)
+        return tags.map(tag => tag.name)
+      }
+
+      async function deleteTag (tag) {
+        let url = `https://${dockerHubDomain}/v2/repositories/${organization}/${repository}/tags/${tag}`
+        const config = {
+          headers: {
+            'Authorization': 'JWT ' + await getToken()
+          }
+        }
+        console.log('Deleting tag at %s', url)
+        await axios.delete(url, config)
+      }
+
+      async function getReleaseTags () {
+        return filterReleaseTags(await getTags())
+      }
+      
+      async function getPullRequestTags (pullRequestNumber) {
+        return filterPullRequestTags(await getTags(), pullRequestNumber)
+      }
+
+      return {
+        getToken,
+        getTags,
+        deleteTag,
+        getReleaseTags,
+        getPullRequestTags
+      }
     }
 
-    function getReleaseTags (tags) {
-      const releaseTags = tags.filter(tag => isReleaseVersionTagName(tag.name))
-      releaseTags.sort((tag1, tag2) => getSemanticVersion(tag1.name).compare(getSemanticVersion(tag2.name)))
+    function getRegistryAPI (config) {
+      const { authDomain, authService, apiDomain, organization, repository, username, password } = config
+      const authScope = `repository:${organization}/${repository}:pull`
+      const authOfflineToken = '1'
+      const authClientId = 'greenlight-pipelines'
+      let token
+      async function getToken () {
+        if (!token)  {
+          const config = {
+            headers: {
+              Accept: 'application/vnd.docker.distribution.manifest.v2+json'
+            },
+            auth: {
+              username: username,
+              password: password
+            }
+          }
+          const url = `https://${authDomain}/token?service=${authService}&scope=${authScope}&offline_token=${authOfflineToken}&client_id=${authClientId}`
+          console.log('Making authentication request to %s', url)
+          const response = await axios.get(url, config)
+          token = response.data.token
+        }
+        return token
+      }
+      
+      async function getTags () {
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + await getToken()
+          }
+        }
+        let url = `https://${apiDomain}/v2/${organization}/${repository}/tags/list`
+        console.log('Retrieving tags from %s', url)
+        const response = await axios.get(url, config)
+        return response.data.tags
+      }
+
+      async function getManifest (reference) {
+        const config = {
+          headers: {
+            'Authorization': 'Bearer ' + await getToken(),
+            'Accept': 'application/vnd.docker.distribution.manifest.v2+json'
+          }
+        }
+        let url = `https://${apiDomain}/v2/${organization}/${repository}/manifests/${reference}`
+        console.log('Retrieving manifest from %s', url)
+        const response = await axios.get(url, config)
+        return {
+          digest: response.headers['docker-content-digest'],
+          data: response.data
+        }
+      }
+
+      async function getReleaseTags () {
+        return filterReleaseTags(await getTags())
+      }
+      
+      async function getPullRequestTags (pullRequestNumber) {
+        return filterPullRequestTags(await getTags(), pullRequestNumber)
+      }
+      
+      return {
+        getToken,
+        getTags,
+        getManifest,
+        getReleaseTags,
+        getPullRequestTags,
+        getSemanticVersion
+      }
+    }
+
+    function filterReleaseTags (tags) {
+      const releaseTags = tags.filter(tag => isReleaseVersionTag(tag))
+      releaseTags.sort((tag1, tag2) => getSemanticVersion(tag1).compare(getSemanticVersion(tag2)))
       return releaseTags
     }
 
-    function getPullRequestTags (tags, pullRequestNumber) {
-      return tags.filter(tag => isPullRequestVersionTagName(tag.name, pullRequestNumber))
+    function filterPullRequestTags (tags, pullRequestNumber) {
+      return tags.filter(tag => isPullRequestVersionTag(tag, pullRequestNumber))
     }
 
-    function isReleaseVersionTagName (tagName) {
+    function isReleaseVersionTag (tag) {
       const versionRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/
-      return versionRegex.test(tagName)
+      return versionRegex.test(tag)
     }
 
-    function isPullRequestVersionTagName (tagName, pullRequestNumber) {
+    function isPullRequestVersionTag (tag, pullRequestNumber) {
       const versionRegex = new RegExp('^(0|[1-9]\d*)\\.(0|[1-9]\d*)\\.(0|[1-9]\\d*)-([a-z]|[0-9]|-)*-pr-' + pullRequestNumber + '-([a-z]|[0-9]|-)*$')
-      return versionRegex.test(tagName)
+      return versionRegex.test(tag)
     }
 
     function getSemanticVersion(tag) {
@@ -69,8 +188,7 @@ data:
     }
 
     module.exports = {
-      getTags,
-      getReleaseTags,
-      getPullRequestTags,
+      getRegistryAPI,
+      getHubAPI,
       getSemanticVersion
     }

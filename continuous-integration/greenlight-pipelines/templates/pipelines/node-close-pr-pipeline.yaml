@@ -44,9 +44,6 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: get-docker-hub-authentication-token
-      taskRef:
-        name: get-docker-hub-authentication-token
     - name: delete-preview-application
       taskRef:
         name: kubernetes-actions
@@ -71,12 +68,26 @@ spec:
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
+    - name: delete-pull-request-images
+      taskRef:
+        name: delete-pull-request-images
+      params:
+        - name: organization
+          value: greenlightcoop
+        - name: repository
+          value: $(params.project-name)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - delete-pr-namespace
         - delete-preview-application
+        - delete-pull-request-images
       params:
         - name: status
           value: success

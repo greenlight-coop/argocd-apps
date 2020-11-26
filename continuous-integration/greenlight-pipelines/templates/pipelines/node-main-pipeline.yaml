@@ -42,19 +42,16 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: get-docker-hub-authentication-token
-      taskRef:
-        name: get-docker-hub-authentication-token
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
       params:
-        - name: project-name
+        - name: organization
+          value: greenlightcoop
+        - name: repository
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
-        - name: docker-hub-token
-          value: $(tasks.get-docker-hub-authentication-token.results.token)
       workspaces:
         - name: node-modules
           workspace: node-modules
