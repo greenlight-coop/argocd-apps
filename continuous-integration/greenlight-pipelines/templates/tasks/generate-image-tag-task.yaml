@@ -65,12 +65,15 @@ spec:
           }
           const api = docker.getHubAPI(config)
 
+          let imageTag = '0.1.0'
           const releaseTags = await api.getReleaseTags()
-          const mostRecentTag = _.last(releaseTags)
-          const semanticVersion = docker.getSemanticVersion(mostRecentTag)
+          if (releaseTags.length > 0) {
+            const mostRecentTag = _.last(releaseTags)
+            const semanticVersion = docker.getSemanticVersion(mostRecentTag)
 
-          semanticVersion.patch = semanticVersion.patch + 1
-          let imageTag = semanticVersion.toString()
+            semanticVersion.patch = semanticVersion.patch + 1
+            imageTag = semanticVersion.toString()
+          }
 
           if (branchName !== 'main' && branchName !== 'master') {
             imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
