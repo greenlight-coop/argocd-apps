@@ -26,4 +26,4 @@ spec:
       workingDir: $(workspaces.source.path)
       image: $(params.node-image)
       script: |
-        BASE_URL=https://$(params.service-name).$(params.namespace).{{ .Values.global.knativeDomainName }} npm run test-features:report
+        BASE_URL=https://$(params.service-name).$(params.namespace).{{ .Values.global.knativeDomainName }} npm run test-features

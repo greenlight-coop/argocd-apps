@@ -45,7 +45,7 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: ensure-pr-namespace-exists
+    - name: ensure-preview-namespace-exists
       taskRef:
         name: kubernetes-actions
       params:
@@ -114,7 +114,7 @@ spec:
         name: deploy-preview-application
       runAfter:
         - build-and-push-image
-        - ensure-pr-namespace-exists
+        - ensure-preview-namespace-exists
       params:
         - name: project-name
           value: $(params.project-name)
