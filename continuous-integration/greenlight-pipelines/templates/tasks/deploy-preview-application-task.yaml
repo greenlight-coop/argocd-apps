@@ -67,9 +67,7 @@ spec:
         do
             echo "Waiting for service deployment to complete..."
             sleep 1
-            metadata_generation=$(kubectl -n prvw-pr-42 get configurations.serving.knative.dev helloworld -o="jsonpath={.metadata.generation}")
-            observed_generation=$(kubectl -n prvw-pr-42 get configurations.serving.knative.dev helloworld -o="jsonpath={.status.observedGeneration}")
-            status=$(kubectl -n prvw-pr-42 get configurations.serving.knative.dev helloworld -o="jsonpath={.status.conditions[0].status}")
+            read -r metadata_generation observed_generation status <<<$(kubectl -n $(params.namespace) get configurations.serving.knative.dev $(params.project-name) -o="jsonpath={.metadata.generation} {.status.observedGeneration} {.status.conditions[0].status}")
             echo "    metadata_generation=$metadata_generation"
             echo "    observed_generation=$observed_generation"
             echo "    status=$status"
