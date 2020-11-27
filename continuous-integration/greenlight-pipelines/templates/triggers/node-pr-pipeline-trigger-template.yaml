@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: node-open-pr-pipeline-trigger-template
+  name: node-pr-pipeline-trigger-template
 spec:
   params:
     - name: project-name
@@ -20,11 +20,11 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(tt.params.project-name)-node-open-pr-pipeline-run-$(uid)
+        name: $(tt.params.project-name)-node-pr-pipeline-run-$(uid)
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: node-open-pr-pipeline
+          name: node-pr-pipeline
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
