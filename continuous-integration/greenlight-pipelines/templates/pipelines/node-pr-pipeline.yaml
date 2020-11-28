@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-open-pr-pipeline
+  name: node-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -45,13 +45,18 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.global.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: create-pr-namespace
+    - name: ensure-preview-namespace-exists
       taskRef:
         name: kubernetes-actions
       params:
         - name: script
           value: |
-            kubectl create namespace $(params.preview-namespace)
+            cat <<EOF | kubectl apply -f -
+            apiVersion: v1
+            kind: Namespace
+            metadata:
+              name: $(params.preview-namespace)
+            EOF
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
@@ -109,7 +114,7 @@ spec:
         name: deploy-preview-application
       runAfter:
         - build-and-push-image
-        - create-pr-namespace
+        - ensure-preview-namespace-exists
       params:
         - name: project-name
           value: $(params.project-name)
@@ -117,11 +122,24 @@ spec:
           value: $(params.preview-namespace)
         - name: image-version
           value: $(tasks.generate-image-tag.results.image-tag)
+    - name: run-integration-tests
+      taskRef:
+        name: node-run-integration-tests
+      runAfter:
+        - deploy-preview-application
+      params:
+        - name: service-name
+          value: $(params.project-name)
+        - name: namespace
+          value: $(params.preview-namespace)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - deploy-preview-application
+        - run-integration-tests
       params:
         - name: status
           value: success

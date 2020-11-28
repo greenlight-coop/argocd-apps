@@ -59,3 +59,18 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
+
+        metadata_generation="metadata_generation unknown"
+        observed_generation="observed_generation unknown"
+        status="unknown"
+        until [ "$metadata_generation" = "$observed_generation" ] && [ "$status" = "True" ]
+        do
+            echo "Waiting for service deployment to complete..."
+            sleep 1
+            read -r metadata_generation observed_generation status <<<$(kubectl -n $(params.namespace) get configurations.serving.knative.dev $(params.project-name) -o="jsonpath={.metadata.generation} {.status.observedGeneration} {.status.conditions[0].status}")
+            echo "    metadata_generation=$metadata_generation"
+            echo "    observed_generation=$observed_generation"
+            echo "    status=$status"
+        done
+
+        echo -e "\nService is available." 

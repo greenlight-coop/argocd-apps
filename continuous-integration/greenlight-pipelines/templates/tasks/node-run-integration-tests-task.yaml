@@ -1,0 +1,26 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: node-run-integration-tests
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    This Task runs Serenity/JS integration tests
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: node:14.15
+    - name: service-name
+      description: The name of the application to test
+      type: string
+    - name: namespace
+      description: The namespace to install the preview into
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: run-integration-tests
+      workingDir: $(workspaces.source.path)
+      image: $(params.node-image)
+      script: |
+        BASE_URL=https://$(params.service-name).$(params.namespace).{{ .Values.global.knativeDomainName }} npm run test-features
