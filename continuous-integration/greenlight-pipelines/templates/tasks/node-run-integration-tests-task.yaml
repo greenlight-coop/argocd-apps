@@ -5,10 +5,7 @@ metadata:
   namespace: greenlight-pipelines
 spec:
   description: >-
-    This Task runs a standard Node.js build process by invoking:
-      npm install
-      npx standard
-      npm test
+    This Task runs Serenity/JS integration tests
   params:
     - name: node-image
       description: Base Node.js image to use for the build
