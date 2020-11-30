@@ -21,7 +21,7 @@ spec:
         global:
           isLocalKindCluster: {{ .Values.global.isLocalKindCluster }}
           istioHttpPort: {{ .Values.global.istioHttpPort }}
-          istioHttpsPort: {{ .Values.global.istioHttpPort }}
+          istioHttpsPort: {{ .Values.global.istioHttpsPort }}
   syncPolicy:
     automated:
       prune: true
