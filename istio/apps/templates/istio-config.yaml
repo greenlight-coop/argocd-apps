@@ -17,13 +17,11 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
-      values:
-        - name: "global.isLocalKindCluster"
-          value: {{ .Values.global.isLocalKindCluster }}
-        - name: "global.istioHttpPort"
-          value: {{ .Values.global.istioHttpPort }}
-        - name: "global.istioHttpsPort"
-          value: {{ .Values.global.istioHttpPort }}
+      values: |
+        global:
+          isLocalKindCluster: {{ .Values.global.isLocalKindCluster }}
+          istioHttpPort: {{ .Values.global.istioHttpPort }}
+          istioHttpsPort: {{ .Values.global.istioHttpPort }}
   syncPolicy:
     automated:
       prune: true
