@@ -1,3 +1,7 @@
+global:
+  isLocalKindCluster: false
+  istioHttpPort: 80
+  istioHttpsPort: 443
 spec:
   destination:
     server: https://kubernetes.default.svc

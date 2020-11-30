@@ -17,10 +17,13 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
-      values: |
-        global:
-          hub: docker.io/istio
-          tag: 1.7.5
+      values:
+        - name: "global.isLocalKindCluster"
+          value: {{ .Values.global.isLocalKindCluster }}
+        - name: "global.istioHttpPort"
+          value: {{ .Values.global.istioHttpPort }}
+        - name: "global.istioHttpsPort"
+          value: {{ .Values.global.istioHttpPort }}
   syncPolicy:
     automated:
       prune: true

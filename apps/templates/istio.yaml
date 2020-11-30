@@ -30,6 +30,12 @@ spec:
         value: {{ .Values.global.tlsSecretName }}
       - name: "global.targetRevision"
         value: {{ .Values.global.targetRevision }}
+      - name: "global.isLocalKindCluster"
+        value: {{ .Values.global.isLocalKindCluster }}
+      - name: "global.istioHttpPort"
+        value: {{ .Values.global.istioHttpPort }}
+      - name: "global.istioHttpsPort"
+        value: {{ .Values.global.istioHttpPort }}
   syncPolicy:
     automated:
       prune: true

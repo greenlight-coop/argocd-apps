@@ -11,7 +11,7 @@ spec:
       useMCP: false
       # The third-party-jwt is not enabled on all k8s.
       # See: https://istio.io/docs/ops/best-practices/security/#configure-third-party-service-account-tokens
-      {{ if .Values.kind }}
+      {{ if .Values.global.isLocalKindCluster }}
       jwtPolicy: first-party-jwt
       {{ else }}
       jwtPolicy: third-party-jwt
@@ -27,19 +27,19 @@ spec:
     ingressGateways:
       - name: istio-ingressgateway
         enabled: true
-        {{ if .Values.kind }}
+        {{ if .Values.global.isLocalKindCluster }}
         k8s:
           service:
             type: NodePort
             ports:
-            - port: 30080
+            - port: {{ .Values.global.istioHttpPort }}
               name: http2
               targetPort: 8080
-              nodePort: 30080
-            - port: 30443
+              nodePort: {{ .Values.global.istioHttpPort }}
+            - port: {{ .Values.global.istioHttpsPort }}
               name: https
               targetPort: 8443      
-              nodePort: 30443
+              nodePort: {{ .Values.global.istioHttpsPort }}
         {{ end }}
       - name: cluster-local-gateway
         enabled: true

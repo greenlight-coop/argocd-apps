@@ -1,3 +1,13 @@
+global:
+  apiDomainName: api.greenlightcoop.dev
+  appsDomainName: apps.greenlightcoop.dev
+  knativeDomainName: kn.greenlightcoop.dev
+  tlsCertIssuer: letsencrypt-production
+  tlsSecretName: letsencrypt-production
+  targetRevision: HEAD
+  isLocalKindCluster: false
+  istioHttpPort: 80
+  istioHttpsPort: 443
 spec:
   destination:
     server: https://kubernetes.default.svc
