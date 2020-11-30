@@ -4,3 +4,4 @@ spec:
   source:    # These values overridden in the infrastructure Application definition
     repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
     targetRevision: HEAD
+kind: false
