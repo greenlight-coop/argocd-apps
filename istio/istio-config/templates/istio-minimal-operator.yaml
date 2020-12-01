@@ -35,11 +35,11 @@ spec:
             - port: {{ .Values.global.istioHttpPort }}
               name: http2
               targetPort: 8080
-              nodePort: {{ .Values.global.istioHttpPort }}
+#              nodePort: {{ .Values.global.istioHttpPort }}
             - port: {{ .Values.global.istioHttpsPort }}
               name: https
               targetPort: 8443      
-              nodePort: {{ .Values.global.istioHttpsPort }}
+#              nodePort: {{ .Values.global.istioHttpsPort }}
         {{ end }}
       - name: cluster-local-gateway
         enabled: true
