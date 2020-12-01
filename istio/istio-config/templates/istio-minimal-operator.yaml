@@ -31,15 +31,15 @@ spec:
         k8s:
           service:
             type: NodePort
-            # ports:
-            # - port: {{ .Values.global.istioHttpPort }}
-            #   name: http2
-            #   targetPort: 8080
-            #   nodePort: {{ .Values.global.istioHttpPort }}
-            # - port: {{ .Values.global.istioHttpsPort }}
-            #   name: https
-            #   targetPort: 8443      
-            #   nodePort: {{ .Values.global.istioHttpsPort }}
+            ports:
+            - port: {{ .Values.global.istioHttpPort }}
+              name: http2
+              targetPort: 8080
+              nodePort: {{ .Values.global.istioHttpPort }}
+            - port: {{ .Values.global.istioHttpsPort }}
+              name: https
+              targetPort: 8443      
+              nodePort: {{ .Values.global.istioHttpsPort }}
         {{ end }}
       - name: cluster-local-gateway
         enabled: true
