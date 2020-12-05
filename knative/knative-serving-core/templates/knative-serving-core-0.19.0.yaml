@@ -1838,7 +1838,6 @@ metadata:
   annotations:
     knative.dev/example-checksum: "5e3df87d"
 data:
-data:
   autoTLS: Enabled
   httpProtocol: Enabled
   _example: |
