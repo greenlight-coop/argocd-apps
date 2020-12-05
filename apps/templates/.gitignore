@@ -1,1 +1,5 @@
 # Temporarily removed apps
+continuous-integration.yaml
+istio.yaml
+knative.yaml
+monitoring.yaml
