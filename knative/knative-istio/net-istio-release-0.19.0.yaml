@@ -65,12 +65,6 @@ spec:
         protocol: HTTP
       hosts:
         - "*"
-    - port:
-        number: 30443
-        name: https
-        protocol: HTTPS
-      hosts:
-        - "*"
 
 ---
 # Copyright 2019 The Knative Authors
