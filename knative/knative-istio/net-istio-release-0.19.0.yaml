@@ -65,6 +65,12 @@ spec:
         protocol: HTTP
       hosts:
         - "*"
+    - port:
+        number: 30443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - "*"
 
 ---
 # Copyright 2019 The Knative Authors
@@ -527,7 +533,7 @@ spec:
       port: 8008
       targetPort: 8008
     - name: https-webhook
-      port: 30443
+      port: 443
       targetPort: 8443
   selector:
     app: istio-webhook
