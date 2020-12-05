@@ -60,7 +60,7 @@ spec:
     istio: ingressgateway
   servers:
     - port:
-        number: 80
+        number: 30080
         name: http
         protocol: HTTP
       hosts:
