@@ -1,36 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: monitoring
+  name: cert-manager-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-30"
+    argocd.argoproj.io/sync-wave: "-4"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: cert-manager
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: monitoring
+    path: cert-manager-config
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        grafana:
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
-            hosts:
-              - name: grafana.{{ .Values.global.appsDomainName }}
-                tls: true
-                tlsSecret: {{ .Values.global.tlsSecretName }}
+        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
+        adminEmail: {{ .Values.global.adminEmail }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 
     retry:
       limit: 5
       backoff:
