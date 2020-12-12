@@ -1,4 +1,8 @@
 global:
+  appsDomainName: apps.greenlightcoop.dev
+  ingressDomainName: ingress.greenlightcoop.dev
+  knativeDomainName: kn.greenlightcoop.dev
+  targetRevision: HEAD
   useStagingCertificates: false
   adminEmail: admin@greenlight.coop
 spec:
