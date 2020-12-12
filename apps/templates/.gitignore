@@ -1,4 +1,5 @@
 # Temporarily removed apps
+cert-manager-config.yaml
 continuous-integration.yaml
 istio.yaml
 knative.yaml

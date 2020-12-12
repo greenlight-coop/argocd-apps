@@ -18,9 +18,8 @@ spec:
       - name: external-dns
         image: k8s.gcr.io/external-dns/external-dns:v0.7.4
         args:
-          - --source=service
-          - --domain-filter=apps-feature-60.greenlightcoop.dev
-          - --provider=google
-          - --policy=sync
-          - --registry=txt
-          - --txt-owner-id=greenlight-coop-cluster
+        - --source=ingress
+        - --domain-filter=apps-feature-60.greenlightcoop.dev
+        - --provider=google
+        - --registry=txt
+        - --txt-owner-id=greenlight-external-dns-identifier
