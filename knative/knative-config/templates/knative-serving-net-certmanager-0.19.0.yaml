@@ -117,7 +117,7 @@ metadata:
 data:
   issuerRef: |
     kind: ClusterIssuer
-    name: {{ .Values.global.tlsCertIssuer }}
+    name: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
 ---
 # Copyright 2020 The Knative Authors
 #
