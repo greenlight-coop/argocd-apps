@@ -16,10 +16,9 @@ spec:
     path: knative/knative-serving-core
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        knativeDomainName: {{ .Values.global.knativeDomainName }}
+        knativeDomainName: {{ .Values.knativeDomainName }}
   syncPolicy:
     automated:
       prune: true
