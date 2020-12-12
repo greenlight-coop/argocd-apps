@@ -22,11 +22,11 @@ spec:
           ingress:
             enabled: true
             annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
+              cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
             hosts:
               - name: grafana.{{ .Values.global.appsDomainName }}
                 tls: true
-                tlsSecret: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
+                tlsSecret: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
   syncPolicy:
     automated:
       prune: true
