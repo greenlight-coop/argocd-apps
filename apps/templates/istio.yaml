@@ -20,6 +20,8 @@ spec:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
         appsDomainName: {{ .Values.global.appsDomainName }}
+        global:
+          targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true
