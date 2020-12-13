@@ -1,0 +1,2 @@
+resources:
+  - knative-eventing-crds-0.19.3.yaml
