@@ -1,0 +1,2 @@
+resources:
+  - knative-eventing-core-0.19.3.yaml
