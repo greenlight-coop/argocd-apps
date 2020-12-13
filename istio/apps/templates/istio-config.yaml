@@ -21,6 +21,7 @@ spec:
         global:
           hub: docker.io/istio
           tag: 1.7.5
+        knativeDomainName: {{ .Values.knativeDomainName }}
   syncPolicy:
     automated:
       prune: true

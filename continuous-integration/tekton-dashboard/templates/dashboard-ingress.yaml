@@ -2,13 +2,13 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   annotations:
-    cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+    cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
     kubernetes.io/ingress.class: nginx
   name: tekton-dashboard
   namespace: tekton-pipelines
 spec:
   rules:
-  - host: dashboard.{{ .Values.global.appsDomainName }}
+  - host: dashboard.{{ .Values.appsDomainName }}
     http:
       paths:
       - backend:
@@ -17,6 +17,6 @@ spec:
         path: /
   tls:
   - hosts:
-    - dashboard.{{ .Values.global.appsDomainName }}
-    secretName: {{ .Values.global.tlsSecretName }}
+    - dashboard.{{ .Values.appsDomainName }}
+    secretName: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
 

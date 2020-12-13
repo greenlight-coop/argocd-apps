@@ -1,0 +1,4 @@
+useStagingCertificates: false
+adminEmail: admin@greenlight.coop
+cert-manager:
+  installCRDs: true

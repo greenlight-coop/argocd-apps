@@ -1,10 +1,9 @@
 global:
-  apiDomainName: api.greenlightcoop.dev
   appsDomainName: apps.greenlightcoop.dev
   knativeDomainName: kn.greenlightcoop.dev
-  tlsCertIssuer: letsencrypt-production
-  tlsSecretName: letsencrypt-production
   targetRevision: HEAD
+  useStagingCertificates: false
+  adminEmail: admin@greenlight.coop
 spec:
   destination:
     server: https://kubernetes.default.svc

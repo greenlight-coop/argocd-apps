@@ -1,13 +1,10 @@
 global:
-  apiDomainName: api.greenlightcoop.dev
-  appsDomainName: apps.greenlightcoop.dev
-  knativeDomainName: kn.greenlightcoop.dev
-  tlsCertIssuer: letsencrypt-production
-  tlsSecretName: letsencrypt-production
   targetRevision: HEAD
+useStagingCertificates: false
+appsDomainName: apps.greenlightcoop.dev
+knativeDomainName: kn.greenlightcoop.dev
 spec:
   destination:
     server: https://kubernetes.default.svc
   source:
     repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
-    targetRevision: HEAD

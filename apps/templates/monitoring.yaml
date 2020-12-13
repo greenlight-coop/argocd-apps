@@ -4,7 +4,7 @@ metadata:
   name: monitoring
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-30"
+    argocd.argoproj.io/sync-wave: "-3"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -22,11 +22,11 @@ spec:
           ingress:
             enabled: true
             annotations:
-              cert-manager.io/cluster-issuer: {{ .Values.global.tlsCertIssuer }}
+              cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
             hosts:
               - name: grafana.{{ .Values.global.appsDomainName }}
                 tls: true
-                tlsSecret: {{ .Values.global.tlsSecretName }}
+                tlsSecret: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
   syncPolicy:
     automated:
       prune: true
