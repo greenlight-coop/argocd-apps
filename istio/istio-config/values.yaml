@@ -1,6 +1,4 @@
-spec:
-  destination:
-    server: https://kubernetes.default.svc
-  source:    # These values overridden in the infrastructure Application definition
-    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
-    targetRevision: HEAD
+global:
+  hub: docker.io/istio
+  tag: 1.7.5
+knativeDomainName: kn.greenlightcoop.dev

@@ -23,6 +23,9 @@ spec:
     ingressGateways:
       - name: istio-ingressgateway
         enabled: true
+        k8s:
+          serviceAnnotations:
+            external-dns.alpha.kubernetes.io/hostname: '*.{{ .Values.knativeDomainName }}'
       - name: cluster-local-gateway
         enabled: true
         label:

@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-config
+  name: continuous-integration
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-4"
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,13 +13,16 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: argocd-config
+    path: continuous-integration/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
         appsDomainName: {{ .Values.global.appsDomainName }}
+        knativeDomainName: {{ .Values.global.knativeDomainName }}
+        global:
+          targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true

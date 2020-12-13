@@ -1,6 +1,3 @@
 # Default values for tekton-dashboard
-
-global:
-  appsDomainName: apps.greenlightcoop.dev
-  tlsCertIssuer: letsencrypt-production
-  tlsSecretName: letsencrypt-production
+appsDomainName: apps.greenlightcoop.dev
+useStagingCertificates: false
