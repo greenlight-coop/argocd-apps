@@ -4,7 +4,7 @@ metadata:
   name: tekton-dashboard
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-5"
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -17,13 +17,9 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
-      parameters:
-      - name: "global.appsDomainName"
-        value: {{ .Values.global.appsDomainName }}
-      - name: "global.tlsCertIssuer"
-        value: {{ .Values.global.tlsCertIssuer }}
-      - name: "global.tlsSecretName"
-        value: {{ .Values.global.tlsSecretName }}
+      values: |
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
+        appsDomainName: {{ .Values.appsDomainName }}
   syncPolicy:
     automated:
       prune: true
