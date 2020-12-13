@@ -18,7 +18,7 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
   syncPolicy:
     automated:
       prune: true
