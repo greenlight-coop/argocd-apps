@@ -16,12 +16,6 @@ spec:
     path: kafka/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    helm:
-      values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        knativeDomainName: {{ .Values.global.knativeDomainName }}
-        global:
-          targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true
