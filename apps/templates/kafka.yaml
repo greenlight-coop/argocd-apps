@@ -16,6 +16,10 @@ spec:
     path: kafka/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      values: |
+        global:
+          targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true
