@@ -1,0 +1,2 @@
+resources:
+  - knative-eventing-channel-consolidated-0.19.0.yaml
