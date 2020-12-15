@@ -1,28 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio
+  name: knative-eventing-core
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-3"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: knative-eventing
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/apps
+    path: knative/knative-eventing-core
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    helm:
-      values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        appsDomainName: {{ .Values.global.appsDomainName }}
-        knativeDomainName: {{ .Values.global.knativeDomainName }}
-        global:
-          targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
     automated:
       prune: true

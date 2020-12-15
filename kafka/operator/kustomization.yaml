@@ -1,0 +1,2 @@
+resources:
+  - strimzi-cluster-operator-0.16.2.yaml

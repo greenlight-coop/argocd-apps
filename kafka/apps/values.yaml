@@ -1,0 +1,7 @@
+global:
+  targetRevision: HEAD
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
