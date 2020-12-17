@@ -1,0 +1,2 @@
+resources:
+  - knative-eventing-kafka-broker-install.yaml
