@@ -21,4 +21,4 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        kubectl apply -f - $(params.manifest-path)
+        kubectl apply -f $(params.manifest-path)
