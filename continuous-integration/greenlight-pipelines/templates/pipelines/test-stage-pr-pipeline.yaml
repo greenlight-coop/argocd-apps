@@ -60,6 +60,9 @@ spec:
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
+      workspaces:
+        - name: source
+          workspace: git-source
     # - name: run-functional-tests
     #   taskRef:
     #     name: node-run-functional-tests
@@ -70,9 +73,6 @@ spec:
     #       value: $(params.project-name)
     #     - name: namespace
     #       value: $(params.preview-namespace)
-    #   workspaces:
-    #     - name: source
-    #       workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
