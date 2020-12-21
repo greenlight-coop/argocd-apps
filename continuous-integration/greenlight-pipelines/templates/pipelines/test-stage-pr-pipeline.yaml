@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-main-pipeline
+  name: test-stage-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -9,14 +9,14 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: git-branch
+    - name: git-pr-number
       type: string
   workspaces:
     - name: git-source
-    - name: kubeconfig-dir
-    - name: manifest-dir
     - name: status-workspace
     - name: node-modules
+    - name: kubeconfig-dir
+    - name: manifest-dir
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -45,19 +45,6 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: generate-image-tag
-      taskRef:
-        name: generate-image-tag
-      params:
-        - name: organization
-          value: greenlightcoop
-        - name: repository
-          value: $(params.project-name)
-        - name: branch-name
-          value: $(params.git-branch)
-      workspaces:
-        - name: node-modules
-          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -68,31 +55,49 @@ spec:
           value: $(params.git-revision)
       workspaces:
         - name: output
-          workspace: git-source
-    - name: node-build
+          workspace: git-source  
+    - name: replace-pr-number-token
       taskRef:
-        name: node-build
+        name: replace-token
       runAfter:
         - clone-git-repo
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: build-and-push-image
-      taskRef:
-        name: kaniko
-      runAfter:
-        - node-build
       params:
-        - name: IMAGE
-          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+        - name: token
+          value: PR_NUMBER
+        - name: value
+          value: $(params.git-pr-number)
+        - name: file-path
+          value: $(params.project-name).yaml
+      workspaces:
+        - name: source    
+          workspace: git-source
+    - name: deploy-test-stage
+      taskRef:
+        name: apply-manifest
+      runAfter:
+        - replace-pr-number-token
+      params:
+        - name: manifest-path
+          value: $(params.project-name).yaml
       workspaces:
         - name: source
           workspace: git-source
+    # - name: run-functional-tests
+    #   taskRef:
+    #     name: node-run-functional-tests
+    #   runAfter:
+    #     - deploy-test-stage
+    #   params:
+    #     - name: service-name
+    #       value: $(params.project-name)
+    #     - name: namespace
+    #       value: $(params.preview-namespace)
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - build-and-push-image
+        - deploy-test-stage
+        # - run-functional-tests
       params:
         - name: status
           value: success

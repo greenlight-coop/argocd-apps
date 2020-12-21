@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: replace-token
+spec:
+  description: >-
+    Globally replaces a string token with a replacement value in a file in the current source workspace.
+  params:
+    - name: file-path
+      description: The path to the file to process.
+      type: string
+    - name: token
+      description: The token to replace.
+      type: string
+    - name: value
+      description: The replacement value.
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: replace-token
+      workingDir: $(workspaces.source.path)
+      image: busybox:1.32
+      script: |
+        #!/bin/sh
+
+        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' $(params.file-path) | tee $(params.file-path)
