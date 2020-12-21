@@ -52,18 +52,6 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-    - name: deploy-test-stage
-      taskRef:
-        name: kubernetes-actions
-      params:
-        - name: script
-          value: |
-            cat <<EOF | kubectl apply -f -
-            apiVersion: v1
-            kind: Namespace
-            metadata:
-              name: $(params.preview-namespace)
-            EOF
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
