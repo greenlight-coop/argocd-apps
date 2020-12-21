@@ -51,12 +51,7 @@ spec:
           value: $(params.git-revision)
       workspaces:
         - name: output
-          workspace: git-source
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
+          workspace: git-source  
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
