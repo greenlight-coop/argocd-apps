@@ -1,2 +1,2 @@
 resources:
-  - tekton-pipelines-0.18.1.yaml
+  - tekton-pipelines-release-0.19.0.yaml

@@ -6,8 +6,11 @@ metadata:
 spec:
   params:
     - name: project-name
+      type: string
     - name: git-revision
+      type: string
     - name: git-branch
+      type: string
   workspaces:
     - name: git-source
     - name: kubeconfig-dir

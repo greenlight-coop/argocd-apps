@@ -1,0 +1,39 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: test-stage-pipeline-event-listener
+  namespace: greenlight-pipelines
+spec:
+  serviceAccountName: tekton-triggers-admin
+  triggers:
+    - name: test-stage-pr-pipeline-trigger
+      template:
+        ref: test-stage-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['opened', 'reopened', 'synchronize']"
+    - name: test-stage-close-pr-pipeline-trigger
+      template:
+        ref: test-stage-close-pr-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: pull-request-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - pull_request
+        - cel:
+            filter: "body.action in ['closed']"
+
