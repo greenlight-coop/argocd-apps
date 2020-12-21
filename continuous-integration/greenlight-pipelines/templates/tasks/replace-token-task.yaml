@@ -28,4 +28,4 @@ spec:
         set -x
 
         # cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' | tee $(params.file-path)
-        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g'
+        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' | tee $(params.file-path)
