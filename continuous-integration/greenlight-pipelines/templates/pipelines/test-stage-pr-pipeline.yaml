@@ -63,7 +63,7 @@ spec:
           value: PR_NUMBER
         - name: value
           # value: $(params.git-pr-number)
-          value: 777
+          value: '777'
         - name: file-path
           value: $(params.project-name).yaml
       workspaces:
