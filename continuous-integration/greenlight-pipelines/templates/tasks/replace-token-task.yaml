@@ -27,5 +27,5 @@ spec:
         set -e
         set -x
 
-        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' | tee $(params.file-path)
+        sed -i -e 's/$(params.token)/$(params.value)/g' $(params.file-path)
         ls -al
