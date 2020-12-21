@@ -28,5 +28,4 @@ spec:
         set -x
 
         sed -i -e 's/$(params.token)/$(params.value)/g' $(params.file-path)
-        ls -al
         cat $(params.file-path)
