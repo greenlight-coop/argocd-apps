@@ -16,10 +16,10 @@ spec:
               serviceName: el-node-pipeline-event-listener
               servicePort: 8080
             path: /webhook/node-pipeline
-          - backend:
-              serviceName: el-test-stage-pipeline-event-listener
-              servicePort: 8080
-            path: /webhook/test-stage-pipeline
+          # - backend:
+          #     serviceName: el-test-stage-pipeline-event-listener
+          #     servicePort: 8080
+          #   path: /webhook/test-stage-pipeline
   tls:
     - hosts:
         - tekton.{{ .Values.appsDomainName }}
