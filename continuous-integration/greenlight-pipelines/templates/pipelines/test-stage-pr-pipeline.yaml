@@ -82,7 +82,8 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - run-functional-tests
+        - deploy-test-stage
+        # - run-functional-tests
       params:
         - name: status
           value: success
