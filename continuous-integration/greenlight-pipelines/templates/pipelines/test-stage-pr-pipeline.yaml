@@ -7,7 +7,7 @@ spec:
   params:
     - name: project-name
     - name: git-revision
-    - name: git-pr-number
+    # - name: git-pr-number
   workspaces:
     - name: git-source
     - name: status-workspace
@@ -62,7 +62,8 @@ spec:
         - name: token
           value: PR_NUMBER
         - name: value
-          value: $(params.git-pr-number)
+          # value: $(params.git-pr-number)
+          value: 777
         - name: file-path
           value: $(params.project-name).yaml
       workspaces:

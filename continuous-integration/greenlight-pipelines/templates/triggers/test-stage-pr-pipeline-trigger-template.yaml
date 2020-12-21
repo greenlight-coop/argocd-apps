@@ -8,8 +8,8 @@ spec:
       description: The repo name in GitHub
     - name: git-revision
       description: The revision to clone and build
-    - name: git-pr-number
-      description: GitHub pull request number
+    # - name: git-pr-number
+    #   description: GitHub pull request number
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
@@ -25,8 +25,8 @@ spec:
             value: $(tt.params.project-name)
           - name: git-revision
             value: $(tt.params.git-revision)  
-          - name: git-pr-number
-            value: $(tt.params.git-pr-number)  
+          # - name: git-pr-number
+          #   value: $(tt.params.git-pr-number)  
         workspaces:
           - name: git-source
             volumeClaimTemplate:
