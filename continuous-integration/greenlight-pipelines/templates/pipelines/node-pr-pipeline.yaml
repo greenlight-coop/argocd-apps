@@ -6,11 +6,17 @@ metadata:
 spec:
   params:
     - name: project-name
+      type: string
     - name: git-revision
+      type: string
     - name: git-branch
+      type: string
     - name: git-pr-number
+      type: string
     - name: git-pr-commit-number
+      type: string
     - name: preview-namespace
+      type: string
   workspaces:
     - name: git-source
     - name: status-workspace
