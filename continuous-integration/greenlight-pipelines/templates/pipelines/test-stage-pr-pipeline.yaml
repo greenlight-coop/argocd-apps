@@ -53,22 +53,21 @@ spec:
       workspaces:
         - name: output
           workspace: git-source  
-    - name: replace-pr-number-token
-      taskRef:
-        name: replace-token
-      runAfter:
-        - clone-git-repo
-      params:
-        - name: token
-          value: PR_NUMBER
-        - name: value
-          # value: $(params.git-pr-number)
-          value: pr-777
-        - name: file-path
-          value: $(params.project-name).yaml
-      workspaces:
-        - name: source    
-          workspace: git-source
+    # - name: replace-pr-number-token
+    #   taskRef:
+    #     name: replace-token
+    #   runAfter:
+    #     - clone-git-repo
+    #   params:
+    #     - name: token
+    #       value: PR_NUMBER
+    #     - name: value
+    #       value: $(params.git-pr-number)
+    #     - name: file-path
+    #       value: $(params.project-name).yaml
+    #   workspaces:
+    #     - name: source    
+    #       workspace: git-source
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
