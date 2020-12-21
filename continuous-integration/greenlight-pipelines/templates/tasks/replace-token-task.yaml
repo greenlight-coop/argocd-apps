@@ -27,5 +27,4 @@ spec:
         set -e
         set -x
 
-        # cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' | tee $(params.file-path)
-        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' | tee $(params.file-path)
+        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' > $(params.file-path)
