@@ -155,12 +155,30 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: set-success-outcome
+    - name: set-success-outcome-for-service-build
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - run-integration-tests
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: set-success-outcome-for-nonservice-build
+      when:
+        - input: $(params.build-type)
+          operator: notin
+          values: ["service"]
       taskRef:
         name: set-outcome-status
       runAfter:
         - build-and-push-image
-        - run-integration-tests
       params:
         - name: status
           value: success
