@@ -146,7 +146,6 @@ spec:
       taskRef:
         name: node-run-integration-tests
       runAfter:
-        - build-and-push-image
         - deploy-preview-application
       params:
         - name: service-name
@@ -160,6 +159,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
+        - build-and-push-image
         - run-integration-tests
       params:
         - name: status
