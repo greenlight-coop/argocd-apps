@@ -146,6 +146,7 @@ spec:
       taskRef:
         name: node-run-integration-tests
       runAfter:
+        - build-and-push-image
         - deploy-preview-application
       params:
         - name: service-name
