@@ -22,4 +22,4 @@ spec:
     - name: preview-namespace
       value: prvw-pr-$(body.number)
     - name: build-type
-      value: $(body.extensions.build_type)
+      value: $(extensions.build_type)
