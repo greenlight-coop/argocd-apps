@@ -14,11 +14,11 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: $(tt.params.project-name)-test-stage-close-pr-pipeline-run-
+        generateName: $(tt.params.project-name)-close-pr-pipeline-run-
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: node-close-pr-pipeline
+          name: test-stage-close-pr-pipeline
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
