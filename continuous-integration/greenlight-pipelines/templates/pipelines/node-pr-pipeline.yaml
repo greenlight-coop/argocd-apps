@@ -155,7 +155,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: set-success-outcome-for-service-build
+    - name: set-success-outcome-service
       when:
         - input: $(params.build-type)
           operator: in
@@ -170,7 +170,7 @@ spec:
       workspaces:
         - name: status-workspace
           workspace: status-workspace
-    - name: set-success-outcome-for-nonservice-build
+    - name: set-success-outcome-nonservice
       when:
         - input: $(params.build-type)
           operator: notin
