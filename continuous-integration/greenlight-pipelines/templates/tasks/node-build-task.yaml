@@ -21,5 +21,5 @@ spec:
       image: $(params.node-image)
       script: |
         npm install
-        npx standard
+        npm run lint
         npm test
