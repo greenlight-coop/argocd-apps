@@ -44,7 +44,7 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-test-stage
+    - name: delete-test-stage-application
       taskRef:
         name: kubernetes-actions
       params:
@@ -59,6 +59,8 @@ spec:
     - name: delete-test-stage-namespace
       taskRef:
         name: kubernetes-actions
+      runAfter:
+        - delete-test-stage-application
       params:
         - name: script
           value: |
@@ -72,7 +74,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - delete-test-stage
+        - delete-test-stage-application
         - delete-test-stage-namespace
       params:
         - name: status
