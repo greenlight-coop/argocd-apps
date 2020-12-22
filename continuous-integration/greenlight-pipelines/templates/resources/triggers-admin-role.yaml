@@ -90,7 +90,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: tekton-triggers-admin
-  namespace: default
+  namespace: greenlight-pipelines
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
