@@ -22,7 +22,7 @@ spec:
         - cel:
             filter: "body.action in ['opened', 'reopened', 'synchronize']"
             overlays:
-              - key: extensions.build_type
+              - key: build_type
                 expression: "'service'"
     - name: node-close-pr-pipeline-trigger
       template:
