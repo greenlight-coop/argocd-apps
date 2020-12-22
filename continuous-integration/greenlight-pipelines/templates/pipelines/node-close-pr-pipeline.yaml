@@ -106,6 +106,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
+        - set-default-outcome
         - delete-pr-namespace
         - delete-preview-application
         - delete-pull-request-images
@@ -123,6 +124,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
+        - set-default-outcome
         - delete-pull-request-images
       params:
         - name: status

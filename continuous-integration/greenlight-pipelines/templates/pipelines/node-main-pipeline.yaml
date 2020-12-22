@@ -94,6 +94,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
+        - set-default-outcome
         - build-and-push-image
       params:
         - name: status
