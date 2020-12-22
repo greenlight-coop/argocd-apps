@@ -1,0 +1,102 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: test-stage-close-pr-pipeline
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+      type: string
+    - name: git-revision
+      type: string
+    - name: git-pr-number
+      type: string
+  workspaces:
+    - name: git-source
+    - name: status-workspace
+    - name: kubeconfig-dir
+    - name: manifest-dir
+  tasks:
+    - name: set-default-outcome
+      taskRef:
+        name: set-outcome-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: delete-test-stage
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-test-stage-namespace
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: set-success-outcome
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - delete-test-stage
+        - delete-test-stage-namespace
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+  finally:
+    - name: publish-outcome-status-to-github
+      taskRef:
+        name: github-set-status-from-outcome
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+      params:
+        - name: REPO_FULL_NAME
+          value: greenlight-coop/$(params.project-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: DESCRIPTION
+          value: Build complete
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
