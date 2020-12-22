@@ -7,6 +7,8 @@ spec:
   params:
     - name: project-name
       type: string
+    - name: build-type
+      type: string
     - name: git-revision
       type: string
     - name: git-branch
@@ -52,6 +54,10 @@ spec:
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: ensure-preview-namespace-exists
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: kubernetes-actions
       params:
@@ -116,6 +122,10 @@ spec:
         - name: source
           workspace: git-source
     - name: deploy-preview-application
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: deploy-preview-application
       runAfter:
@@ -129,6 +139,10 @@ spec:
         - name: image-version
           value: $(tasks.generate-image-tag.results.image-tag)
     - name: run-integration-tests
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: node-run-integration-tests
       runAfter:

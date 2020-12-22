@@ -7,6 +7,8 @@ spec:
   params:
     - name: project-name
       type: string
+    - name: build-type
+      type: string
     - name: git-revision
       type: string
     - name: git-branch

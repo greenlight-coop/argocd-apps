@@ -21,4 +21,7 @@ spec:
       value: $(body.pull_request.commits)
     - name: preview-namespace
       value: prvw-pr-$(body.number)
-      
+    - name: git-branch
+      value: $(body.extensions.branch_name)
+    - name: build-type
+      value: $(body.extensions.build_type)

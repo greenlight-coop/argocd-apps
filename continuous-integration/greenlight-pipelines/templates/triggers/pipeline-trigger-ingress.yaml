@@ -13,9 +13,13 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: el-node-pipeline-event-listener
+              serviceName: el-node-service-pipeline-event-listener
               servicePort: 8080
-            path: /webhook/node-pipeline
+            path: /webhook/node-service-pipeline
+          - backend:
+              serviceName: el-node-image-pipeline-event-listener
+              servicePort: 8080
+            path: /webhook/node-image-pipeline
           - backend:
               serviceName: el-test-stage-pipeline-event-listener
               servicePort: 8080

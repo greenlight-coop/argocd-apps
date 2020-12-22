@@ -9,6 +9,6 @@ spec:
       value: $(body.repository.name)
     - name: git-revision
       value: $(body.after)
-    - name: git-branch
-      value: $(body.extensions.branch_name)
+    - name: build-type
+      value: $(body.extensions.build_type)
 

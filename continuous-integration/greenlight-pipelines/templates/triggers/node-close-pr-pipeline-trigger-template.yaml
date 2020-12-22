@@ -6,6 +6,8 @@ spec:
   params:
     - name: project-name
       description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: build-type
+      description: Indicates the type of Node project to build. Current supported values are 'service' and 'image'
     - name: preview-namespace
       description: The namespace to use to remove preview services for isolated integration testing
     - name: git-revision
@@ -29,6 +31,8 @@ spec:
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: build-type
+            value: $(tt.params.build-type)
           - name: preview-namespace
             value: $(tt.params.preview-namespace)
           - name: pipeline-run-name
