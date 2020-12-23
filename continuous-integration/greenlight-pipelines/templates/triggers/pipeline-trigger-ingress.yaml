@@ -17,7 +17,7 @@ spec:
               servicePort: 8080
             path: /webhook/service-pipeline
           - backend:
-              serviceName: el-node-image-pipeline-event-listener
+              serviceName: el-image-pipeline-event-listener
               servicePort: 8080
             path: /webhook/image-pipeline
           - backend:
