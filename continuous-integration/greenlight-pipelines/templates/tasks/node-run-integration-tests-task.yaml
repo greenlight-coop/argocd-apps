@@ -23,4 +23,5 @@ spec:
       workingDir: $(workspaces.source.path)
       image: $(params.node-image)
       script: |
+        npm install
         BASE_URL=https://$(params.service-name).$(params.namespace).{{ .Values.knativeDomainName }} npm run test-features
