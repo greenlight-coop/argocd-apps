@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-pr-pipeline
+  name: main-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -13,18 +13,12 @@ spec:
       type: string
     - name: git-branch
       type: string
-    - name: git-pr-number
-      type: string
-    - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
-      type: string
   workspaces:
     - name: git-source
-    - name: status-workspace
-    - name: node-modules
     - name: kubeconfig-dir
     - name: manifest-dir
+    - name: status-workspace
+    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -53,27 +47,6 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: ensure-preview-namespace-exists
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: kubernetes-actions
-      params:
-        - name: script
-          value: |
-            cat <<EOF | kubectl apply -f -
-            apiVersion: v1
-            kind: Namespace
-            metadata:
-              name: $(params.preview-namespace)
-            EOF
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
@@ -84,10 +57,6 @@ spec:
           value: $(params.project-name)
         - name: branch-name
           value: $(params.git-branch)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
-        - name: pull-request-commit-number
-          value: $(params.git-pr-commit-number)
       workspaces:
         - name: node-modules
           workspace: node-modules
@@ -102,80 +71,18 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-    - name: node-build
-      taskRef:
-        name: node-build
-      runAfter:
-        - clone-git-repo
-      workspaces:
-        - name: source
-          workspace: git-source
     - name: build-and-push-image
       taskRef:
         name: kaniko
       runAfter:
-        - node-build
+        - clone-git-repo
       params:
         - name: IMAGE
           value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
         - name: source
           workspace: git-source
-    - name: deploy-preview-application
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: deploy-preview-application
-      runAfter:
-        - build-and-push-image
-        - ensure-preview-namespace-exists
-      params:
-        - name: project-name
-          value: $(params.project-name)
-        - name: namespace
-          value: $(params.preview-namespace)
-        - name: image-version
-          value: $(tasks.generate-image-tag.results.image-tag)
-    - name: run-integration-tests
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: node-run-integration-tests
-      runAfter:
-        - deploy-preview-application
-      params:
-        - name: service-name
-          value: $(params.project-name)
-        - name: namespace
-          value: $(params.preview-namespace)
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: set-success-outcome-service
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: set-outcome-status
-      runAfter:
-        - set-default-outcome
-        - run-integration-tests
-      params:
-        - name: status
-          value: success
-      workspaces:
-        - name: status-workspace
-          workspace: status-workspace
-    - name: set-success-outcome-nonservice
-      when:
-        - input: $(params.build-type)
-          operator: notin
-          values: ["service"]
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:

@@ -5,7 +5,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
-  name: node-pipeline-trigger-ingress
+  name: pipeline-trigger-ingress
   namespace: greenlight-pipelines
 spec:
   rules:
@@ -13,13 +13,13 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: el-node-service-pipeline-event-listener
+              serviceName: el-service-pipeline-event-listener
               servicePort: 8080
-            path: /webhook/node-service-pipeline
+            path: /webhook/service-pipeline
           - backend:
               serviceName: el-node-image-pipeline-event-listener
               servicePort: 8080
-            path: /webhook/node-image-pipeline
+            path: /webhook/image-pipeline
           - backend:
               serviceName: el-test-stage-pipeline-event-listener
               servicePort: 8080

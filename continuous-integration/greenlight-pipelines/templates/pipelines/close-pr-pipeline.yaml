@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-main-pipeline
+  name: close-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -13,11 +13,17 @@ spec:
       type: string
     - name: git-branch
       type: string
+    - name: git-pr-number
+      type: string
+    - name: git-pr-commit-number
+      type: string
+    - name: preview-namespace
+      type: string
   workspaces:
     - name: git-source
+    - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: status-workspace
     - name: node-modules
   tasks:
     - name: set-default-outcome
@@ -47,55 +53,79 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: generate-image-tag
+    - name: delete-preview-application
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
-        name: generate-image-tag
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.project-name)-$(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pr-namespace
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pull-request-images
+      taskRef:
+        name: delete-pull-request-images
       params:
         - name: organization
           value: greenlightcoop
         - name: repository
           value: $(params.project-name)
-        - name: branch-name
-          value: $(params.git-branch)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
       workspaces:
         - name: node-modules
           workspace: node-modules
-    - name: clone-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/$(params.project-name).git
-        - name: revision
-          value: $(params.git-revision)
-      workspaces:
-        - name: output
-          workspace: git-source
-    - name: node-build
-      taskRef:
-        name: node-build
-      runAfter:
-        - clone-git-repo
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: build-and-push-image
-      taskRef:
-        name: kaniko
-      runAfter:
-        - node-build
-      params:
-        - name: IMAGE
-          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: set-success-outcome
+    - name: set-success-outcome-service
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - build-and-push-image
+        - delete-pr-namespace
+        - delete-preview-application
+        - delete-pull-request-images
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: set-success-outcome-nonservice
+      when:
+        - input: $(params.build-type)
+          operator: notin
+          values: ["service"]
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - set-default-outcome
+        - delete-pull-request-images
       params:
         - name: status
           value: success

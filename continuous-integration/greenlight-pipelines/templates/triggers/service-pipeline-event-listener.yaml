@@ -1,14 +1,14 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: node-service-pipeline-event-listener
+  name: service-pipeline-event-listener
   namespace: greenlight-pipelines
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: node-pr-pipeline-trigger
+    - name: pr-pipeline-trigger
       template:
-        ref: node-pr-pipeline-trigger-template
+        ref: pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -24,9 +24,9 @@ spec:
             overlays:
               - key: build_type
                 expression: "'service'"
-    - name: node-close-pr-pipeline-trigger
+    - name: close-pr-pipeline-trigger
       template:
-        ref: node-close-pr-pipeline-trigger-template
+        ref: close-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -42,9 +42,9 @@ spec:
             overlays:
               - key: build_type
                 expression: "'service'"
-    - name: node-main-pipeline-trigger
+    - name: main-pipeline-trigger
       template:
-        ref: node-main-pipeline-trigger-template
+        ref: main-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: push-trigger-binding
