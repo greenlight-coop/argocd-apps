@@ -21,6 +21,9 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['opened', 'reopened', 'synchronize']"
+            overlays:
+              - key: build_type
+                expression: "'test'"
     - name: test-stage-close-pr-pipeline-trigger
       template:
         ref: test-stage-close-pr-pipeline-trigger-template
@@ -36,4 +39,7 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
+            overlays:
+              - key: build_type
+                expression: "'test'"
 
