@@ -13,7 +13,6 @@ spec:
       type: string
   workspaces:
     - name: git-source
-    - name: processed-templates
     - name: status-workspace
     - name: node-modules
     - name: kubeconfig-dir
@@ -70,10 +69,8 @@ spec:
             knativeDomainName: {{ .Values.knativeDomainName }}
             useStagingCertificates: {{ .Values.useStagingCertificates }}
       workspaces:
-        - name: input    
+        - name: template-directory
           workspace: git-source
-        - name: output    
-          workspace: processed-templates
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
@@ -84,7 +81,7 @@ spec:
           value: $(params.project-name).yaml
       workspaces:
         - name: source
-          workspace: processed-templates
+          workspace: git-source
     - name: run-functional-tests
       taskRef:
         name: apply-manifest

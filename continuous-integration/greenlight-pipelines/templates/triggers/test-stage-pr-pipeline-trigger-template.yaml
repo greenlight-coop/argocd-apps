@@ -36,14 +36,6 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
-          - name: processed-templates
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 1Gi
           - name: status-workspace
             volumeClaimTemplate:
               spec:

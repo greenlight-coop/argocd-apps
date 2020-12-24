@@ -10,16 +10,13 @@ spec:
       description: YAML string of values to used for template substitution.
       type: string
   workspaces:
-    - name: input
-    - name: output
+    - name: template-directory
   steps:
     - name: parse-templates
-      image: greenlightcoop/template-processor:0.1.0
+      image: greenlightcoop/template-processor:0.1.1
       env:
-        - name: INPUT_DIRECTORY
-          value: $(workspaces.input.path)
-        - name: OUTPUT_DIRECTORY
-          value: $(workspaces.output.path)
+        - name: TEMPLATE_DIRECTORY
+          value: $(workspaces.template-directory.path)
         - name: VALUES
           value: $(params.values)
           
