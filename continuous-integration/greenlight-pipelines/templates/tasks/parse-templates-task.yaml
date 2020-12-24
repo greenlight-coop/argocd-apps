@@ -21,6 +21,4 @@ spec:
           value: $(params.values)
       script: |
         cd /usr/src/app
-        ls -al $TEMPLATE_DIRECTORY
-        echo $VALUES
         npm start
