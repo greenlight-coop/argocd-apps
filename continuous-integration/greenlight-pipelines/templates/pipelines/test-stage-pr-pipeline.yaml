@@ -57,9 +57,9 @@ spec:
       workspaces:
         - name: output
           workspace: git-source  
-    - name: process-templates
+    - name: parse-templates
       taskRef:
-        name: process-templates
+        name: parse-templates
       runAfter:
         - clone-git-repo
       params:
