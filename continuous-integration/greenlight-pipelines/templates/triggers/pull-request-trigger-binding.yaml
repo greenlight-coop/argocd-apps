@@ -21,4 +21,5 @@ spec:
       value: $(body.pull_request.commits)
     - name: preview-namespace
       value: prvw-pr-$(body.number)
-      
+    - name: build-type
+      value: $(extensions.build_type)

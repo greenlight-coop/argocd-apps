@@ -24,4 +24,8 @@ spec:
       script: |
         #!/bin/sh
 
-        cat $(params.file-path) | sed 's/$(params.token)/$(params.value)/g' $(params.file-path) | tee $(params.file-path)
+        set -e
+        set -x
+
+        sed -i -e 's/$(params.token)/$(params.value)/g' $(params.file-path)
+        cat $(params.file-path)

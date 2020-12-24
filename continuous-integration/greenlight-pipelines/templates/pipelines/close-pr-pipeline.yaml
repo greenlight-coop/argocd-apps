@@ -1,11 +1,13 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-close-pr-pipeline
+  name: close-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name
+      type: string
+    - name: build-type
       type: string
     - name: git-revision
       type: string
@@ -52,6 +54,10 @@ spec:
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: delete-preview-application
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: kubernetes-actions
       params:
@@ -64,6 +70,10 @@ spec:
         - name: manifest-dir
           workspace: manifest-dir
     - name: delete-pr-namespace
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: kubernetes-actions
       params:
@@ -88,12 +98,33 @@ spec:
       workspaces:
         - name: node-modules
           workspace: node-modules
-    - name: set-success-outcome
+    - name: set-success-outcome-service
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service"]
       taskRef:
         name: set-outcome-status
       runAfter:
+        - set-default-outcome
         - delete-pr-namespace
         - delete-preview-application
+        - delete-pull-request-images
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: set-success-outcome-nonservice
+      when:
+        - input: $(params.build-type)
+          operator: notin
+          values: ["service"]
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - set-default-outcome
         - delete-pull-request-images
       params:
         - name: status

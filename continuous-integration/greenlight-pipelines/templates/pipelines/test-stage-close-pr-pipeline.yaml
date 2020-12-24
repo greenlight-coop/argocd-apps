@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: node-main-pipeline
+  name: test-stage-close-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
@@ -9,14 +9,13 @@ spec:
       type: string
     - name: git-revision
       type: string
-    - name: git-branch
+    - name: git-pr-number
       type: string
   workspaces:
     - name: git-source
+    - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: status-workspace
-    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -45,54 +44,38 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: generate-image-tag
+    - name: delete-test-stage-application
       taskRef:
-        name: generate-image-tag
+        name: kubernetes-actions
       params:
-        - name: organization
-          value: greenlightcoop
-        - name: repository
-          value: $(params.project-name)
-        - name: branch-name
-          value: $(params.git-branch)
+        - name: script
+          value: |
+            kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
       workspaces:
-        - name: node-modules
-          workspace: node-modules
-    - name: clone-git-repo
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-test-stage-namespace
       taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/$(params.project-name).git
-        - name: revision
-          value: $(params.git-revision)
-      workspaces:
-        - name: output
-          workspace: git-source
-    - name: node-build
-      taskRef:
-        name: node-build
+        name: kubernetes-actions
       runAfter:
-        - clone-git-repo
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: build-and-push-image
-      taskRef:
-        name: kaniko
-      runAfter:
-        - node-build
+        - delete-test-stage-application
       params:
-        - name: IMAGE
-          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
       workspaces:
-        - name: source
-          workspace: git-source
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - build-and-push-image
+        - delete-test-stage-application
+        - delete-test-stage-namespace
       params:
         - name: status
           value: success

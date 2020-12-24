@@ -12,7 +12,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.0
+      default: greenlightcoop/node-utils:0.1.5
     - name: docker-hub-domain
       description: Docker Hub API
       default: hub.docker.com
@@ -42,19 +42,24 @@ spec:
         deletePullRequestImages()
 
         async function deletePullRequestImages () {
-          const auth = await getAuth(dockerHubUrl)
-          const config = {
-            dockerHubDomain, 
-            organization, 
-            repository, 
-            username: auth.username, 
-            password: auth.password
-          }
-          const api = docker.getHubAPI(config)
+          try {
+            const auth = await getAuth(dockerHubUrl)
+            const config = {
+              dockerHubDomain, 
+              organization, 
+              repository, 
+              username: auth.username, 
+              password: auth.password
+            }
+            const api = docker.getHubAPI(config)
 
-          const tags = await api.getPullRequestTags(pullRequestNumber)
-          for (const tag of tags) {
-            await api.deleteTag(tag)
+            const tags = await api.getPullRequestTags(pullRequestNumber)
+            for (const tag of tags) {
+              await api.deleteTag(tag)
+            }
+          } catch (err) {
+            console.log(err)
+            throw err
           }
         }
         

@@ -1,14 +1,14 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: node-pipeline-event-listener
+  name: image-pipeline-event-listener
   namespace: greenlight-pipelines
 spec:
   serviceAccountName: tekton-triggers-admin
   triggers:
-    - name: node-pr-pipeline-trigger
+    - name: pr-pipeline-trigger
       template:
-        ref: node-pr-pipeline-trigger-template
+        ref: pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -21,9 +21,12 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['opened', 'reopened', 'synchronize']"
-    - name: node-close-pr-pipeline-trigger
+            overlays:
+              - key: build_type
+                expression: "'image'"
+    - name: close-pr-pipeline-trigger
       template:
-        ref: node-close-pr-pipeline-trigger-template
+        ref: close-pr-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
@@ -36,9 +39,12 @@ spec:
               - pull_request
         - cel:
             filter: "body.action in ['closed']"
-    - name: node-main-pipeline-trigger
+            overlays:
+              - key: build_type
+                expression: "'image'"
+    - name: main-pipeline-trigger
       template:
-        ref: node-main-pipeline-trigger-template
+        ref: main-pipeline-trigger-template
       bindings:
         - kind: TriggerBinding
           ref: push-trigger-binding
@@ -52,5 +58,7 @@ spec:
         - cel:
             filter: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
             overlays:
-              - key: extensions.branch_name
+              - key: build_type
+                expression: "'image'"
+              - key: branch_name
                 expression: "body.ref.split('/')[2]"

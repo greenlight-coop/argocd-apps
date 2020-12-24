@@ -1,11 +1,13 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: node-close-pr-pipeline-trigger-template
+  name: close-pr-pipeline-trigger-template
 spec:
   params:
     - name: project-name
       description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: build-type
+      description: Indicates the type of project to build. Current supported values are 'service' and 'image'
     - name: preview-namespace
       description: The namespace to use to remove preview services for isolated integration testing
     - name: git-revision
@@ -20,19 +22,19 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: $(tt.params.project-name)-node-close-pr-pipeline-run-$(uid)
+        generateName: $(tt.params.project-name)-close-pr-pipeline-run-
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: node-close-pr-pipeline
+          name: close-pr-pipeline
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: build-type
+            value: $(tt.params.build-type)
           - name: preview-namespace
             value: $(tt.params.preview-namespace)
-          - name: pipeline-run-name
-            value: $(tt.params.project-name)-node-pr-pipeline-run-$(uid)
           - name: git-revision
             value: $(tt.params.git-revision)  
           - name: git-branch
