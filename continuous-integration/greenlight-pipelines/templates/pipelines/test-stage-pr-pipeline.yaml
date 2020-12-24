@@ -78,7 +78,7 @@ spec:
       taskRef:
         name: apply-manifest
       runAfter:
-        - process-templates
+        - parse-templates
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
@@ -89,7 +89,7 @@ spec:
       taskRef:
         name: apply-manifest
       runAfter:
-        - process-templates
+        - parse-templates
       params:
         - name: manifest-path
           value: $(params.project-name)-api-tests.yaml
