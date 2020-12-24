@@ -13,6 +13,7 @@ spec:
       type: string
   workspaces:
     - name: git-source
+    - name: processed-templates
     - name: status-workspace
     - name: node-modules
     - name: kubeconfig-dir
@@ -56,48 +57,51 @@ spec:
       workspaces:
         - name: output
           workspace: git-source  
-    - name: replace-pr-number-token
+    - name: process-templates
       taskRef:
-        name: replace-token
+        name: process-templates
       runAfter:
         - clone-git-repo
       params:
-        - name: token
-          value: PR_NUMBER
-        - name: value
-          value: $(params.git-pr-number)
-        - name: file-path
-          value: $(params.project-name).yaml
+        - name: values
+          value: |
+            prNumber: $(params.git-pr-number)
+            appsDomainName: {{ .Values.appsDomainName }}
+            knativeDomainName: {{ .Values.knativeDomainName }}
+            useStagingCertificates: {{ .Values.useStagingCertificates }}
       workspaces:
-        - name: source    
+        - name: input    
           workspace: git-source
+        - name: output    
+          workspace: processed-templates
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
       runAfter:
-        - replace-pr-number-token
+        - process-templates
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
       workspaces:
         - name: source
-          workspace: git-source
-    # - name: run-functional-tests
-    #   taskRef:
-    #     name: node-run-functional-tests
-    #   runAfter:
-    #     - deploy-test-stage
-    #   params:
-    #     - name: service-name
-    #       value: $(params.project-name)
-    #     - name: namespace
-    #       value: $(params.preview-namespace)
+          workspace: processed-templates
+    - name: run-functional-tests
+      taskRef:
+        name: apply-manifest
+      runAfter:
+        - process-templates
+      params:
+        - name: manifest-path
+          value: $(params.project-name)-api-tests.yaml
+      workspaces:
+        - name: source
+          workspace: processed-templates
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - deploy-test-stage
-        # - run-functional-tests
+        - run-functional-tests
       params:
         - name: status
           value: success
