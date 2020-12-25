@@ -14,11 +14,11 @@ spec:
   steps:
     - name: parse-templates
       image: greenlightcoop/template-processor:0.1.2
+      workingDir: /usr/src/app
       env:
         - name: TEMPLATE_DIRECTORY
           value: $(workspaces.template-directory.path)
         - name: VALUES
           value: $(params.values)
       script: |
-        cd /usr/src/app
         npm start

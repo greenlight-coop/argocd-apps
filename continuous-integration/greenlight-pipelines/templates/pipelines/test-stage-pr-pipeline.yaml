@@ -82,14 +82,18 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: run-functional-tests
+    - name: run-api-functional-tests
       taskRef:
-        name: apply-manifest
+        name: run-serenity-tests
       runAfter:
-        - parse-templates
+        - deploy-test-stage
       params:
-        - name: manifest-path
-          value: $(params.project-name)-api-tests.yaml
+        - name: test-image
+          value: greenlightcoop/template-processor
+        - name: base-url
+          value: https://helloworld.test-pr-$(params.git-pr-number).{{ .Values.knativeDomainName }}
+        - name: results-identifier
+          value: test-pr-$(params.git-pr-number)
       workspaces:
         - name: source
           workspace: git-source
