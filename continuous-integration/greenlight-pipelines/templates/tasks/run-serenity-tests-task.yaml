@@ -16,7 +16,7 @@ spec:
     - name: base-url
       description: The base URL to pass to the tests as environment variable BASE_URL
       type: string
-    - name: result-identifier
+    - name: results-identifier
       description: >-
         Unique identifier for the test results; used to generate the results report URL and for later deletion of the resources
         that provide the report.
@@ -78,7 +78,7 @@ spec:
             targetRevision: HEAD
             helm:
               values: |
-                identifier: $(params.result-identifier)
+                identifier: $(params.results-identifier)
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
