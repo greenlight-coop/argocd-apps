@@ -102,4 +102,4 @@ spec:
           npm install
         fi
         npm run test-features
-        echo '$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
+        echo 'https://$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
