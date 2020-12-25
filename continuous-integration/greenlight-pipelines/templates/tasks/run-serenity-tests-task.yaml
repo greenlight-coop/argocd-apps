@@ -102,4 +102,4 @@ spec:
           npm install
         fi
         npm run test-features
-        echo '$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.current-date-human-readable.path)
+        echo '$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
