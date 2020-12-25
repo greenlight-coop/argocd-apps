@@ -61,7 +61,7 @@ spec:
       taskRef:
         name: kubernetes-actions
       runAfter:
-        - delete-test-stage-application
+        - delete-test-stage-resources
       params:
         - name: script
           value: |
@@ -75,7 +75,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - delete-test-stage-application
+        - delete-test-stage-resources
         - delete-test-stage-namespace
       params:
         - name: status
