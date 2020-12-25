@@ -51,7 +51,7 @@ spec:
         AFFINITY_ASSISTANT_INSTANCE=$(kubectl get pod \
           --namespace greenlight-pipelines \
           --selector=tekton.dev/taskRun=$(context.taskRun.name) \
-          -o go-template='{{range .items}}{{range .spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution}}{{index .labelSelector.matchLabels "app.kubernetes.io/instance"}}{{end}}{{end}}')
+          -o go-template='{{"{{"}}range .items{{"}}"}}{{"{{"}}range .spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution{{"}}"}}{{"{{"}}index .labelSelector.matchLabels "app.kubernetes.io/instance"{{"}}"}}{{"{{"}}end{{"}}"}}{{"{{"}}end{{"}}"}}')
 
         #### DEBUG ###
 
