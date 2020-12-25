@@ -11,8 +11,10 @@ spec:
     - name: test-image
       description: >-
         Image containing features to run, must be packaged at /usr/src/app with Node script 'test-features'. If not
-        provided, the source workspace is expected to contain a Node module with the script 'test-features'. 
-      default: node:14.15
+        provided, the source workspace is expected to contain a Node module with the script 'test-features'.
+
+        Note: if the default value is updated, the reference in the run-integration-tests step must be updated as well.
+      default: greenlightcoop/serenity-js-runner:0.1.2
     - name: base-url
       description: The base URL to pass to the tests as environment variable BASE_URL
       type: string
@@ -90,7 +92,7 @@ spec:
         - name: BDD_REPORT_DIR
           value: $(workspaces.source.path)/site
       script: |
-        if [ "$(params.test-image)" != "node:14.15" ]
+        if [ "$(params.test-image)" != "greenlightcoop/serenity-js-runner:0.1.2" ]
         then
           cd /usr/src/app
         else
