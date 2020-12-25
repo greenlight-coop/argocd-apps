@@ -38,26 +38,11 @@ spec:
         </html>
         EOL
 
-        #### DEBUG ###
-
-        echo $(context.taskRun.name)
-
-        kubectl get pod \
-          --namespace greenlight-pipelines \
-          --selector=tekton.dev/taskRun=$(context.taskRun.name)
-
-        ### END DEBUG ###
-
         AFFINITY_ASSISTANT_INSTANCE=$(kubectl get pod \
           --namespace greenlight-pipelines \
           --selector=tekton.dev/taskRun=$(context.taskRun.name) \
           -o go-template='{{"{{"}}range .items{{"}}"}}{{"{{"}}range .spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution{{"}}"}}{{"{{"}}index .labelSelector.matchLabels "app.kubernetes.io/instance"{{"}}"}}{{"{{"}}end{{"}}"}}{{"{{"}}end{{"}}"}}')
 
-        #### DEBUG ###
-
-        echo AFFINITY_ASSISTANT_INSTANCE: $AFFINITY_ASSISTANT_INSTANCE
-
-        ### END DEBUG ###
         cat <<EOF | kubectl apply -f -
         apiVersion: argoproj.io/v1alpha1
         kind: Application
@@ -95,13 +80,6 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
-
-
-        #### DEBUG ###
-
-        kubectl describe -n argocd application test-results-$(params.results-identifier)
-
-        ### END DEBUG ###
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)
