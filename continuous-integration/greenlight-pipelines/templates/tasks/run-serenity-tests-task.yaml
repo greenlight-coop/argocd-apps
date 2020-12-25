@@ -85,6 +85,7 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
+        echo 'https://$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)
@@ -102,4 +103,3 @@ spec:
           npm install
         fi
         npm run test-features
-        echo 'https://$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
