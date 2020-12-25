@@ -1,0 +1,122 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-serenity-tests
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    This Task runs Serenity/JS integration tests. Test results are written into the source workspace at the subdirectory
+    './site' and exposed at the URL https://${results-identifier}.apps.greenlightcoop.dev
+  params:
+    - name: test-image
+      description: >-
+        Image containing features to run, must be packaged at /usr/src/app with Node script 'test-features'. If not
+        provided, the source workspace is expected to contain a Node module with the script 'test-features'. 
+      default: node:14.15
+    - name: base-url
+      description: The base URL to pass to the tests as environment variable BASE_URL
+      type: string
+    - name: result-identifier
+      description: >-
+        Unique identifier for the test results; used to generate the results report URL and for later deletion of the resources
+        that provide the report.
+    - name: kubectl-image
+      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
+      description: Kubectl wrapper image
+  workspaces:
+    - name: source
+  steps:
+    - name: expose-report-site
+      workingDir: $(workspaces.source.path)
+      image: $(params.kubectl-image)
+      script: |
+        mkdir site
+        cat > site/index.html <<EOL
+        <html>
+          <head><title>Test results pending</title></head>
+          <body><p>Test results pending</p></body>
+        </html>
+        EOL
+
+        #### DEBUG ###
+
+        echo $(context.taskRun.name)
+
+        kubectl get pod \
+          --namespace greenlight-pipelines \
+          --selector=tekton.dev/taskRun=$(context.taskRun.name)
+
+        ### END DEBUG ###
+
+        AFFINITY_ASSISTANT_INSTANCE=$(kubectl get pod \
+          --namespace greenlight-pipelines \
+          --selector=tekton.dev/taskRun=$(context.taskRun.name) \
+          -o go-template='{{range .items}}{{range .spec.affinity.podAffinity.requiredDuringSchedulingIgnoredDuringExecution}}{{index .labelSelector.matchLabels "app.kubernetes.io/instance"}}{{end}}{{end}}'
+
+        #### DEBUG ###
+
+        echo $AFFINITY_ASSISTANT_INSTANCE
+
+        ### END DEBUG ###
+
+        cat <<EOF | kubectl apply -f -
+        apiVersion: argoproj.io/v1alpha1
+        kind: Application
+        metadata:
+          name: test-results-$(params.results-identifier)
+          namespace: argocd
+          finalizers:
+            - resources-finalizer.argocd.argoproj.io
+        spec:
+          destination:
+            namespace: greenlight-pipelines
+            server: https://kubernetes.default.svc
+          project: greenlight-project
+          source:
+            path: expose-pipeline-workspace-content
+            repoURL: git@github.com:greenlight-coop/greenlight-helm-charts.git
+            targetRevision: HEAD
+            helm:
+              values: |
+                identifier: $(params.result-identifier)
+                namespace: $(context.taskRun.namespace)
+                affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
+                persistentVolumeClaimName: $(workspaces.source.claim)
+                volumeSubPath: site
+                appsDomainName: {{ .Values.appsDomainName }}
+                useStagingCertificates: {{ .Values.useStagingCertificates }}
+          syncPolicy:
+            automated:
+              prune: true
+              selfHeal: true
+            retry:
+              limit: 5
+              backoff:
+                duration: 5s
+                factor: 2
+                maxDuration: 3m
+        EOF
+
+
+        #### DEBUG ###
+
+        kubectl describe -n greenlight-pipelines application test-results-$(params.results-identifier)
+
+        ### END DEBUG ###
+
+    - name: run-integration-tests
+      workingDir: $(workspaces.source.path)
+      image: $(params.test-image)
+      env:
+        - name: BASE_URL
+          value: $(params.base-url)
+        - name: BDD_REPORT_DIR
+          value: $(workspaces.source.path)/site
+      script: |
+        if [ "$(params.test-image)" != "node:14.15" ]
+        then
+          cd /usr/src/app
+        else
+          npm install
+        fi
+        npm run test-features
