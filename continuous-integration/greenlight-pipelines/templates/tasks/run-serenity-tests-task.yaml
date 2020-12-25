@@ -27,6 +27,9 @@ spec:
       description: Kubectl wrapper image
   workspaces:
     - name: source
+  results:
+    - name: report-url
+      description: URL used to access the generated Serenity results report
   steps:
     - name: expose-report-site
       workingDir: $(workspaces.source.path)
@@ -99,3 +102,4 @@ spec:
           npm install
         fi
         npm run test-features
+        echo '$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.current-date-human-readable.path)
