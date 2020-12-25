@@ -99,7 +99,7 @@ spec:
 
         #### DEBUG ###
 
-        kubectl describe -n greenlight-pipelines application test-results-$(params.results-identifier)
+        kubectl describe -n argocd application test-results-$(params.results-identifier)
 
         ### END DEBUG ###
 

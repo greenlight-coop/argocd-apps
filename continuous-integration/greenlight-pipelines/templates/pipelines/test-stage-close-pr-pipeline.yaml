@@ -44,12 +44,13 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-test-stage-application
+    - name: delete-test-stage-resources
       taskRef:
         name: kubernetes-actions
       params:
         - name: script
           value: |
+            kubectl delete --namespace argocd Application test-pr-$(params.git-pr-number)
             kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
