@@ -89,7 +89,7 @@ spec:
         - deploy-test-stage
       params:
         - name: test-image
-          value: greenlightcoop/template-processor
+          value: greenlightcoop/greenlight-api-tests:0.1.2
         - name: base-url
           value: https://helloworld.test-pr-$(params.git-pr-number).{{ .Values.knativeDomainName }}
         - name: results-identifier
@@ -102,7 +102,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - deploy-test-stage
-        - run-functional-tests
+        - run-api-functional-tests
       params:
         - name: status
           value: success
