@@ -22,4 +22,4 @@ spec:
         #!/usr/bin/env bash
         set -xe
         OUTPUT=$($(params.command))
-        echo $OUTPUT | tr -d '\n' > $(results.output.path)
+        echo $OUTPUT > $(results.output.path)

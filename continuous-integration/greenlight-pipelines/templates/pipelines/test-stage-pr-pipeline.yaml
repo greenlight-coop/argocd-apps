@@ -91,7 +91,7 @@ spec:
         - name: command
           value: |
             kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
-              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-image']}"
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-image']}" | tr -d '\n'
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
