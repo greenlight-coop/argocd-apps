@@ -23,5 +23,3 @@ spec:
         set -xe
         OUTPUT=$($(params.command))
         echo $OUTPUT | tr -d '\n' > $(results.output.path)
-        echo 'Content:'
-        cat $(results.output.path)
