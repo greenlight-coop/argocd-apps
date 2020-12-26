@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: parse-templates
+spec:
+  description: >-
+    Recursively process an input directory of files performing Go template parsing, writing output files to an output directory.
+  params:
+    - name: values
+      description: YAML string of values to used for template substitution.
+      type: string
+  workspaces:
+    - name: template-directory
+  steps:
+    - name: parse-templates
+      image: greenlightcoop/template-processor:0.1.2
+      workingDir: /usr/src/app
+      env:
+        - name: TEMPLATE_DIRECTORY
+          value: $(workspaces.template-directory.path)
+        - name: VALUES
+          value: $(params.values)
+      script: |
+        npm start

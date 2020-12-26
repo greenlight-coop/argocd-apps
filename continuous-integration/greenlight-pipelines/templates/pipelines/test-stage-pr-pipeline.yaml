@@ -56,48 +56,63 @@ spec:
       workspaces:
         - name: output
           workspace: git-source  
-    - name: replace-pr-number-token
+    - name: parse-templates
       taskRef:
-        name: replace-token
+        name: parse-templates
       runAfter:
         - clone-git-repo
       params:
-        - name: token
-          value: PR_NUMBER
-        - name: value
-          value: $(params.git-pr-number)
-        - name: file-path
-          value: $(params.project-name).yaml
+        - name: values
+          value: |
+            prNumber: $(params.git-pr-number)
+            appsDomainName: {{ .Values.appsDomainName }}
+            knativeDomainName: {{ .Values.knativeDomainName }}
+            useStagingCertificates: {{ .Values.useStagingCertificates }}
       workspaces:
-        - name: source    
+        - name: template-directory
           workspace: git-source
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
       runAfter:
-        - replace-pr-number-token
+        - parse-templates
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
       workspaces:
         - name: source
           workspace: git-source
-    # - name: run-functional-tests
-    #   taskRef:
-    #     name: node-run-functional-tests
-    #   runAfter:
-    #     - deploy-test-stage
-    #   params:
-    #     - name: service-name
-    #       value: $(params.project-name)
-    #     - name: namespace
-    #       value: $(params.preview-namespace)
+    - name: get-api-functional-test-image
+      taskRef:
+        name: get-command-output
+      runAfter:
+        - deploy-test-stage
+      params:
+        - name: command
+          value: |
+            kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-image']}"
+    - name: run-api-functional-tests
+      taskRef:
+        name: run-serenity-tests
+      runAfter:
+        - deploy-test-stage
+      params:
+        - name: test-image
+          value: $(tasks.get-api-functional-test-image.results.output)
+        - name: base-url
+          value: https://helloworld.test-pr-$(params.git-pr-number).{{ .Values.knativeDomainName }}
+        - name: results-identifier
+          value: test-pr-$(params.git-pr-number)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - deploy-test-stage
-        # - run-functional-tests
+        - run-api-functional-tests
       params:
         - name: status
           value: success

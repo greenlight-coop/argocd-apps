@@ -53,7 +53,7 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-application
+    - name: delete-preview-resources
       when:
         - input: $(params.build-type)
           operator: in
@@ -64,6 +64,7 @@ spec:
         - name: script
           value: |
             kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.project-name)-$(params.preview-namespace)
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io test-results-$(params.preview-namespace)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
@@ -108,7 +109,7 @@ spec:
       runAfter:
         - set-default-outcome
         - delete-pr-namespace
-        - delete-preview-application
+        - delete-preview-resources
         - delete-pull-request-images
       params:
         - name: status

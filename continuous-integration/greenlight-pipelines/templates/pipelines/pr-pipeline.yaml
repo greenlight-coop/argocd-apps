@@ -136,13 +136,13 @@ spec:
           operator: in
           values: ["service"]
       taskRef:
-        name: node-run-integration-tests
+        name: run-serenity-tests
       runAfter:
         - deploy-preview-application
       params:
-        - name: service-name
-          value: $(params.project-name)
-        - name: namespace
+        - name: base-url
+          value: https://$(params.project-name).$(params.preview-namespace).{{ .Values.knativeDomainName }}
+        - name: results-identifier
           value: $(params.preview-namespace)
       workspaces:
         - name: source

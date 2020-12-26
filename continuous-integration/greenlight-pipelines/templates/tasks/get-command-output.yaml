@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: get-command-output
+spec:
+  description: >-
+    Runs a given command within a bash shell with kubectl support and returns the results.
+  params:
+    - name: command
+      description: The command to execute.
+      type: string
+    - name: kubectl-image
+      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
+      description: Kubectl wrapper image
+  results:
+    - name: output
+      description: Standard out from the command
+  steps:
+    - name: run-command
+      image: $(params.kubectl-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+        OUTPUT=$($(params.command))
+        echo -n $OUTPUT > $(results.output.path)
