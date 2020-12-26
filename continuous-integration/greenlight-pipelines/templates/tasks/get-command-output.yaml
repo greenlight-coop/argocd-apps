@@ -21,4 +21,6 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -xe
-        $(params.command) | tee $(results.output.path)
+        OUTPUT=$(params.command)
+        echo $OUTPUT
+        echo $OUTPUT > $(results.output.path)
