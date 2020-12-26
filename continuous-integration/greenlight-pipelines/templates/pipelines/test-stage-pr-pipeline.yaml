@@ -82,6 +82,16 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: get-api-functional-test-image
+      taskRef:
+        name: get-command-output
+      runAfter:
+        - deploy-test-stage
+      params:
+        - name: command
+          value: |
+            kubectl get application greenlight-stage-test-pr-$(params.git-pr-number) \
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-image']}")
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
@@ -89,7 +99,7 @@ spec:
         - deploy-test-stage
       params:
         - name: test-image
-          value: greenlightcoop/greenlight-api-tests:0.1.3
+          value: $(tasks.get-api-functional-test-image.results.output)
         - name: base-url
           value: https://helloworld.test-pr-$(params.git-pr-number).{{ .Values.knativeDomainName }}
         - name: results-identifier
