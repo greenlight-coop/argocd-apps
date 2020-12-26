@@ -24,3 +24,6 @@ spec:
         OUTPUT=$($(params.command))
         echo $OUTPUT
         echo $OUTPUT > $(results.output.path)
+        echo $(results.output.path)
+        echo 'Content:'
+        cat $(results.output.path)
