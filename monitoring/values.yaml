@@ -8,18 +8,19 @@ grafana:
       kubernetes.io/ingress.class: nginx 
       cert-manager.io/cluster-issuer: letsencrypt-production
     hosts:
-      - name: grafana.apps.greenlightcoop.dev
-        tls: true
-        tlsSecret: letsencrypt-production
+    - name: grafana.apps.greenlightcoop.dev
+      tls: true
+      tlsSecret: letsencrypt-production
   datasources:
-    apiVersion: 1
+    datasources.yaml:
+      apiVersion: 1
       datasources:
-        - name: Loki
-          type: loki
-          access: proxy
-          url: http://monitoring-loki:3100
-          isDefault: true
-        - name: Prometheus
-          type: prometheus
-          access: proxy
-          url: http://monitoring-prometheus-server
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://monitoring-loki:3100
+        isDefault: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://monitoring-prometheus-server
