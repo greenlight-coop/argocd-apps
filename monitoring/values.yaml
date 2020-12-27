@@ -7,11 +7,11 @@ grafana:
       kubernetes.io/ingress.class: kong 
       cert-manager.io/cluster-issuer: letsencrypt-production
     hosts:
-    - grafana.apps.greenlightcoop.dev
+    - grafana.kong.greenlightcoop.dev
     tls:
     - secretName: letsencrypt-production
       hosts:
-      - grafana.apps.greenlightcoop.dev
+      - grafana.kong.greenlightcoop.dev
   datasources:
     datasources.yaml:
       apiVersion: 1
