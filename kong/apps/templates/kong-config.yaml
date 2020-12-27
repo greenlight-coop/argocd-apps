@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kong-config
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: {{ .Values.spec.destination.server }}
+  project: greenlight-project
+  source:
+    path: kong/kong-config
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      values: |
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
+        appsDomainName: {{ .Values.appsDomainName }}
+        kongDomainName: {{ .Values.kongDomainName }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
