@@ -12,7 +12,7 @@ grafana:
       tls: true
       tlsSecret: letsencrypt-production
   datasources:
-    datasources.yaml:
+    datasources.yaml: |
       apiVersion: 1
       datasources:
       - name: Loki
