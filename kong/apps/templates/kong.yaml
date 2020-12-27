@@ -19,7 +19,7 @@ spec:
     helm:
       values: |
         ingressController:
-          installCRDs=false
+          installCRDs: false
         proxy:
           annotations:
             external-dns.alpha.kubernetes.io/hostname: {{ .Values.kongDomainName }},*.{{ .Values.kongDomainName }}
