@@ -8,7 +8,7 @@ grafana:
       kubernetes.io/ingress.class: nginx 
       cert-manager.io/cluster-issuer: letsencrypt-production
     hosts:
-    - grafana.apps.greenlightcoop.dev
+    - "grafana.apps.greenlightcoop.dev"
     tls:
     - secretName: letsencrypt-production
       hosts:
