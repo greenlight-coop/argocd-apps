@@ -12,4 +12,14 @@ grafana:
         tls: true
         tlsSecret: letsencrypt-production
   datasources:
-    secretName: grafana-datasources
+    apiVersion: 1
+      datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://monitoring-loki:3100
+          isDefault: true
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://monitoring-prometheus-server
