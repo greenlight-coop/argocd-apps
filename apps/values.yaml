@@ -1,6 +1,7 @@
 global:
   appsDomainName: apps.greenlightcoop.dev
   knativeDomainName: kn.greenlightcoop.dev
+  kongDomainName: kong.greenlightcoop.dev
   targetRevision: HEAD
   useStagingCertificates: false
   adminEmail: admin@greenlight.coop
