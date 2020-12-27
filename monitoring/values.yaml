@@ -1,7 +1,7 @@
 grafana:
   admin:
     existingSecret: admin-password-secret
-    existingSecretPasswordKey: password
+    passwordKey: password
   ingress:
     enabled: true
     annotations:
@@ -14,4 +14,15 @@ grafana:
       hosts:
       - grafana.apps.greenlightcoop.dev
   datasources:
-    secretName: grafana-datasources
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://monitoring-loki:3100
+        isDefault: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://monitoring-prometheus-server
