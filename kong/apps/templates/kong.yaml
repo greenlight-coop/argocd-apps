@@ -21,6 +21,9 @@ spec:
         proxy:
           annotations:
             external-dns.alpha.kubernetes.io/hostname: {{ .Values.kongDomainName }},*.{{ .Values.kongDomainName }}
+        podAnnotations:
+          prometheus.io/scrape: true
+          prometheus.io/port: 9542
   syncPolicy:
     automated:
       prune: true
