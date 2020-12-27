@@ -24,11 +24,11 @@ spec:
             annotations:
               cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
             hosts:
-            - grafana.{{ .Values.global.appsDomainName }}
+            - grafana.{{ .Values.global.kongDomainName }}
             tls:
             - secretName: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
               hosts:
-              - grafana.{{ .Values.global.appsDomainName }}
+              - grafana.{{ .Values.global.kongDomainName }}
   syncPolicy:
     automated:
       prune: true
