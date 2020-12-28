@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/instance: monitoring
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 7.3.5
+    argocd.argoproj.io/instance: monitoring
+  name: grafana-certificate
+  namespace: istio-system
+spec:
+  dnsNames:
+  - grafana.{{ .Values.knativeDomainName }}
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt-issuer
+  secretName: route-ea5ab8c9-9270-4703-8dbc-778d4f500b13
