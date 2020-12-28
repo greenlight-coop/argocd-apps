@@ -18,12 +18,10 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        global:
-          hub: docker.io/istio
-          tag: 1.7.5
         useStagingCertificates: {{ .Values.useStagingCertificates }}
         adminEmail: {{ .Values.adminEmail }}
         knativeDomainName: {{ .Values.knativeDomainName }}
+        googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:
       prune: true
