@@ -1,15 +1,27 @@
 grafana:
   admin:
-    existingSecret: admin-password-secret
-    existingSecretPasswordKey: password
+    existingSecret: grafana-admin-password-secret
   ingress:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx 
       cert-manager.io/cluster-issuer: letsencrypt-production
     hosts:
-      - name: grafana.apps.greenlightcoop.dev
-        tls: true
-        tlsSecret: letsencrypt-production
+    - grafana.apps.greenlightcoop.dev
+    tls:
+    - secretName: letsencrypt-production
+      hosts:
+      - grafana.apps.greenlightcoop.dev
   datasources:
-    secretName: grafana-datasources
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://monitoring-loki:3100
+        isDefault: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://monitoring-prometheus-server
