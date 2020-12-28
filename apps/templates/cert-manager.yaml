@@ -20,6 +20,10 @@ spec:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
         adminEmail: {{ .Values.global.adminEmail }}
+        cert-manager:
+          serviceAccount:
+            annotations:
+              iam.gke.io/gcp-service-account: dns01-solver@{{ .Values.googleProjectId }}.iam.gserviceaccount.com
   syncPolicy:
     automated:
       prune: true

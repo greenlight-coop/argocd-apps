@@ -1,4 +1,7 @@
-useStagingCertificates: false
-adminEmail: admin@greenlight.coop
+useStagingCertificates: ""
+adminEmail:  ""
 cert-manager:
-  installCRDs: true
+  installCRDs:  ""
+  serviceAccount:
+    annotations:
+      iam.gke.io/gcp-service-account: ""

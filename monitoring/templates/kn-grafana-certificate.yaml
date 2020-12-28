@@ -13,5 +13,5 @@ spec:
   - grafana.{{ .Values.knativeDomainName }}
   issuerRef:
     kind: Issuer
-    name: letsencrypt-issuer
-  secretName: route-ea5ab8c9-9270-4703-8dbc-778d4f500b13
+    name: letsencrypt-istio-system-issuer
+  secretName: grafana-letsencrypt
