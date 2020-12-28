@@ -19,6 +19,7 @@ spec:
     helm:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
+        adminEmail: {{ .Values.adminEmail }}
         appsDomainName: {{ .Values.global.appsDomainName }}
         knativeDomainName: {{ .Values.global.knativeDomainName }}
         global:

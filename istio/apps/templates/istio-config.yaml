@@ -21,7 +21,9 @@ spec:
         global:
           hub: docker.io/istio
           tag: 1.7.5
-        knativeDomainName: {{ .Values.knativeDomainName }}
+        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
+        adminEmail: {{ .Values.adminEmail }}
+        knativeDomainName: {{ .Values.global.knativeDomainName }}
   syncPolicy:
     automated:
       prune: true
