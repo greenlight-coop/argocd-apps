@@ -1,5 +1,5 @@
 apiVersion: v2
-name: cert-manager-config
+name: cert-manager
 description: Installs cert-manager and configures the associated ClusterIssuer
 
 # A chart can be either an 'application' or a 'library' chart.
