@@ -1,3 +1,5 @@
+knativeDomainName: ""
+useStagingCertificates: ""
 grafana:
   admin:
     existingSecret: grafana-admin-password-secret
