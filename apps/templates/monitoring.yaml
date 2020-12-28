@@ -20,17 +20,6 @@ spec:
       values: |
         knativeDomainName: {{ .Values.global.knativeDomainName }}
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        grafana:
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
-            hosts:
-            - grafana.{{ .Values.global.appsDomainName }}
-            tls:
-            - secretName: letsencrypt-{{ .Values.global.useStagingCertificates | ternary "staging" "production" }}
-              hosts:
-              - grafana.{{ .Values.global.appsDomainName }}
   syncPolicy:
     automated:
       prune: true
