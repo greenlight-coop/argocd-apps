@@ -20,6 +20,7 @@ spec:
       values: |
         knativeDomainName: {{ .Values.global.knativeDomainName }}
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
+        googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:
       prune: true

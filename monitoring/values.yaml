@@ -1,5 +1,6 @@
 knativeDomainName: ""
 useStagingCertificates: ""
+googleProjectId: ""
 grafana:
   admin:
     existingSecret: grafana-admin-password-secret
