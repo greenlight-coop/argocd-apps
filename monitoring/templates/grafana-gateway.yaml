@@ -19,3 +19,6 @@ spec:
       protocol: HTTP
     hosts:
     - grafana.{{ .Values.knativeDomainName }}
+    tls:
+      mode: SIMPLE
+      credentialName: grafana-letsencrypt
