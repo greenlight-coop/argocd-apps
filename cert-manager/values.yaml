@@ -7,3 +7,4 @@ cert-manager:
       iam.gke.io/gcp-service-account: ""
   extraArgs:
   - --cluster-issuer-ambient-credentials=true
+  - --issuer-ambient-credentials=true
