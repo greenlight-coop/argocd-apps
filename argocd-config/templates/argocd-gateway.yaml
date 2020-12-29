@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  labels:
+    app.kubernetes.io/component: server
+    app.kubernetes.io/instance: argo-cd
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd
+  name: argo-cd-argocd-server
+spec:
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: PASSTHROUGH
+    hosts:
+    - argocd.{{ .Values.knativeDomainName }}
