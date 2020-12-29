@@ -11,7 +11,7 @@ metadata:
 spec:
   dnsNames:
   - {{ .Values.knativeDomainName }}
-  - "*.{{ .Values.knativeDomainName }}""
+  - "*.{{ .Values.knativeDomainName }}"
   issuerRef:
     kind: Issuer
     name: letsencrypt-istio-system-issuer
