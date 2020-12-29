@@ -21,4 +21,4 @@ spec:
     - grafana.{{ .Values.knativeDomainName }}
     tls:
       mode: SIMPLE
-      credentialName: istiogateway-letsencrypt
+      credentialName: istio-letsencrypt
