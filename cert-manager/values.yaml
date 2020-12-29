@@ -1,7 +1,7 @@
 useStagingCertificates: ""
 adminEmail:  ""
 cert-manager:
-  installCRDs:  ""
+  installCRDs:  true
   serviceAccount:
     annotations:
       iam.gke.io/gcp-service-account: ""
