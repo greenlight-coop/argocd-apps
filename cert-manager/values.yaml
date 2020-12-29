@@ -5,3 +5,5 @@ cert-manager:
   serviceAccount:
     annotations:
       iam.gke.io/gcp-service-account: ""
+  extraArgs:
+  - --cluster-issuer-ambient-credentials=true
