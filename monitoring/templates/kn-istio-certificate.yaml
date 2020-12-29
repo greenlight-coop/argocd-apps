@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/instance: monitoring
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 7.3.5
+    argocd.argoproj.io/instance: monitoring
+  name: istio-certificate
+  namespace: istio-system
+spec:
+  dnsNames:
+  - {{ .Values.knativeDomainName }}
+  - "*.{{ .Values.knativeDomainName }}""
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt-istio-system-issuer
+  secretName: istio-letsencrypt
