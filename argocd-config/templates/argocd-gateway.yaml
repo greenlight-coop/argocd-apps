@@ -26,5 +26,6 @@ spec:
       protocol: HTTPS
     tls:
       mode: SIMPLE
+      credentialName: istio-letsencrypt
     hosts:
     - argocd.{{ .Values.knativeDomainName }}
