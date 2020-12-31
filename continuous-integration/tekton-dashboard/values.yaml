@@ -1,3 +1,4 @@
 # Default values for tekton-dashboard
-appsDomainName: apps.greenlightcoop.dev
-useStagingCertificates: false
+appsDomainName: ""
+knativeDomainName: ""
+useStagingCertificates: ""

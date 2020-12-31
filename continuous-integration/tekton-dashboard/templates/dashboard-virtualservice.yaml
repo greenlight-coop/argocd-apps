@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: tekton-dashboard
+  namespace: tekton-pipelines
+  labels:
+    app: tekton-dashboard
+    app.kubernetes.io/component: dashboard
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/part-of: tekton-dashboard
+    app.kubernetes.io/version: v0.12.0
+    argocd.argoproj.io/instance: tekton-dashboard
+    dashboard.tekton.dev/release: v0.12.0
+    version: v0.12.0
+spec:
+  gateways:
+  - tekton-dashboard
+  hosts:
+  - dashboard.{{ .Values.knativeDomainName }}
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        port:
+          number: 9097
+        host: tekton-dashboard

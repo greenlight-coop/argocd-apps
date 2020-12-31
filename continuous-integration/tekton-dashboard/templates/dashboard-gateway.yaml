@@ -1,0 +1,29 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  labels:
+    app: tekton-dashboard
+    app.kubernetes.io/component: dashboard
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: dashboard
+    app.kubernetes.io/part-of: tekton-dashboard
+    app.kubernetes.io/version: v0.12.0
+    argocd.argoproj.io/instance: tekton-dashboard
+    dashboard.tekton.dev/release: v0.12.0
+    version: v0.12.0
+  name: tekton-dashboard
+  namespace: tekton-pipelines
+spec:
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - dashboard.{{ .Values.knativeDomainName }}
+    tls:
+      mode: SIMPLE
+      credentialName: istio-letsencrypt
