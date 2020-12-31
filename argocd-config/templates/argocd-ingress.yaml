@@ -4,8 +4,6 @@ metadata:
   name: argo-cd-argocd-server
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
-    kubernetes.io/tls-acme: "true"
   labels:
     app.kubernetes.io/component: server
     app.kubernetes.io/instance: argo-cd
@@ -18,7 +16,7 @@ spec:
       paths:
       - backend:
           serviceName: argo-cd-argocd-server
-          servicePort: 443
+          servicePort: 80
         path: /
   tls:
   - hosts:
