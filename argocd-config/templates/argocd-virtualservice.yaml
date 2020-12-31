@@ -12,7 +12,7 @@ spec:
   - argocd.{{ .Values.knativeDomainName }}
   gateways:
   - argocd-gateway
-    http:
+  http:
   - route:
     - destination:
         host: argo-cd-argocd-server.argocd.svc.cluster.local
