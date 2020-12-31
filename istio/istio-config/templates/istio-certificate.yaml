@@ -5,8 +5,8 @@ metadata:
   namespace: istio-system
 spec:
   dnsNames:
-  - {{ .Values.knativeDomainName }}
-  - "*.{{ .Values.knativeDomainName }}"
+  - {{ .Values.appsDomainName }}
+  - "*.{{ .Values.appsDomainName }}"
   issuerRef:
     kind: Issuer
     name: letsencrypt-istio-system-issuer

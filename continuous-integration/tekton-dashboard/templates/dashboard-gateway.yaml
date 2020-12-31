@@ -23,7 +23,7 @@ spec:
       name: https
       protocol: HTTPS
     hosts:
-    - dashboard.{{ .Values.knativeDomainName }}
+    - dashboard.{{ .Values.appsDomainName }}
     tls:
       mode: SIMPLE
       credentialName: istio-letsencrypt

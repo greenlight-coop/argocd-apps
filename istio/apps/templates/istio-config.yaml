@@ -20,7 +20,7 @@ spec:
       values: |
         useStagingCertificates: {{ .Values.useStagingCertificates }}
         adminEmail: {{ .Values.adminEmail }}
-        knativeDomainName: {{ .Values.knativeDomainName }}
+        appsDomainName: {{ .Values.appsDomainName }}
         googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:

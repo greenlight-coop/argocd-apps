@@ -17,7 +17,7 @@ spec:
   gateways:
   - tekton-dashboard
   hosts:
-  - dashboard.{{ .Values.knativeDomainName }}
+  - dashboard.{{ .Values.appsDomainName }}
   http:
   - match:
     - uri:

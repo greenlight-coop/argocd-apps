@@ -1,6 +1,5 @@
 global:
   appsDomainName: ""
-  knativeDomainName: ""
   targetRevision: ""
   useStagingCertificates: ""
   adminEmail: ""

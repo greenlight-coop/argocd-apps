@@ -1393,7 +1393,7 @@ metadata:
   annotations:
     knative.dev/example-checksum: "74c3fc6a"
 data:
-  {{ .Values.knativeDomainName }}: |
+  {{ .Values.appsDomainName }}: |
   _example: |
     ################################
     #                              #

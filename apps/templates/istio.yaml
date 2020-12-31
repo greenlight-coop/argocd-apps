@@ -21,7 +21,6 @@ spec:
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
         adminEmail: {{ .Values.global.adminEmail }}
         appsDomainName: {{ .Values.global.appsDomainName }}
-        knativeDomainName: {{ .Values.global.knativeDomainName }}
         googleProjectId: {{ .Values.googleProjectId }}
         global:
           targetRevision: {{ .Values.global.targetRevision }}

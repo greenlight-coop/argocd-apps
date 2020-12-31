@@ -9,12 +9,12 @@ metadata:
     app.kubernetes.io/part-of: argocd
 spec:
   hosts:
-  - argocd.{{ .Values.knativeDomainName }}
+  - argocd.{{ .Values.appsDomainName }}
   gateways:
   - argocd-gateway
   http:
   - route:
     - destination:
-        host: argo-cd-argocd-server.argocd.svc.cluster.local
+        host: argo-cd-argocd-server
         port:
           number: 80

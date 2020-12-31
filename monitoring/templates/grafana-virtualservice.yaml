@@ -12,7 +12,7 @@ spec:
   gateways:
   - monitoring-grafana
   hosts:
-  - grafana.{{ .Values.knativeDomainName }}
+  - grafana.{{ .Values.appsDomainName }}
   http:
   - match:
     - uri:

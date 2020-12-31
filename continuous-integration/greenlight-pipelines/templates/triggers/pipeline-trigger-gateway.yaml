@@ -1,13 +1,8 @@
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
-  labels:
-    app.kubernetes.io/instance: monitoring
-    app.kubernetes.io/name: grafana
-    app.kubernetes.io/version: 7.3.5
-    argocd.argoproj.io/instance: monitoring
-  name: monitoring-grafana
-  namespace: default
+  name: pipeline-trigger
+  namespace: greenlight-pipelines
 spec:
   selector:
     app: istio-ingressgateway
@@ -18,7 +13,7 @@ spec:
       name: https
       protocol: HTTPS
     hosts:
-    - grafana.{{ .Values.appsDomainName }}
+    - tekton.{{ .Values.appsDomainName }}
     tls:
       mode: SIMPLE
       credentialName: istio-letsencrypt

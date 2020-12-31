@@ -1,4 +1,4 @@
-knativeDomainName: ""
+appsDomainName: ""
 useStagingCertificates: ""
 adminEmail: ""
 googleProjectId: ""

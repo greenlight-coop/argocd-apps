@@ -19,7 +19,7 @@ spec:
     tls:
       httpsRedirect: true
     hosts:
-    - argocd.{{ .Values.knativeDomainName }}
+    - argocd.{{ .Values.appsDomainName }}
   - port:
       number: 443
       name: https
@@ -28,4 +28,4 @@ spec:
       mode: SIMPLE
       credentialName: istio-letsencrypt
     hosts:
-    - argocd.{{ .Values.knativeDomainName }}
+    - argocd.{{ .Values.appsDomainName }}

@@ -20,7 +20,6 @@ spec:
       values: |
         useStagingCertificates: {{ .Values.useStagingCertificates }}
         appsDomainName: {{ .Values.appsDomainName }}
-        knativeDomainName: {{ .Values.knativeDomainName }}
   syncPolicy:
     automated:
       prune: true

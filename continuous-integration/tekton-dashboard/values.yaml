@@ -1,4 +1,3 @@
 # Default values for tekton-dashboard
 appsDomainName: ""
-knativeDomainName: ""
 useStagingCertificates: ""

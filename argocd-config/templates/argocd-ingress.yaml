@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
 spec:
   rules:
-  - host: argocd.{{ .Values.appsDomainName }}
+  - host: argocd-ingress.{{ .Values.appsDomainName }}
     http:
       paths:
       - backend:
@@ -22,5 +22,5 @@ spec:
         path: /
   tls:
   - hosts:
-    - argocd.{{ .Values.appsDomainName }}
+    - argocd-ingress.{{ .Values.appsDomainName }}
     secretName: letsencrypt-{{ .Values.useStagingCertificates | ternary "staging" "production" }}
