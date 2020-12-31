@@ -12,13 +12,9 @@ spec:
   - argocd.{{ .Values.knativeDomainName }}
   gateways:
   - argocd-gateway
-  tls:
-  - match:
-    - port: 443
-      sniHosts:
-      - argocd-dev.example.com
-    route:
+    http:
+  - route:
     - destination:
         host: argo-cd-argocd-server.argocd.svc.cluster.local
         port:
-          number: 443
+          number: 80
