@@ -5,7 +5,7 @@ metadata:
   namespace: greenlight-pipelines
 spec:
   gateways:
-  - pipeline-trigger
+  - istio-system/istio-gateway
   hosts:
   - tekton.{{ .Values.appsDomainName }}
   http:

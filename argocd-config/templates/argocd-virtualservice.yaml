@@ -8,10 +8,10 @@ metadata:
     app.kubernetes.io/name: argocd-server
     app.kubernetes.io/part-of: argocd
 spec:
+  gateways:
+  - istio-system/istio-gateway
   hosts:
   - argocd.{{ .Values.appsDomainName }}
-  gateways:
-  - argocd-gateway
   http:
   - route:
     - destination:

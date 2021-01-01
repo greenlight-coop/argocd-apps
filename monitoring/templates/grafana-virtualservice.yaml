@@ -10,7 +10,7 @@ metadata:
     argocd.argoproj.io/instance: monitoring
 spec:
   gateways:
-  - monitoring-grafana
+  - istio-system/istio-gateway
   hosts:
   - grafana.{{ .Values.appsDomainName }}
   http:
