@@ -1393,7 +1393,7 @@ metadata:
   annotations:
     knative.dev/example-checksum: "74c3fc6a"
 data:
-  {{ .Values.appsDomainName }}: |
+  svc.cluster.local: |
   _example: |
     ################################
     #                              #
@@ -1839,7 +1839,7 @@ metadata:
     knative.dev/example-checksum: "5e3df87d"
 data:
 data:
-  autoTLS: Enabled
+  autoTLS: Disabled
   httpProtocol: Enabled
   _example: |
     ################################
