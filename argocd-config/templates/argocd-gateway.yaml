@@ -14,7 +14,7 @@ spec:
   servers:
   - port:
       number: 80
-      name: http
+      name: http-argocd
       protocol: HTTP
     tls:
       httpsRedirect: true
@@ -22,7 +22,7 @@ spec:
     - argocd.{{ .Values.appsDomainName }}
   - port:
       number: 443
-      name: https
+      name: https-argocd
       protocol: HTTPS
     tls:
       mode: SIMPLE
