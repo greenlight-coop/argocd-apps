@@ -100,7 +100,7 @@ spec:
         - name: test-image
           value: $(tasks.get-api-functional-test-image.results.output)
         - name: base-url
-          value: https://helloworld.test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
+          value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
         - name: results-identifier
           value: test-pr-$(params.git-pr-number)
       workspaces:
