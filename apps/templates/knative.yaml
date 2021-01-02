@@ -19,7 +19,7 @@ spec:
     helm:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        knativeDomainName: {{ .Values.global.knativeDomainName }}
+        appsDomainName: {{ .Values.global.appsDomainName }}
         global:
           targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:

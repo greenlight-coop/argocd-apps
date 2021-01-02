@@ -1,21 +1,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx
+  name: istio-gateway
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-8"
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: istio-system
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    chart: ingress-nginx
-    repoURL: https://kubernetes.github.io/ingress-nginx
-    targetRevision: 3.15.2
+    path: istio/istio-gateway
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
+    helm:
+      values: |
+        appsDomainName: {{ .Values.appsDomainName }}
   syncPolicy:
     automated:
       prune: true

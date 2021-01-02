@@ -141,7 +141,7 @@ spec:
         - deploy-preview-application
       params:
         - name: base-url
-          value: https://$(params.project-name).$(params.preview-namespace).{{ .Values.knativeDomainName }}
+          value: http://$(params.project-name).$(params.preview-namespace).svc.cluster.local
         - name: results-identifier
           value: $(params.preview-namespace)
       workspaces:

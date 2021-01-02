@@ -1,2 +1,2 @@
-useStagingCertificates: false
-appsDomainName: apps.greenlightcoop.dev
+useStagingCertificates: ""
+appsDomainName: ""

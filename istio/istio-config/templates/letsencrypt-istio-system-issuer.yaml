@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-istio-system-issuer
+  namespace: istio-system
+spec:
+  acme:
+    email: {{ .Values.adminEmail }}
+    server: {{ .Values.useStagingCertificates | ternary "https://acme-staging-v02.api.letsencrypt.org/directory" "https://acme-v02.api.letsencrypt.org/directory" }}
+    privateKeySecretRef:
+      name: letsencrypt-issuer-tls-key
+    solvers:
+    - dns01:
+        cloudDNS:
+          project: {{ .Values.googleProjectId }}

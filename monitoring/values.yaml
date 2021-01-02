@@ -1,17 +1,8 @@
+appsDomainName: ""
+useStagingCertificates: ""
 grafana:
   admin:
     existingSecret: grafana-admin-password-secret
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx 
-      cert-manager.io/cluster-issuer: letsencrypt-production
-    hosts:
-    - grafana.apps.greenlightcoop.dev
-    tls:
-    - secretName: letsencrypt-production
-      hosts:
-      - grafana.apps.greenlightcoop.dev
   datasources:
     datasources.yaml:
       apiVersion: 1

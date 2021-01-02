@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: istio-certificate
+  namespace: istio-system
+spec:
+  dnsNames:
+  - {{ .Values.appsDomainName }}
+  - "*.{{ .Values.appsDomainName }}"
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt-istio-system-issuer
+  secretName: istio-letsencrypt

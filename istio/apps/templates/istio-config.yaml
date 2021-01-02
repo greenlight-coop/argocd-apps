@@ -4,7 +4,7 @@ metadata:
   name: istio-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -18,10 +18,10 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        global:
-          hub: docker.io/istio
-          tag: 1.7.5
-        knativeDomainName: {{ .Values.knativeDomainName }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
+        adminEmail: {{ .Values.adminEmail }}
+        appsDomainName: {{ .Values.appsDomainName }}
+        googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:
       prune: true

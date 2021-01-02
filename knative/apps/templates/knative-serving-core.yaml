@@ -18,7 +18,7 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        knativeDomainName: {{ .Values.knativeDomainName }}
+        appsDomainName: {{ .Values.appsDomainName }}
   syncPolicy:
     automated:
       prune: true

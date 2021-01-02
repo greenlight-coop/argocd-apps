@@ -1,9 +1,9 @@
 global:
-  appsDomainName: apps.greenlightcoop.dev
-  knativeDomainName: kn.greenlightcoop.dev
-  targetRevision: HEAD
-  useStagingCertificates: false
-  adminEmail: admin@greenlight.coop
+  appsDomainName: ""
+  targetRevision: ""
+  useStagingCertificates: ""
+  adminEmail: ""
+googleProjectId: ""
 spec:
   destination:
     server: https://kubernetes.default.svc

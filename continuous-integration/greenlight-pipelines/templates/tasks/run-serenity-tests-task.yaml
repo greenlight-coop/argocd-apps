@@ -67,7 +67,7 @@ spec:
             targetRevision: HEAD
             helm:
               values: |
-                identifier: $(params.results-identifier)
+                identifier: results-$(params.results-identifier)
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
@@ -85,7 +85,7 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
-        echo 'https://$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
+        echo 'https://results-$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)

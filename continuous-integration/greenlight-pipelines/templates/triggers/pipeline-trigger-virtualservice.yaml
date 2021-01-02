@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: pipeline-trigger
+  namespace: greenlight-pipelines
+spec:
+  gateways:
+  - istio-system/istio-gateway
+  hosts:
+  - tekton.{{ .Values.appsDomainName }}
+  http:
+  - match:
+    - uri:
+        exact: /webhook/service-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-service-pipeline-event-listener
+  - match:
+    - uri:
+        exact: /webhook/image-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-image-pipeline-event-listener
+  - match:
+    - uri:
+        exact: /webhook/test-stage-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-test-stage-pipeline-event-listener

@@ -2,7 +2,6 @@ global:
   targetRevision: HEAD
 useStagingCertificates: false
 appsDomainName: apps.greenlightcoop.dev
-knativeDomainName: kn.greenlightcoop.dev
 spec:
   destination:
     server: https://kubernetes.default.svc
