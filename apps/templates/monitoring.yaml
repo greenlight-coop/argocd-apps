@@ -19,7 +19,6 @@ spec:
     helm:
       values: |
         appsDomainName: {{ .Values.global.appsDomainName }}
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
   syncPolicy:
     automated:
       prune: true

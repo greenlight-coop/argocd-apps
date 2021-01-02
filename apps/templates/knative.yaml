@@ -18,8 +18,6 @@ spec:
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        appsDomainName: {{ .Values.global.appsDomainName }}
         global:
           targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
