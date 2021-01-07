@@ -13,14 +13,14 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-1.8.1/manifests/charts/istio-operator
+    path: istio/istio-1.7.5/manifests/charts/istio-operator
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
         global:
           hub: docker.io/istio
-          tag: 1.8.1
+          tag: 1.7.5
         enableCRDTemplates: true
   syncPolicy:
     automated:
