@@ -63,6 +63,7 @@ spec:
 # that component's namespace in istio_component_namespaces.
 #  ---
 #  istio_namespace: ""
+  istio_namespace: istio-system
 
 ##########
 # The version of the Ansible playbook to execute in order to install that version of Kiali.
