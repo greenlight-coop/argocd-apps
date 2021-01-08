@@ -266,7 +266,6 @@ spec:
 #    ---
 #    ingress_enabled: true
 #
-  ingress_enabled: false
 # Determines the logger configuration.
 # log_format supports text and json.
 # log_level supports trace, debug, info, warn, error, fatal.
@@ -377,7 +376,8 @@ spec:
 # modify the service mesh.
 #    ---
 #    view_only_mode: false
-
+  deployment:
+    ingress_enabled: false
 ##########
 #  ---
 #  extensions:
