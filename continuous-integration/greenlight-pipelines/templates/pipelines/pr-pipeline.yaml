@@ -68,6 +68,8 @@ spec:
             kind: Namespace
             metadata:
               name: $(params.preview-namespace)
+              labels:
+                istio-injection: enabled
             EOF
       workspaces:
         - name: kubeconfig-dir
