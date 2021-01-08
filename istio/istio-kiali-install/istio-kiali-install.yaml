@@ -159,7 +159,8 @@ spec:
 #    ---
 #    openshift:
 #      client_id_prefix: kiali
-
+  auth:
+    strategy: anonymous
 ##########
 #  ---
 #  deployment:
