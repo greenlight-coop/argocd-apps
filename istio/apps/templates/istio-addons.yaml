@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-config
+  name: istio-addons
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-2"
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,24 +13,16 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-config
+    path: istio/istio-addons
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
-    helm:
-      values: |
-        useStagingCertificates: {{ .Values.useStagingCertificates }}
-        adminEmail: {{ .Values.adminEmail }}
-        appsDomainName: {{ .Values.appsDomainName }}
-        googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m
+        maxDuration: 3m 
