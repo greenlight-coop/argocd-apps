@@ -6,6 +6,12 @@ metadata:
 rules:
 # istio groups
 - apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - '*'
+- apiGroups:
   - authentication.istio.io
   resources:
   - '*'

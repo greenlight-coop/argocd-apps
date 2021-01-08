@@ -1,31 +1,30 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: knative-serving-core
+  name: istio-kiali-operator
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-8"
+    argocd.argoproj.io/sync-wave: "-2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: knative-serving
+    namespace: kiali-operator
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: knative/knative-serving-core
-    repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.global.targetRevision }}
-    helm:
-      values: |
-        appsDomainName: {{ .Values.appsDomainName }}
+    repoURL: https://kiali.org/helm-charts
+    chart: kiali-operator
+    targetRevision: 1.28.1
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m
+        maxDuration: 3m 
