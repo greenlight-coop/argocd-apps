@@ -141,7 +141,7 @@ data:
             namespace: var-namespace
             workload: var-workload
         enabled: true
-        in_cluster_url: http://grafana:3000
+        in_cluster_url: http://monitoring-grafana:80
         url: ""
       istio:
         istio_identity_domain: svc.cluster.local
@@ -157,8 +157,8 @@ data:
           type: none
           use_kiali_token: false
           username: ""
-        custom_metrics_url: http://prometheus:9090
-        url: http://prometheus:9090
+        custom_metrics_url: http://monitoring-prometheus-server:80
+        url: http://monitoring-prometheus-server:80
       tracing:
         auth:
           ca_file: ""
