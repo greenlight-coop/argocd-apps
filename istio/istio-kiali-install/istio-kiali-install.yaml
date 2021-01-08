@@ -432,9 +432,6 @@ spec:
 #          username: ""
 #        url: ""
 #
-  custom_dashboards:
-    prometheus:
-      url: "http://monitoring-prometheus-server:80"
 # **Grafana-specific settings:
 # auth: authentication settings to connect to Grafana:
 #   ca_file: The certificate authority file to use when accessing Grafana using https. An empty string means no extra
@@ -485,9 +482,6 @@ spec:
 #      in_cluster_url: "http://grafana.istio-system:3000"
 #      url: ""
 #
-  grafana:
-    enabled: true
-    in_cluster_url: "http://monitoring-grafana:80"
 # **Istio-specific settings:
 # component_status:
 #   enabled: Enable/Disable of istio component status into masthead indicator. It defaults to true.
@@ -552,8 +546,6 @@ spec:
 #      cache_enabled: true
 #      cache_expiration: 300
 #      url: ""
-  prometheus:
-    url: "http://monitoring-prometheus-server:80"
 #
 # **Tracing-specific settings:
 #  - Right now we only support Jaeger
@@ -595,6 +587,15 @@ spec:
 #      namespace_selector: true
 #      url: ""
 #      whitelist_istio_system: ["jaeger-query", "istio-ingressgateway"]
+  external_services:
+    custom_dashboards:
+      prometheus:
+        url: "http://monitoring-prometheus-server:80"
+    grafana:
+      enabled: true
+      in_cluster_url: "http://monitoring-grafana:80"
+    prometheus:
+      url: "http://monitoring-prometheus-server:80"
 
 ##########
 #  ---
