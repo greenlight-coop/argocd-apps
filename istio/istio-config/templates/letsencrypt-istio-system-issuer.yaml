@@ -1,4 +1,4 @@
-{{- if .Values.isKindCluster }}
+{{- if not .Values.isKindCluster }}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
