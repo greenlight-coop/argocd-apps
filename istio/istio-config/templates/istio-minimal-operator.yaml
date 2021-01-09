@@ -26,7 +26,7 @@ spec:
         k8s:
           serviceAnnotations:
             external-dns.alpha.kubernetes.io/hostname: '{{ .Values.appsDomainName }},*.{{ .Values.appsDomainName }}'
-          {{- if .Values.global.isKindCluster }}
+          {{- if .Values.isKindCluster }}
           service:
             type: NodePort
             ports:
