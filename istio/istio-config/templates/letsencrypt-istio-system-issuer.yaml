@@ -1,3 +1,4 @@
+{{- if .Values.isKindCluster }}
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
@@ -13,3 +14,4 @@ spec:
     - dns01:
         cloudDNS:
           project: {{ .Values.googleProjectId }}
+{{- end }}
