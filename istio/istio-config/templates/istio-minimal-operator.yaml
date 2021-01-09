@@ -36,7 +36,8 @@ spec:
               nodePort: 30080
             - port: 443
               name: https
-              targetPort: 30443
+              targetPort: 8443
+              nodePort: 30443
           {{- end }}
       - name: cluster-local-gateway
         enabled: true
