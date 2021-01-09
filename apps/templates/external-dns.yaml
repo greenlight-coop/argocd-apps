@@ -1,4 +1,4 @@
-{{- if .Values.global.isKindCluster }}
+{{- if not .Values.global.isKindCluster }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
