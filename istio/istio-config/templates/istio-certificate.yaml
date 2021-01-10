@@ -1,3 +1,4 @@
+{{- if not .Values.isKindCluster }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -11,3 +12,4 @@ spec:
     kind: Issuer
     name: letsencrypt-istio-system-issuer
   secretName: istio-letsencrypt
+{{- end }}

@@ -11,7 +11,7 @@ spec:
       useMCP: false
       # The third-party-jwt is not enabled on all k8s.
       # See: https://istio.io/docs/ops/best-practices/security/#configure-third-party-service-account-tokens
-      jwtPolicy: third-party-jwt
+      jwtPolicy: {{ .Values.isKindCluster | ternary "first-party-jwt" "third-party-jwt" }}
 
   addonComponents:
     pilot:
@@ -26,6 +26,19 @@ spec:
         k8s:
           serviceAnnotations:
             external-dns.alpha.kubernetes.io/hostname: '{{ .Values.appsDomainName }},*.{{ .Values.appsDomainName }}'
+          {{- if .Values.isKindCluster }}
+          service:
+            type: NodePort
+            ports:
+            - port: 80
+              name: http2
+              targetPort: 8080
+              nodePort: 30080
+            - port: 443
+              name: https
+              targetPort: 8443
+              nodePort: 30443
+          {{- end }}
       - name: cluster-local-gateway
         enabled: true
         label:

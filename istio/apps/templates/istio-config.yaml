@@ -22,6 +22,7 @@ spec:
         adminEmail: {{ .Values.adminEmail }}
         appsDomainName: {{ .Values.appsDomainName }}
         googleProjectId: {{ .Values.googleProjectId }}
+        isKindCluster: {{ .Values.isKindCluster }}
   syncPolicy:
     automated:
       prune: true

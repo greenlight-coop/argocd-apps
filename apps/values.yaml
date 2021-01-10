@@ -3,6 +3,7 @@ global:
   targetRevision: ""
   useStagingCertificates: ""
   adminEmail: ""
+  isKindCluster: ""
 googleProjectId: ""
 spec:
   destination:
