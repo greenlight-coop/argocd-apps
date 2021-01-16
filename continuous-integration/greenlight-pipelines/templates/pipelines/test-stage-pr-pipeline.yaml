@@ -81,7 +81,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: get-api-functional-test-image
+    - name: get-functional-test-images
       taskRef:
         name: get-command-output
       runAfter:
@@ -90,15 +90,15 @@ spec:
         - name: command
           value: |
             kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
-              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-image']}"
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-images']}"
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
       runAfter:
         - deploy-test-stage
       params:
-        - name: test-image
-          value: $(tasks.get-api-functional-test-image.results.output)
+        - name: test-images
+          value: $(tasks.get-functional-test-images.results.output)
         - name: base-url
           value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
         - name: results-identifier
