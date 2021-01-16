@@ -113,6 +113,9 @@ spec:
           value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
         - name: results-identifier
           value: api-pr-$(params.git-pr-number)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: run-ui-functional-tests
       taskRef:
         name: run-serenity-tests
