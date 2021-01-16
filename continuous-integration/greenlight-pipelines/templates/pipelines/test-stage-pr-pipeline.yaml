@@ -107,7 +107,7 @@ spec:
       runAfter:
         - deploy-test-stage
       params:
-        - name: test-images
+        - name: test-image
           value: $(tasks.get-api-functional-tests-image.results.output)
         - name: base-url
           value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
@@ -119,7 +119,7 @@ spec:
       runAfter:
         - deploy-test-stage
       params:
-        - name: test-images
+        - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)
         - name: base-url
           value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
