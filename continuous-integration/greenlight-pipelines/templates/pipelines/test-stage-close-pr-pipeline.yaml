@@ -50,7 +50,8 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd Application test-results-test-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd Application results-api-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd Application results-ui-pr-$(params.git-pr-number)
             kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir

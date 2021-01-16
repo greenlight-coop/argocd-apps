@@ -81,7 +81,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: get-functional-test-images
+    - name: get-api-functional-tests-image
       taskRef:
         name: get-command-output
       runAfter:
@@ -90,7 +90,17 @@ spec:
         - name: command
           value: |
             kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
-              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/test-images']}"
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/api-functional-tests']}"
+    - name: get-ui-functional-tests-image
+      taskRef:
+        name: get-command-output
+      runAfter:
+        - deploy-test-stage
+      params:
+        - name: command
+          value: |
+            kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
+              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
@@ -98,11 +108,23 @@ spec:
         - deploy-test-stage
       params:
         - name: test-images
-          value: $(tasks.get-functional-test-images.results.output)
+          value: $(tasks.get-api-functional-tests-image.results.output)
         - name: base-url
           value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
         - name: results-identifier
-          value: test-pr-$(params.git-pr-number)
+          value: api-pr-$(params.git-pr-number)
+    - name: run-ui-functional-tests
+      taskRef:
+        name: run-serenity-tests
+      runAfter:
+        - deploy-test-stage
+      params:
+        - name: test-images
+          value: $(tasks.get-ui-functional-tests-image.results.output)
+        - name: base-url
+          value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
+        - name: results-identifier
+          value: ui-pr-$(params.git-pr-number)
       workspaces:
         - name: source
           workspace: git-source
