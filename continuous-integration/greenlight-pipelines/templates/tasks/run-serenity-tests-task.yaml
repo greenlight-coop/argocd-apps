@@ -102,4 +102,4 @@ spec:
         else
           npm install
         fi
-        npm run test-features-ci
+        npm run test-features:ci
