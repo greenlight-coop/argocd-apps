@@ -121,6 +121,7 @@ spec:
         name: run-serenity-tests
       runAfter:
         - deploy-test-stage
+        - run-api-functional-tests
       params:
         - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)

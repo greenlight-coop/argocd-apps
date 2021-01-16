@@ -35,8 +35,8 @@ spec:
       workingDir: $(workspaces.source.path)
       image: $(params.kubectl-image)
       script: |
-        mkdir site
-        cat > site/index.html <<EOL
+        mkdir -p site/$(params.results-identifier)
+        cat > site/$(params.results-identifier)/index.html <<EOL
         <html>
           <head><title>Test results pending</title></head>
           <body><p>Test results pending</p></body>
@@ -71,7 +71,7 @@ spec:
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
-                volumeSubPath: site
+                volumeSubPath: site/$(params.results-identifier)
                 appsDomainName: {{ .Values.appsDomainName }}
                 useStagingCertificates: {{ .Values.useStagingCertificates }}
           syncPolicy:
@@ -94,7 +94,7 @@ spec:
         - name: BASE_URL
           value: $(params.base-url)
         - name: BDD_REPORT_DIR
-          value: $(workspaces.source.path)/site
+          value: $(workspaces.source.path)/site/$(params.results-identifier)
       script: |
         #!/usr/bin/env bash
         if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.4" ]
