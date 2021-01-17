@@ -22,8 +22,11 @@ spec:
     - name: kubectl-image
       default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
       description: Kubectl wrapper image
+  workspaces:
+    - name: source
   steps:
     - name: deploy-application-to-argocd
+      workingDir: $(workspaces.source.path)
       image: $(params.kubectl-image)
       script: |
         #!/usr/bin/env bash
@@ -42,9 +45,7 @@ spec:
             server: https://kubernetes.default.svc
           project: greenlight-project
           source:
-            path: preview-chart
-            repoURL: git@github.com:greenlight-coop/$(params.project-name).git
-            targetRevision: $(params.git-revision)
+            path: ./preview-chart
             helm:
               parameters:
               - name: preview.namespace
