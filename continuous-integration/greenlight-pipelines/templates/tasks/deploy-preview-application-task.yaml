@@ -26,7 +26,7 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: prepare-preview-manifests
+    - name: deploy-preview-application
       workingDir: $(workspaces.source.path)
       image: $(params.kubectl-image)
       script: |
@@ -41,13 +41,6 @@ spec:
           sed "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file | tee $file
           echo
         done
-
-    - name: deploy-preview-application
-      workingDir: $(workspaces.source.path)
-      image: $(params.kubectl-image)
-      script: |
-        #!/usr/bin/env bash
-        set -xe
 
         kubectl apply -n $(params.namespace) -k preview-parsed
 
