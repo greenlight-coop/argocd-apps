@@ -45,6 +45,9 @@ rules:
     resources: ["applications"]
     verbs: ["get", "create", "update", "patch", "list", "delete"]
   - apiGroups: ["serving.knative.dev"]
+    resources: ["services"]
+    verbs: ["get", "create", "update", "patch", "list", "delete"]
+  - apiGroups: ["serving.knative.dev"]
     resources: ["configurations"]
     verbs: ["get"]
 
