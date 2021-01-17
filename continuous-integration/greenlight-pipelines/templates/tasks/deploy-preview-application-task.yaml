@@ -4,8 +4,8 @@ metadata:
   name: deploy-preview-application
 spec:
   description: >-
-    Deploys a preview version of a service for isolated integration testing. Based on tekton-catalog kuberenets-actions
-    task.
+    Deploys a preview version of a service for isolated integration testing. Based on tekton-catalog kuberenetes-actions
+    task. Expects a Kustomize application in the source subdirctory "preview".
   params:
     - name: project-name
       description: The project name for the application to install (should match GitHub repo and Docker image name)
@@ -25,44 +25,23 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: deploy-application-to-argocd
+    - name: deploy-preview-application
       workingDir: $(workspaces.source.path)
       image: $(params.kubectl-image)
       script: |
         #!/usr/bin/env bash
+        set -xe
 
-        cat <<EOF | kubectl apply -f -
-        apiVersion: argoproj.io/v1alpha1
-        kind: Application
-        metadata:
-          name: $(params.project-name)-$(params.namespace)
-          namespace: argocd
-          finalizers:
-            - resources-finalizer.argocd.argoproj.io
-        spec:
-          destination:
-            namespace: $(params.namespace)
-            server: https://kubernetes.default.svc
-          project: greenlight-project
-          source:
-            path: ./preview-chart
-            helm:
-              parameters:
-              - name: preview.namespace
-                value: $(params.namespace)
-              - name: preview.image.tag
-                value: $(params.image-version)
-          syncPolicy:
-            automated:
-              prune: true
-              selfHeal: true
-            retry:
-              limit: 5
-              backoff:
-                duration: 5s
-                factor: 2
-                maxDuration: 3m
-        EOF
+        export IMAGE_TAG=$(params.image-version)
+        cp -r preview preview-parsed
+        for file in `find preview-parsed -type f`
+        do 
+          echo $file
+          cat $file | envsubst | tee $file
+          echo
+        done
+
+        kubectl apply -n $(params.namespace) -k preview-parsed
 
         metadata_generation="metadata_generation unknown"
         observed_generation="observed_generation unknown"
