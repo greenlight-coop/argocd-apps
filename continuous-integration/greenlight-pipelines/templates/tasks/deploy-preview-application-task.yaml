@@ -37,9 +37,7 @@ spec:
         cp -r preview preview-parsed
         for file in `find preview-parsed -type f`
         do 
-          echo $file
-          sed "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file | tee $file
-          echo
+          sed -i "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file
         done
 
         kubectl apply -n $(params.namespace) -k preview-parsed
