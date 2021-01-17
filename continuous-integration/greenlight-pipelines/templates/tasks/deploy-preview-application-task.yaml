@@ -13,6 +13,9 @@ spec:
     - name: namespace
       description: The namespace to install the preview into
       type: string
+    - name: git-revision
+      description: The current git-revision, used to access the preview Helm chart
+      type: string
     - name: image-version
       description: Version of the Docker image to deploy
       type: string
@@ -39,9 +42,9 @@ spec:
             server: https://kubernetes.default.svc
           project: greenlight-project
           source:
-            path: $(params.project-name)/charts/preview
-            repoURL: git@github.com:greenlight-coop/greenlight-helm-charts.git
-            targetRevision: HEAD
+            path: preview-chart
+            repoURL: git@github.com:greenlight-coop/$(params.project-name).git
+            targetRevision: $(params.git-revision)
             helm:
               parameters:
               - name: preview.namespace

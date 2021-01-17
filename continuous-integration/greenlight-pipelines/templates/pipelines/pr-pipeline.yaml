@@ -130,6 +130,8 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+        - name: git-revision
+          value: $(params.git-revision)
         - name: image-version
           value: $(tasks.generate-image-tag.results.image-tag)
     - name: run-integration-tests
