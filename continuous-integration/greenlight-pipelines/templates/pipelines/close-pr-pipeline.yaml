@@ -107,6 +107,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
+        - delete-preview-resources
         - delete-pr-namespace
         - delete-pull-request-images
       params:
