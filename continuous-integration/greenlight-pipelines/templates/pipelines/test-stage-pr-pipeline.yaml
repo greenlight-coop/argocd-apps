@@ -111,6 +111,11 @@ spec:
             do 
               kubectl wait -n test-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
             done
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
