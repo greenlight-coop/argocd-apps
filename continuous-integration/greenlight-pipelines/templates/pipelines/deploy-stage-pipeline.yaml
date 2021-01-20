@@ -76,7 +76,7 @@ spec:
               kubectl wait -n $(params.project-name) --for=condition=Ready --timeout=60s ksvc/$ksvc
             done
       runAfter:
-        - deploy-test-stage
+        - deploy-stage
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
