@@ -58,7 +58,7 @@ spec:
       taskRef:
         name: apply-manifest
       runAfter:
-        - git-clone
+        - clone-git-repo
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
