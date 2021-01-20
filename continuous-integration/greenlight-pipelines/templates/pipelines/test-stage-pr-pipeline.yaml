@@ -101,6 +101,16 @@ spec:
           value: |
             kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
               -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
+    - name: wait-for-stage-ready
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            for ksvc in `kubectl -n test-pr-$(params.git-pr-number) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
+            do 
+              kubectl wait -n test-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
+            done
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
