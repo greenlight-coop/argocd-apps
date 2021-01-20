@@ -116,6 +116,7 @@ spec:
         name: run-serenity-tests
       runAfter:
         - deploy-test-stage
+        - wait-for-stage-ready
       params:
         - name: test-image
           value: $(tasks.get-api-functional-tests-image.results.output)
@@ -132,6 +133,7 @@ spec:
       runAfter:
         - deploy-test-stage
         - run-api-functional-tests
+        - wait-for-stage-ready
       params:
         - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)
