@@ -101,11 +101,29 @@ spec:
           value: |
             kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
               -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
+    - name: wait-for-stage-ready
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            for ksvc in `kubectl -n test-pr-$(params.git-pr-number) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
+            do 
+              kubectl wait -n test-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
+            done
+      runAfter:
+        - deploy-test-stage
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
       runAfter:
         - deploy-test-stage
+        - wait-for-stage-ready
       params:
         - name: test-image
           value: $(tasks.get-api-functional-tests-image.results.output)
@@ -122,6 +140,7 @@ spec:
       runAfter:
         - deploy-test-stage
         - run-api-functional-tests
+        - wait-for-stage-ready
       params:
         - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)

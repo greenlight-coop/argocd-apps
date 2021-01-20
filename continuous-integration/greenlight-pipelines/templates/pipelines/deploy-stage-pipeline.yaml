@@ -1,30 +1,20 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: close-pr-pipeline
+  name: deploy-stage-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
-      type: string
-    - name: git-branch
-      type: string
-    - name: git-pr-number
-      type: string
-    - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
       type: string
   workspaces:
     - name: git-source
     - name: status-workspace
+    - name: node-modules
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -53,79 +43,51 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-resources
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+    - name: clone-git-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/$(params.project-name).git
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: deploy-stage
+      taskRef:
+        name: apply-manifest
+      runAfter:
+        - clone-git-repo
+      params:
+        - name: manifest-path
+          value: $(params.project-name).yaml
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: wait-for-stage-ready
       taskRef:
         name: kubernetes-actions
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io results-$(params.preview-namespace)
+            for ksvc in `kubectl -n $(params.project-name) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
+            do 
+              kubectl wait -n $(params.project-name) --for=condition=Ready --timeout=60s ksvc/$ksvc
+            done
+      runAfter:
+        - deploy-stage
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
-    - name: delete-pr-namespace
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: kubernetes-actions
-      params:
-        - name: script
-          value: |
-            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
-    - name: delete-pull-request-images
-      taskRef:
-        name: delete-pull-request-images
-      params:
-        - name: organization
-          value: greenlightcoop
-        - name: repository
-          value: $(params.project-name)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
-      workspaces:
-        - name: node-modules
-          workspace: node-modules
-    - name: set-success-outcome-service
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - set-default-outcome
-        - delete-preview-resources
-        - delete-pr-namespace
-        - delete-pull-request-images
-      params:
-        - name: status
-          value: success
-      workspaces:
-        - name: status-workspace
-          workspace: status-workspace
-    - name: set-success-outcome-nonservice
-      when:
-        - input: $(params.build-type)
-          operator: notin
-          values: ["service"]
-      taskRef:
-        name: set-outcome-status
-      runAfter:
-        - set-default-outcome
-        - delete-pull-request-images
+        - deploy-stage
+        - wait-for-stage-ready
       params:
         - name: status
           value: success
