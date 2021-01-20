@@ -20,7 +20,7 @@ spec:
             eventTypes:
               - push
         - cel:
-            filter: "body.ref == 'refs/heads/main'
+            filter: "body.ref == 'refs/heads/main'"
             overlays:
               - key: build_type
                 expression: "'deployment'"
