@@ -111,6 +111,8 @@ spec:
             do 
               kubectl wait -n test-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
             done
+      runAfter:
+        - deploy-test-stage
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
