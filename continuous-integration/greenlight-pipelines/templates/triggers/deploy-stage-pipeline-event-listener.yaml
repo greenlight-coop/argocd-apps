@@ -1,0 +1,28 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: deploy-stage-pipeline-event-listener
+  namespace: greenlight-pipelines
+spec:
+  serviceAccountName: tekton-triggers-admin
+  triggers:
+    - name: deploy-stage-pipeline-trigger
+      template:
+        ref: deploy-stage-pipeline-trigger-template
+      bindings:
+        - kind: TriggerBinding
+          ref: push-trigger-binding
+      interceptors:
+        - github:
+            secretRef:
+              secretName: webhook-secret
+              secretKey: webhookSecretValue
+            eventTypes:
+              - push
+        - cel:
+            filter: "body.ref == 'refs/heads/main'
+            overlays:
+              - key: build_type
+                expression: "'deployment'"
+              - key: branch_name
+                expression: "body.ref.split('/')[2]"

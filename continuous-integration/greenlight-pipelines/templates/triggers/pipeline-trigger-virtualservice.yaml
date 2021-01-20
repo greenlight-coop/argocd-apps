@@ -11,12 +11,12 @@ spec:
   http:
   - match:
     - uri:
-        exact: /webhook/service-pipeline
+        exact: /webhook/deploy-stage-pipeline
     route:
     - destination:
         port:
           number: 8080
-        host: el-service-pipeline-event-listener
+        host: el-deploy-stage-pipeline-event-listener
   - match:
     - uri:
         exact: /webhook/image-pipeline
@@ -25,6 +25,14 @@ spec:
         port:
           number: 8080
         host: el-image-pipeline-event-listener
+  - match:
+    - uri:
+        exact: /webhook/service-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-service-pipeline-event-listener
   - match:
     - uri:
         exact: /webhook/test-stage-pipeline

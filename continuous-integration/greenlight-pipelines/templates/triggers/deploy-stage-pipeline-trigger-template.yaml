@@ -1,0 +1,49 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: deploy-stage-pipeline-trigger-template
+spec:
+  params:
+    - name: project-name
+      description: The repo name in GitHub
+    - name: git-revision
+      description: The revision to clone and build
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: $(tt.params.project-name)-deploy-pipeline-run-
+        namespace: greenlight-pipelines
+      spec:
+        pipelineRef:
+          name: deploy-stage-pipeline
+        serviceAccountName: pipeline-sa
+        params:
+          - name: project-name
+            value: $(tt.params.project-name)
+          - name: git-revision
+            value: $(tt.params.git-revision)
+        workspaces:
+          - name: git-source
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Gi
+          - name: status-workspace
+            volumeClaimTemplate:
+              spec:
+                accessModes:
+                  - ReadWriteOnce
+                resources:
+                  requests:
+                    storage: 1Ki
+          - name: node-modules
+            configMap:
+              name: node-modules
+          - name: kubeconfig-dir
+            emptyDir: {}
+          - name: manifest-dir
+            emptyDir: {}
