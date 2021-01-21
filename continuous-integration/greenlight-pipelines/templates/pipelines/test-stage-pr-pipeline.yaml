@@ -156,6 +156,7 @@ spec:
       runAfter:
         - deploy-test-stage
         - run-api-functional-tests
+        - run-ui-functional-tests
       params:
         - name: status
           value: success
