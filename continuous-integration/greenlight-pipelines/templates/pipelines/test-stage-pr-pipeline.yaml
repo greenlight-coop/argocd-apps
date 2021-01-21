@@ -66,7 +66,6 @@ spec:
           value: |
             prNumber: $(params.git-pr-number)
             appsDomainName: {{ .Values.appsDomainName }}
-            useStagingCertificates: {{ .Values.useStagingCertificates }}
       workspaces:
         - name: template-directory
           workspace: git-source
