@@ -115,6 +115,13 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+      outputs:
+      - name: image
+        resourceSpec:
+          type: image
+          params:
+            - name: url
+              value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
     - name: deploy-preview-application
       when:
         - input: $(params.build-type)
