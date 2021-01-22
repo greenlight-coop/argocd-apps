@@ -54,11 +54,24 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+    - name: parse-templates
+      taskRef:
+        name: parse-templates
+      runAfter:
+        - clone-git-repo
+      params:
+        - name: values
+          value: |
+            appsDomainName: {{ .Values.appsDomainName }}
+      workspaces:
+        - name: template-directory
+          workspace: git-source
     - name: deploy-stage
       taskRef:
         name: apply-manifest
       runAfter:
         - clone-git-repo
+        - parse-templates
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
