@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: buildkit-daemonless
+  name: buildkit-daemonless-image-param
   labels:
     app.kubernetes.io/version: "0.1"
   annotations:
@@ -25,12 +25,10 @@ spec:
     # The image needs to be rootful because Tekton creates /builder/home/.docker/config.json owned by root:root with 0600
     # https://github.com/tektoncd/pipeline/issues/852
     default: "docker.io/moby/buildkit:v0.6.2@sha256:db234cf7362aef489e4273a6937794cb19c09ba15c7ee0ec6f85044086ea4f6a"
+  - name: image
+    description: The image tag to use and push
   workspaces:
   - name: source
-  resources:
-    outputs:
-    - name: image
-      type: image
   steps:
   - name: build-and-push
     image: $(params.BUILDKIT_IMAGE)
@@ -43,6 +41,6 @@ spec:
               "--frontend=dockerfile.v0",
               "--opt", "filename=$(params.DOCKERFILE)",
               "--local", "context=.", "--local", "dockerfile=.",
-              "--output", "type=image,name=$(resources.outputs.image.url),push=true",
+              "--output", "type=image,name=$(params.IMAGE),push=true",
               "--export-cache", "type=inline",
-              "--import-cache", "type=registry,ref=$(resources.outputs.image.url)"]
+              "--import-cache", "type=registry,ref=$(params.IMAGE)"]

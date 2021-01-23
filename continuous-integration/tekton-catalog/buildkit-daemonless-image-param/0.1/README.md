@@ -10,7 +10,7 @@ This `buildkit-daemonless` Task is similar to [`buildkit`](../buildkit) but does
 |Supports Rootless | Yes            | No (BuildKit per se supports, but [Tekton doesn't support](https://github.com/tektoncd/pipeline/issues/852))|
 |Cache             | Registry+Local | Registry             |
 
-Note: Edited for Green Light to change output resource to a param to integrate with build process.
+Note: Edited for Green Light to change image output resource to a param to integrate with build process.
 
 ## Install
 
