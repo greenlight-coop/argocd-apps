@@ -25,7 +25,7 @@ spec:
     # The image needs to be rootful because Tekton creates /builder/home/.docker/config.json owned by root:root with 0600
     # https://github.com/tektoncd/pipeline/issues/852
     default: "docker.io/moby/buildkit:v0.6.2@sha256:db234cf7362aef489e4273a6937794cb19c09ba15c7ee0ec6f85044086ea4f6a"
-  - name: image
+  - name: IMAGE
     description: The image tag to use and push
   workspaces:
   - name: source
