@@ -43,6 +43,13 @@ spec:
             value: $(tt.params.git-pr-number)  
           - name: git-pr-commit-number
             value: $(tt.params.git-pr-commit-number)  
+        resources:
+        - name: image
+          resourceSpec:
+            type: image
+            params:
+              - name: url
+                value: greenlightcoop/$(tt.params.project-name)
         workspaces:
           - name: git-source
             volumeClaimTemplate:
