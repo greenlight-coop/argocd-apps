@@ -109,9 +109,9 @@ spec:
         name: buildkit-daemonless
       runAfter:
         - clone-git-repo
-      # params:
-      #   - name: IMAGE
-      #     value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      params:
+        - name: IMAGE
+          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
         - name: source
           workspace: git-source
