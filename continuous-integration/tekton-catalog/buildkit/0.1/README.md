@@ -4,6 +4,8 @@ This Task builds source into a container image using [Moby BuildKit](https://git
 
 See also [`buildkit-daemonless`](../buildkit-daemonless) for the daemonless version of this task.
 
+Note: Edited from the original to replace the image output pipeline resource with a param.
+
 ## Install
 
 ### Step 0: Create mTLS secrets

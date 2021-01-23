@@ -106,7 +106,7 @@ spec:
           workspace: git-source
     - name: build-and-push-image
       taskRef:
-        name: buildah
+        name: buildkit
       runAfter:
         - clone-git-repo
       params:
