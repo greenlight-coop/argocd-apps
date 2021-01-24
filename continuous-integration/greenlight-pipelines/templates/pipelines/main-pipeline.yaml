@@ -73,7 +73,7 @@ spec:
           workspace: git-source
     - name: build-and-push-image
       taskRef:
-        name: kaniko
+        name: buildkit
       runAfter:
         - clone-git-repo
       params:
