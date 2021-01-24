@@ -1,8 +1,6 @@
 resources:
   - argocd-task-sync-and-wait/0.1/argocd-task-sync-and-wait.yaml
-  - buildah/0.2/buildah.yaml
-  - buildkit-daemonless-image-param/0.1/buildkit-daemonless-image-param.yaml
-  - buildkit-image-param/0.1/buildkit-image-param.yaml
+  - buildkit/0.1/buildkit.yaml
   - git-cli/0.1/git-cli.yaml
   - git-clone/0.2/git-clone.yaml
   - kaniko/0.1/kaniko.yaml
