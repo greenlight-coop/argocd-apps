@@ -17,6 +17,9 @@ spec:
     chart: k8ssandra
     targetRevision: 0.38.0
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true 
     retry:
