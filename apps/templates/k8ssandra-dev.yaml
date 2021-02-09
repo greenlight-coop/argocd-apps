@@ -15,7 +15,9 @@ spec:
   source:
     repoURL: https://helm.k8ssandra.io/
     chart: k8ssandra
-    targetRevision: 0.38.0
+    targetRevision: 0.44.0
+    helm:
+      releaseName: k8ssandra-dev
   syncPolicy:
     automated:
       prune: true
