@@ -19,6 +19,7 @@ spec:
     helm:
       releaseName: k8ssandra-dev
       kube-prometheus-stack.grafana.enabled: false
+      monitoring.grafana.provision_dashboards: false
   syncPolicy:
     automated:
       prune: true
