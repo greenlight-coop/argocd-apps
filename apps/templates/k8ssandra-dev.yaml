@@ -17,9 +17,13 @@ spec:
     chart: k8ssandra
     targetRevision: 0.44.0
     helm:
-      releaseName: k8ssandra-dev
-      kube-prometheus-stack.grafana.enabled: false
-      monitoring.grafana.provision_dashboards: false
+      values: |
+        kube-prometheus-stack:
+          grafana:
+            enabled: false
+        monitoring:
+          grafana:
+            provision_dashboards: false
   syncPolicy:
     automated:
       prune: true
