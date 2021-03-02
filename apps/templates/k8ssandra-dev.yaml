@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: https://helm.k8ssandra.io/
     chart: k8ssandra
-    targetRevision: 0.49.1
+    targetRevision: 1.0.0
     helm:
       values: |
         kube-prometheus-stack:
