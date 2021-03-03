@@ -24,6 +24,8 @@ spec:
         monitoring:
           grafana:
             provision_dashboards: false
+        stargate:
+          enabled: false
   syncPolicy:
     automated:
       prune: true
