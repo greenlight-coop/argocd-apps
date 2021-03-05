@@ -1,7 +1,8 @@
 global:
-  targetRevision: HEAD
-useStagingCertificates: false
-appsDomainName: apps.greenlightcoop.dev
+  targetRevision: ""
+useStagingCertificates: ""
+appsDomainName: ""
+lightweight: ""
 spec:
   destination:
     server: https://kubernetes.default.svc
