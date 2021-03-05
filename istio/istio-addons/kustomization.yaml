@@ -1,2 +1,2 @@
 resources:
-- istio-jaeger-1.7.5.yaml
+- istio-jaeger-1.9.yaml
