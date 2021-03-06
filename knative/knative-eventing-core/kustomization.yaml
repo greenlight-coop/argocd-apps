@@ -1,2 +1,2 @@
 resources:
-  - knative-eventing-core-0.19.3.yaml
+  - knative-eventing-core-0.21.1.yaml

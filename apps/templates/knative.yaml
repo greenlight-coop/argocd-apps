@@ -20,6 +20,7 @@ spec:
       values: |
         useStagingCertificates: {{ .Values.global.useStagingCertificates }}
         appsDomainName: {{ .Values.global.appsDomainName }}
+        lightweight: {{ .Values.global.lightweight }}
         global:
           targetRevision: {{ .Values.global.targetRevision }}
   syncPolicy:
