@@ -42,4 +42,4 @@ spec:
 
         kubectl apply -n $(params.namespace) -k preview-parsed
 
-        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=60s ksvc/$(params.project-name)
+        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=120s ksvc/$(params.project-name)
