@@ -16,8 +16,12 @@ kind: ConfigMap
 metadata:
   name: config-kafka-broker-data-plane
   namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
 data:
   config-kafka-broker-producer.properties: |
+    key.serializer=org.apache.kafka.common.serialization.StringSerializer
+    value.serializer=io.cloudevents.kafka.CloudEventSerializer
     acks=1
     buffer.memory=33554432
     # compression.type=snappy
@@ -46,6 +50,8 @@ data:
     # transaction.timeout.ms=60000
     # transactional.id=null
   config-kafka-broker-consumer.properties: |
+    key.deserializer=org.apache.kafka.common.serialization.StringDeserializer
+    value.deserializer=io.cloudevents.kafka.CloudEventDeserializer
     fetch.min.bytes=1
     heartbeat.interval.ms=3000
     max.partition.fetch.bytes=1048576
@@ -56,7 +62,7 @@ data:
     # ssl.truststore.location=
     # ssl.truststore.password=
     allow.auto.create.topics=true
-    auto.offset.reset=latest
+    auto.offset.reset=earliest
     client.dns.lookup=use_all_dns_ips
     connections.max.idle.ms=540000
     default.api.timeout.ms=60000
@@ -112,6 +118,117 @@ data:
     idleTimeout=0
 
 ---
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-config-logging
+  namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
+data:
+  config.xml: |
+    <configuration>
+      <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+      </appender>
+      <root level="INFO">
+        <appender-ref ref="jsonConsoleAppender"/>
+      </root>
+    </configuration>
+
+---
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: knative-kafka-data-plane
+  labels:
+    kafka.eventing.knative.dev/release: devel
+rules:
+  - apiGroups:
+      - "*"
+    resources:
+      - secrets
+    verbs:
+      - get
+
+---
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: knative-kafka-data-plane
+  namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
+
+---
+# Copyright 2020 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: knative-kafka-data-plane
+  labels:
+    kafka.eventing.knative.dev/release: devel
+subjects:
+  - kind: ServiceAccount
+    name: knative-kafka-data-plane
+    namespace: knative-eventing
+roleRef:
+  kind: ClusterRole
+  name: knative-kafka-data-plane
+  apiGroup: rbac.authorization.k8s.io
+
+---
 ---
 
 # Copyright 2020 The Knative Authors
@@ -135,9 +252,8 @@ metadata:
   namespace: knative-eventing
   labels:
     app: kafka-broker-dispatcher
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: kafka-broker-dispatcher
@@ -146,14 +262,15 @@ spec:
       name: kafka-broker-dispatcher
       labels:
         app: kafka-broker-dispatcher
-        eventing.knative.dev/release: devel
+        kafka.eventing.knative.dev/release: devel
     spec:
+      serviceAccountName: knative-kafka-data-plane
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
       containers:
         - name: kafka-broker-dispatcher
-          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:b5a96e54-23b9-11eb-a9b2-767fa62a0486
+          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:c1453630-7634-11eb-b5da-ba807f8f42f2
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
@@ -167,11 +284,20 @@ spec:
             - mountPath: /etc/logging
               name: kafka-broker-config-logging
               readOnly: true
+            - mountPath: /etc/tracing
+              name: config-tracing
+              readOnly: true
           ports:
             - containerPort: 9090
               name: http-metrics
               protocol: TCP
           env:
+            - name: SERVICE_NAME
+              value: "kafka-broker-dispatcher"
+            - name: SERVICE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: PRODUCER_CONFIG_FILE_PATH
               value: /etc/config/config-kafka-broker-producer.properties
             - name: CONSUMER_CONFIG_FILE_PATH
@@ -192,20 +318,30 @@ spec:
               value: "9090"
             - name: METRICS_PUBLISH_QUANTILES
               value: "false"
+            - name: METRICS_JVM_ENABLED
+              value: "false"
+            - name: CONFIG_TRACING_PATH
+              value: "/etc/tracing"
+            # https://github.com/fabric8io/kubernetes-client/issues/2212
+            - name: HTTP2_DISABLE
+              value: "true"
+            # This should be set according to initial delay seconds
+            - name: WAIT_STARTUP_SECONDS
+              value: "8"
           command:
             - "java"
-          # TODO add JVM arguments
           args:
             - "-Dlogback.configurationFile=/etc/logging/config.xml"
             - "-jar"
             - "/app/app.jar"
+          # TODO set resources (limits and requests)
           livenessProbe:
             failureThreshold: 3
             httpGet:
               port: 9090
               path: /metrics
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
@@ -215,7 +351,7 @@ spec:
               port: 9090
               path: /metrics
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
@@ -237,7 +373,13 @@ spec:
         - name: kafka-broker-config-logging
           configMap:
             name: kafka-config-logging
+        - name: config-tracing
+          configMap:
+            name: config-tracing
       restartPolicy: Always
+      dnsConfig:
+        options:
+          - name: single-request-reopen
 ---
 
 # Copyright 2020 The Knative Authors
@@ -261,9 +403,8 @@ metadata:
   namespace: knative-eventing
   labels:
     app: kafka-broker-receiver
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: kafka-broker-receiver
@@ -272,14 +413,25 @@ spec:
       name: kafka-broker-receiver
       labels:
         app: kafka-broker-receiver
-        eventing.knative.dev/release: devel
+        kafka.eventing.knative.dev/release: devel
     spec:
+      serviceAccountName: knative-kafka-data-plane
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
+      # To avoid node becoming SPOF, spread our replicas to different nodes.
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: kafka-broker-receiver
+                topologyKey: kubernetes.io/hostname
+              weight: 100
       containers:
         - name: kafka-broker-receiver
-          image: gcr.io/knative-releases/knative-kafka-broker-receiver:b5a96e54-23b9-11eb-a9b2-767fa62a0486
+          image: gcr.io/knative-releases/knative-kafka-broker-receiver:c1453630-7634-11eb-b5da-ba807f8f42f2
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
@@ -293,6 +445,9 @@ spec:
             - mountPath: /etc/logging
               name: kafka-broker-config-logging
               readOnly: true
+            - mountPath: /etc/tracing
+              name: config-tracing
+              readOnly: true
           ports:
             - containerPort: 9090
               name: http-metrics
@@ -301,6 +456,12 @@ spec:
               name: http
               protocol: TCP
           env:
+            - name: SERVICE_NAME
+              value: "kafka-broker-receiver"
+            - name: SERVICE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: INGRESS_PORT
               value: "8080"
             - name: PRODUCER_CONFIG_FILE_PATH
@@ -319,9 +480,18 @@ spec:
               value: "9090"
             - name: METRICS_PUBLISH_QUANTILES
               value: "false"
+            - name: METRICS_JVM_ENABLED
+              value: "false"
+            - name: CONFIG_TRACING_PATH
+              value: "/etc/tracing"
+            # https://github.com/fabric8io/kubernetes-client/issues/2212
+            - name: HTTP2_DISABLE
+              value: "true"
+            # This should be set according to initial delay seconds
+            - name: WAIT_STARTUP_SECONDS
+              value: "8"
           command:
             - "java"
-          # TODO add JVM arguments
           args:
             - "-Dlogback.configurationFile=/etc/logging/config.xml"
             - "-jar"
@@ -333,7 +503,7 @@ spec:
               port: 8080
               path: /healthz
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
@@ -343,7 +513,7 @@ spec:
               port: 8080
               path: /readyz
               scheme: HTTP
-            initialDelaySeconds: 5
+            initialDelaySeconds: 10
             periodSeconds: 3
             successThreshold: 1
             timeoutSeconds: 1
@@ -361,10 +531,13 @@ spec:
           configMap:
             name: config-kafka-broker-data-plane
         - name: cache
-          emptyDir: {}
+          emptyDir: { }
         - name: kafka-broker-config-logging
           configMap:
             name: kafka-config-logging
+        - name: config-tracing
+          configMap:
+            name: config-tracing
       restartPolicy: Always
 ---
 
@@ -373,6 +546,9 @@ kind: Service
 metadata:
   name: kafka-broker-ingress
   namespace: knative-eventing
+  labels:
+    app: kafka-broker-receiver
+    kafka.eventing.knative.dev/release: devel
 spec:
   selector:
     app: kafka-broker-receiver
