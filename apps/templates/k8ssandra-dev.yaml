@@ -21,7 +21,7 @@ spec:
       values: |
         cassandra:
           cassandraLibDirVolume:
-            storageClass: local-path
+            storageClass: standard-rwo
             size: 5Gi
           allowMultipleNodesPerWorker: true
           heap:
