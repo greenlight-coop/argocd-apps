@@ -1,3 +1,64 @@
+# Copyright 2019 The Knative Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-tracing
+  namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
+    knative.dev/config-propagation: original
+    knative.dev/config-category: eventing
+  annotations:
+    knative.dev/example-checksum: "4002b4c2"
+data:
+  _example: |
+    ################################
+    #                              #
+    #    EXAMPLE CONFIGURATION     #
+    #                              #
+    ################################
+    # This block is not actually functional configuration,
+    # but serves to illustrate the available configuration
+    # options and document them in a way that is accessible
+    # to users that `kubectl edit` this config map.
+    #
+    # These sample configuration options may be copied out of
+    # this example block and unindented to be in the data block
+    # to actually change the configuration.
+    #
+    # This may be "zipkin" or "stackdriver", the default is "none"
+    backend: "none"
+
+    # URL to zipkin collector where traces are sent.
+    # This must be specified when backend is "zipkin"
+    zipkin-endpoint: "http://zipkin.istio-system.svc.cluster.local:9411/api/v2/spans"
+
+    # The GCP project into which stackdriver metrics will be written
+    # when backend is "stackdriver".  If unspecified, the project-id
+    # is read from GCP metadata when running on GCP.
+    stackdriver-project-id: "my-project"
+
+    # Enable zipkin debug mode. This allows all spans to be sent to the server
+    # bypassing sampling.
+    debug: "false"
+
+    # Percentage (0-1) of requests to trace
+    sample-rate: "0.1"
+
+---
 # Copyright 2020 The Knative Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +77,8 @@ kind: ConfigMap
 metadata:
   name: kafka-broker-config
   namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
 data:
   default.topic.partitions: "10"
   default.topic.replication.factor: "3"
@@ -40,7 +103,7 @@ kind: ClusterRole
 metadata:
   name: kafka-controller
   labels:
-    contrib.eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 rules:
   - apiGroups:
       - "*"
@@ -79,6 +142,14 @@ rules:
       - update
       - delete
       - patch
+      - watch
+  - apiGroups:
+      - "*"
+    resources:
+      - secrets
+    verbs:
+      - list
+      - get
       - watch
   # Eventing resources and statuses we care about
   - apiGroups:
@@ -126,7 +197,7 @@ metadata:
   name: kafka-controller
   namespace: knative-eventing
   labels:
-    contrib.eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 
 ---
 # Copyright 2020 The Knative Authors
@@ -147,7 +218,7 @@ kind: ClusterRoleBinding
 metadata:
   name: kafka-controller
   labels:
-    contrib.eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 subjects:
   - kind: ServiceAccount
     name: kafka-controller
@@ -161,6 +232,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: kafka-controller-addressable-resolver
+  labels:
+    kafka.eventing.knative.dev/release: devel
 subjects:
   - kind: ServiceAccount
     name: kafka-controller
@@ -191,9 +264,8 @@ metadata:
   namespace: knative-eventing
   labels:
     app: kafka-controller
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: kafka-controller
@@ -202,7 +274,7 @@ spec:
       name: kafka-controller
       labels:
         app: kafka-controller
-        eventing.knative.dev/release: devel
+        kafka.eventing.knative.dev/release: devel
     spec:
       securityContext:
         runAsNonRoot: true
@@ -219,7 +291,7 @@ spec:
               weight: 100
       containers:
         - name: controller
-          image: gcr.io/knative-releases/knative.dev/eventing-kafka-broker/control-plane/cmd/kafka-controller@sha256:5eee166f588a4e6b9171c5394f1e5f0d264fab897c703da2e9ce82e07252d739
+          image: gcr.io/knative-releases/knative.dev/eventing-kafka-broker/control-plane/cmd/kafka-controller@sha256:113845f631e75340ea03d53820aaf940fb6699a3ed0564f9ce4f6982439a59f6
           imagePullPolicy: IfNotPresent
           env:
             - name: BROKER_DATA_PLANE_CONFIG_MAP_NAMESPACE
@@ -299,7 +371,7 @@ metadata:
   labels:
     duck.knative.dev/addressable: "true"
     knative.dev/crd-install: "true"
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 spec:
   group: eventing.knative.dev
   names:
@@ -358,12 +430,31 @@ spec:
                     - structured
                     - binary
                   default: structured
+                auth:
+                  description: 'Auth configurations'
+                  type: object
+                  properties:
+                    secret:
+                      description: 'Auth secret'
+                      type: object
+                      properties:
+                        ref:
+                          # TODO add format in description (?)
+                          description: |
+                            Secret reference.
+                          type: object
+                          required:
+                            - name
+                          properties:
+                            name:
+                              description: 'Secret name'
+                              type: string
             status:
-              description: 'Status represents the current state of the Broker. This data may be out of date.'
+              description: 'Status represents the current state of the KafkaSink. This data may be out of date.'
               type: object
               properties:
                 address:
-                  description: 'Kafka Sink is Addressable. It exposes the endpoint as an URI to get events delivered into the Broker mesh.'
+                  description: 'Kafka Sink is Addressable. It exposes the endpoint as an URI to get events delivered to a Kafka topic.'
                   type: object
                   properties:
                     url:
@@ -444,7 +535,7 @@ kind: ClusterRole
 metadata:
   name: kafka-webhook-eventing
   labels:
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 rules:
   # For watching logging configuration and getting certs.
   - apiGroups:
@@ -501,11 +592,6 @@ rules:
     resources:
       - "leases"
     verbs: *everything
-  # Necessary for conversion webhook. These are copied from the eventing (which are copied from serving)
-  # TODO: Do we really need all these permissions?
-  - apiGroups: ["apiextensions.k8s.io"]
-    resources: ["customresourcedefinitions"]
-    verbs: ["get", "list", "create", "update", "delete", "patch", "watch"]
 
 ---
 # Copyright 2020 The Knative Authors
@@ -527,7 +613,7 @@ metadata:
   name: kafka-webhook-eventing
   namespace: knative-eventing
   labels:
-    contrib.eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 
 ---
 kind: ClusterRole
@@ -535,7 +621,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: kafkasinks-addressable-resolver
   labels:
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
     duck.knative.dev/addressable: "true"
 # Do not use this role directly. These rules will be added to the "addressable-resolver" role.
 rules:
@@ -568,7 +654,7 @@ kind: ClusterRoleBinding
 metadata:
   name: kafka-webhook-eventing
   labels:
-    contrib.eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 subjects:
   - kind: ServiceAccount
     name: kafka-webhook-eventing
@@ -598,7 +684,7 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: defaulting.webhook.kafka.eventing.knative.dev
   labels:
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -631,7 +717,7 @@ metadata:
   name: kafka-webhook-eventing-certs
   namespace: knative-eventing
   labels:
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 # The data is populated at install time.
 
 ---
@@ -654,7 +740,7 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: validation.webhook.kafka.eventing.knative.dev
   labels:
-    eventing.knative.dev/release: devel
+    kafka.eventing.knative.dev/release: devel
 webhooks:
   - admissionReviewVersions: ["v1", "v1beta1"]
     clientConfig:
@@ -687,16 +773,17 @@ metadata:
   name: kafka-webhook-eventing
   namespace: knative-eventing
   labels:
-    eventing.knative.dev/release: devel
+    app: kafka-webhook-eventing
+    kafka.eventing.knative.dev/release: devel
 spec:
-  replicas: 1
   selector:
-    matchLabels: &labels
+    matchLabels:
       app: kafka-webhook-eventing
-      role: kafka-webhook-eventing
   template:
     metadata:
-      labels: *labels
+      labels:
+        app: kafka-webhook-eventing
+        kafka.eventing.knative.dev/release: devel
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
@@ -714,7 +801,7 @@ spec:
       containers:
         - name: kafka-webhook-eventing
           terminationMessagePolicy: FallbackToLogsOnError
-          image: gcr.io/knative-releases/knative.dev/eventing-kafka-broker/control-plane/cmd/webhook-kafka@sha256:3bfd89e9cc31fab94e919956660f5649af25afe454beb2442b2f320acd7dfd22
+          image: gcr.io/knative-releases/knative.dev/eventing-kafka-broker/control-plane/cmd/webhook-kafka@sha256:d9c4be8f900889f43210aaeb2112e246913c7e6bc61530ffadc9e33ecac6272f
           resources:
             requests:
               cpu: 20m
@@ -766,18 +853,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    eventing.knative.dev/release: devel
-    role: kafka-webhook-eventing
   name: kafka-webhook-eventing
   namespace: knative-eventing
+  labels:
+    app: kafka-webhook-eventing
+    kafka.eventing.knative.dev/release: devel
 spec:
   ports:
     - name: https-webhook
       port: 443
       targetPort: 8443
   selector:
-    role: kafka-webhook-eventing
+    app: kafka-webhook-eventing
 
 ---
 ---
@@ -801,6 +888,8 @@ kind: ConfigMap
 metadata:
   name: kafka-config-logging
   namespace: knative-eventing
+  labels:
+    kafka.eventing.knative.dev/release: devel
 data:
   config.xml: |
     <configuration>
@@ -811,4 +900,3 @@ data:
         <appender-ref ref="jsonConsoleAppender"/>
       </root>
     </configuration>
-
