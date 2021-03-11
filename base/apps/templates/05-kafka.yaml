@@ -2,31 +2,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8ssandra-dev
+  name: kafka
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "5"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: k8ssandra-dev
+    namespace: kafka
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    repoURL: https://helm.k8ssandra.io/
-    chart: k8ssandra
-    targetRevision: 1.0.0
+    path: kafka/apps
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        kube-prometheus-stack:
-          grafana:
-            enabled: false
-        monitoring:
-          grafana:
-            provision_dashboards: false
-        stargate:
-          enabled: false
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true

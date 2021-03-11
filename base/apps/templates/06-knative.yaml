@@ -1,22 +1,29 @@
-{{- if not .Values.lightweight }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: knative-eventing-kafka-channel
+  name: knative
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-3"
+    argocd.argoproj.io/sync-wave: "6"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: knative-eventing
+    namespace: default
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: knative/knative-eventing-kafka-channel
+    path: base/knative/apps
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.global.targetRevision }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      values: |
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
@@ -27,4 +34,3 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-{{- end }}
