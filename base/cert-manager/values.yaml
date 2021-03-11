@@ -1,5 +1,3 @@
-useStagingCertificates: ""
-adminEmail:  ""
 cert-manager:
   installCRDs:  true
   serviceAccount:

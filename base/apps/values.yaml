@@ -1,13 +1,14 @@
-global:
-  appsDomainName: ""
-  targetRevision: ""
-  useStagingCertificates: ""
-  adminEmail: ""
-  isKindCluster: ""
+adminEmail: ""
+certManager:
+  enabled: ""
+domainName: ""
 googleProjectId: ""
+metricsServer:
+  enabled: ""
 spec:
   destination:
-    server: https://kubernetes.default.svc
+    server: ""
   source:
-    repoURL: git@github.com:greenlight-coop/argocd-greenlight-infrastructure.git
-    targetRevision: HEAD
+    repoURL: ""
+    targetRevision: ""
+useStagingCertificates: ""

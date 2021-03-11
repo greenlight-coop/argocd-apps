@@ -1,11 +1,11 @@
-{{- if not .Values.global.isKindCluster }}
+{{- if .Values.certManager.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cert-manager
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-6"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -16,11 +16,9 @@ spec:
   source:
     path: cert-manager
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.global.targetRevision }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        adminEmail: {{ .Values.global.adminEmail }}
         cert-manager:
           serviceAccount:
             annotations:
