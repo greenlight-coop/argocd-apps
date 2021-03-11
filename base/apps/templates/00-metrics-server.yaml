@@ -14,7 +14,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: metrics-server/install
+    path: base/metrics-server/install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:

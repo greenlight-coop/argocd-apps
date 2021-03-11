@@ -14,7 +14,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: external-dns
+    path: base/external-dns
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
