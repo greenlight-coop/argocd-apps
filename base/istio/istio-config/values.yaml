@@ -1,4 +1,4 @@
-appsDomainName: ""
+domainName: ""
 useStagingCertificates: ""
 adminEmail: ""
 googleProjectId: ""

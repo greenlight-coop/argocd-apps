@@ -1,34 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio
+  name: istio-config
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "-4"
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: istio-system
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/apps
+    path: istio/istio-config
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        useStagingCertificates: {{ .Values.global.useStagingCertificates }}
-        adminEmail: {{ .Values.global.adminEmail }}
-        appsDomainName: {{ .Values.global.appsDomainName }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
+        adminEmail: {{ .Values.adminEmail }}
+        domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
-        isKindCluster: {{ .Values.global.isKindCluster }}
-        global:
-          targetRevision: {{ .Values.global.targetRevision }}
+        isKindCluster: {{ .Values.isKindCluster }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
     retry:
       limit: 5
       backoff:

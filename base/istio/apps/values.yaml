@@ -1,0 +1,10 @@
+useStagingCertificates: ""
+domainName: ""
+adminEmail: ""
+googleProjectId: ""
+spec:
+  destination:
+    server: ""
+  source:
+    repoURL: ""
+    targetRevision: ""
