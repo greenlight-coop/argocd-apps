@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-kiali-install
+  name: istio-operator
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,16 +13,24 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-kiali-install
+    path: base/istio/istio-1.9.1/manifests/charts/istio-operator
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.global.targetRevision }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      values: |
+        enableCRDTemplates: true
+        global:
+          hub: docker.io/istio
+          tag: 1.9.1
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
     retry:
       limit: 5
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m 
+        maxDuration: 3m

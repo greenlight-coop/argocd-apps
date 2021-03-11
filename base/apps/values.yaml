@@ -3,6 +3,10 @@ certManager:
   enabled: ""
 domainName: ""
 googleProjectId: ""
+istio:
+  httpNodePort: ""
+  httpsNodePort: ""
+  jwtPolicy: ""
 metricsServer:
   enabled: ""
 spec:

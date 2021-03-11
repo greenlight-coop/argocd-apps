@@ -1,5 +1,9 @@
-domainName: ""
-useStagingCertificates: ""
 adminEmail: ""
+certManager:
+  enabled: ""
+domainName: ""
 googleProjectId: ""
-isKindCluster: ""
+httpNodePort: ""
+httpsNodePort: ""
+jwtPolicy: ""
+useStagingCertificates: ""

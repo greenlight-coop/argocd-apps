@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-operator
+  name: istio-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-5"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,15 +13,20 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: istio/istio-1.9.1/manifests/charts/istio-operator
+    path: base/istio/istio-config
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.global.targetRevision }}
     helm:
       values: |
-        global:
-          hub: docker.io/istio
-          tag: 1.9.1
-        enableCRDTemplates: true
+        adminEmail: {{ .Values.adminEmail }}
+        certManager:
+          enabled: {{ .Values.certManager.enabled }}
+        domainName: {{ .Values.domainName }}
+        googleProjectId: {{ .Values.googleProjectId }}
+        httpNodePort: {{ .Values.istio.httpNodePort }}
+        httpsNodePort: {{ .Values.istio.httpsNodePort }}
+        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
   syncPolicy:
     automated:
       prune: true

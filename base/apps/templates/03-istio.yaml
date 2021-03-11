@@ -19,8 +19,13 @@ spec:
     helm:
       values: |
         adminEmail: {{ .Values.adminEmail }}
+        certManager:
+          enabled: {{ .Values.certManager.enabled }}
         domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
+        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        httpNodePort: {{ .Values.istio.httpNodePort }}
+        httpsNodePort: {{ .Values.istio.httpsNodePort }}
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}
@@ -28,8 +33,6 @@ spec:
             repoURL: {{ .Values.spec.source.repoURL }}
             targetRevision: {{ .Values.spec.source.targetRevision }}
         useStagingCertificates: {{ .Values.useStagingCertificates }}
-
-        isKindCluster: {{ .Values.global.isKindCluster }}
   syncPolicy:
     automated:
       prune: true
