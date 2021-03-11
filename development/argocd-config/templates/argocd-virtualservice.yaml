@@ -11,7 +11,7 @@ spec:
   gateways:
   - istio-system/istio-gateway
   hosts:
-  - argocd.{{ .Values.appsDomainName }}
+  - argocd.{{ .Values.domainName }}
   http:
   - route:
     - destination:
