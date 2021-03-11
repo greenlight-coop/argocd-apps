@@ -1,30 +1,21 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: close-pr-pipeline
+  name: test-stage-close-pr-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
       type: string
-    - name: git-branch
-      type: string
     - name: git-pr-number
-      type: string
-    - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
       type: string
   workspaces:
     - name: git-source
     - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -52,80 +43,41 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-resources
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: delete-test-stage-resources
       taskRef:
         name: kubernetes-actions
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io results-$(params.preview-namespace)
+            kubectl delete --namespace argocd Application results-api-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd Application results-ui-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
-    - name: delete-pr-namespace
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+    - name: delete-test-stage-namespace
       taskRef:
         name: kubernetes-actions
+      runAfter:
+        - delete-test-stage-resources
       params:
         - name: script
           value: |
-            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
+            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
-    - name: delete-pull-request-images
-      taskRef:
-        name: delete-pull-request-images
-      params:
-        - name: organization
-          value: greenlightcoop
-        - name: repository
-          value: $(params.project-name)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
-      workspaces:
-        - name: node-modules
-          workspace: node-modules
-    - name: set-success-outcome-service
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - set-default-outcome
-        - delete-preview-resources
-        - delete-pr-namespace
-        - delete-pull-request-images
-      params:
-        - name: status
-          value: success
-      workspaces:
-        - name: status-workspace
-          workspace: status-workspace
-    - name: set-success-outcome-nonservice
-      when:
-        - input: $(params.build-type)
-          operator: notin
-          values: ["service"]
-      taskRef:
-        name: set-outcome-status
-      runAfter:
-        - set-default-outcome
-        - delete-pull-request-images
+        - delete-test-stage-resources
+        - delete-test-stage-namespace
       params:
         - name: status
           value: success
@@ -151,4 +103,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

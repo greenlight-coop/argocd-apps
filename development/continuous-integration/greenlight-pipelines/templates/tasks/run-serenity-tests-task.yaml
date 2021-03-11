@@ -72,8 +72,7 @@ spec:
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
                 volumeSubPath: site/$(params.results-identifier)
-                appsDomainName: {{ .Values.appsDomainName }}
-                useStagingCertificates: {{ .Values.useStagingCertificates }}
+                domainName: {{ .Values.domainName }}
           syncPolicy:
             automated:
               prune: true
@@ -85,7 +84,7 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
-        echo 'https://results-$(params.results-identifier).{{ .Values.appsDomainName }}' > $(results.report-url.path)
+        echo 'https://results-$(params.results-identifier).{{ .Values.domainName }}' > $(results.report-url.path)
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)

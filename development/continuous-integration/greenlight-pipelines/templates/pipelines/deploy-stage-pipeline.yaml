@@ -42,7 +42,7 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -62,7 +62,7 @@ spec:
       params:
         - name: values
           value: |
-            appsDomainName: {{ .Values.appsDomainName }}
+            domainName: {{ .Values.domainName }}
       workspaces:
         - name: template-directory
           workspace: git-source
@@ -126,4 +126,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

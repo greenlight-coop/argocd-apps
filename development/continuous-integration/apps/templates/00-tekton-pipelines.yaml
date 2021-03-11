@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: greenlight-pipelines
+  name: tekton-pipelines
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "0"
@@ -9,21 +9,19 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: greenlight-pipelines
+    namespace: tekton-pipelines
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: continuous-integration/greenlight-pipelines
+    path: development/continuous-integration/tekton-pipelines
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      values: |
-        useStagingCertificates: {{ .Values.useStagingCertificates }}
-        appsDomainName: {{ .Values.appsDomainName }}
   syncPolicy:
     automated:
       prune: true
-      selfHeal: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
     retry:
       limit: 5
       backoff:

@@ -1,27 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tekton-pipelines
+  name: continuous-integration
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-2"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: tekton-pipelines
+    namespace: argocd
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: continuous-integration/tekton-pipelines
+    path: development/continuous-integration/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      values: |
+        domainName: {{ .Values.domainName }}
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     retry:
       limit: 5
       backoff:

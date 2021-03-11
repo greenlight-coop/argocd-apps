@@ -1,21 +1,24 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: test-stage-close-pr-pipeline
+  name: main-pipeline
   namespace: greenlight-pipelines
 spec:
   params:
     - name: project-name
       type: string
+    - name: build-type
+      type: string
     - name: git-revision
       type: string
-    - name: git-pr-number
+    - name: git-branch
       type: string
   workspaces:
     - name: git-source
-    - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
+    - name: status-workspace
+    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -43,41 +46,48 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-test-stage-resources
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: generate-image-tag
       taskRef:
-        name: kubernetes-actions
+        name: generate-image-tag
       params:
-        - name: script
-          value: |
-            kubectl delete --namespace argocd Application results-api-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd Application results-ui-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
+        - name: organization
+          value: greenlightcoop
+        - name: repository
+          value: $(params.project-name)
+        - name: branch-name
+          value: $(params.git-branch)
       workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
-    - name: delete-test-stage-namespace
+        - name: node-modules
+          workspace: node-modules
+    - name: clone-git-repo
       taskRef:
-        name: kubernetes-actions
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/$(params.project-name).git
+        - name: revision
+          value: $(params.git-revision)
+      workspaces:
+        - name: output
+          workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: buildkit
       runAfter:
-        - delete-test-stage-resources
+        - clone-git-repo
       params:
-        - name: script
-          value: |
-            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
+        - name: IMAGE
+          value: greenlightcoop/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
+        - name: source
+          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
-        - delete-test-stage-resources
-        - delete-test-stage-namespace
+        - set-default-outcome
+        - build-and-push-image
       params:
         - name: status
           value: success
@@ -103,4 +113,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

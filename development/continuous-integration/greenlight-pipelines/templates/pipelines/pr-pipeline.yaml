@@ -52,7 +52,7 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: ensure-preview-namespace-exists
       when:
         - input: $(params.build-type)
@@ -205,4 +205,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

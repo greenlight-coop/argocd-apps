@@ -44,7 +44,7 @@ spec:
         - name: DESCRIPTION
           value: Build started
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -65,7 +65,7 @@ spec:
         - name: values
           value: |
             prNumber: $(params.git-pr-number)
-            appsDomainName: {{ .Values.appsDomainName }}
+            domainName: {{ .Values.domainName }}
       workspaces:
         - name: template-directory
           workspace: git-source
@@ -127,7 +127,7 @@ spec:
         - name: test-image
           value: $(tasks.get-api-functional-tests-image.results.output)
         - name: base-url
-          value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
+          value: https://test-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
           value: api-pr-$(params.git-pr-number)
       workspaces:
@@ -144,7 +144,7 @@ spec:
         - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)
         - name: base-url
-          value: https://test-pr-$(params.git-pr-number).{{ .Values.appsDomainName }}
+          value: https://test-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
           value: ui-pr-$(params.git-pr-number)
       workspaces:
@@ -182,4 +182,4 @@ spec:
         - name: DESCRIPTION
           value: Build complete
         - name: TARGET_URL
-          value: https://dashboard.{{ .Values.appsDomainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)

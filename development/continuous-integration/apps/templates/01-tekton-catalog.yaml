@@ -1,27 +1,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: tekton-triggers
+  name: tekton-catalog
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-1"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: tekton-triggers
+    namespace: greenlight-pipelines
     server: {{ .Values.spec.destination.server }}
   project: greenlight-project
   source:
-    path: continuous-integration/tekton-triggers
+    path: development/continuous-integration/tekton-catalog
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
     retry:
       limit: 5
       backoff:

@@ -7,7 +7,7 @@ spec:
   gateways:
   - istio-system/istio-gateway
   hosts:
-  - tekton.{{ .Values.appsDomainName }}
+  - tekton.{{ .Values.domainName }}
   http:
   - match:
     - uri:
