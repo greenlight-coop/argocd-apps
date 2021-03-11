@@ -23,9 +23,9 @@ spec:
           enabled: {{ .Values.certManager.enabled }}
         domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
-        httpNodePort: {{ .Values.istio.httpNodePort }}
-        httpsNodePort: {{ .Values.istio.httpsNodePort }}
-        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        httpNodePort: {{ .Values.httpNodePort }}
+        httpsNodePort: {{ .Values.httpsNodePort }}
+        jwtPolicy: {{ .Values.jwtPolicy }}
         useStagingCertificates: {{ .Values.useStagingCertificates }}
   syncPolicy:
     automated:
