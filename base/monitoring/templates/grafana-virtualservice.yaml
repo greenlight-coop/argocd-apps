@@ -12,7 +12,7 @@ spec:
   gateways:
   - istio-system/istio-gateway
   hosts:
-  - grafana.{{ .Values.appsDomainName }}
+  - grafana.{{ .Values.domainName }}
   http:
   - match:
     - uri:
@@ -21,4 +21,4 @@ spec:
     - destination:
         port:
           number: 80
-        host: monitoring-grafana
+        host: k8ssandra-grafana
