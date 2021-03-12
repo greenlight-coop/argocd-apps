@@ -84,6 +84,7 @@ spec:
       params:
         - name: script
           value: |
+            sleep 5
             for ksvc in `kubectl -n $(params.project-name) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
             do 
               kubectl wait -n $(params.project-name) --for=condition=Ready --timeout=60s ksvc/$ksvc
