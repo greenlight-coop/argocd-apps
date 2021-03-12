@@ -1394,7 +1394,7 @@ metadata:
   annotations:
     knative.dev/example-checksum: "74c3fc6a"
 data:
-  _example: |
+  svc.cluster.local: |
     ################################
     #                              #
     #    EXAMPLE CONFIGURATION     #
