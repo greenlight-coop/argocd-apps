@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: istio-system
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: base/istio/istio-kiali-install
     repoURL: {{ .Values.spec.source.repoURL }}

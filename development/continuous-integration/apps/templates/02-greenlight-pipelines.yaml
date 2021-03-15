@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: greenlight-pipelines
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: development/continuous-integration/greenlight-pipelines
     repoURL: {{ .Values.spec.source.repoURL }}

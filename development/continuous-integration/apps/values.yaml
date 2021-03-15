@@ -2,6 +2,7 @@ domainName: ""
 spec:
   destination:
     server: ""
+  project: ""
   source:
     repoURL: ""
     targetRevision: ""

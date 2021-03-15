@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: argocd
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: development/argocd-config
     repoURL: {{ .Values.spec.source.repoURL }}

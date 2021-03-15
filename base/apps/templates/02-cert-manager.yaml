@@ -12,7 +12,7 @@ spec:
   destination:
     namespace: cert-manager
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: base/cert-manager
     repoURL: {{ .Values.spec.source.repoURL }}

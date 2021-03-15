@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: tekton-triggers
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: development/continuous-integration/tekton-triggers
     repoURL: {{ .Values.spec.source.repoURL }}

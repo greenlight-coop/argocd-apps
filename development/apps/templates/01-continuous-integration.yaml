@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: argocd
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: development/continuous-integration/apps
     repoURL: {{ .Values.spec.source.repoURL }}
@@ -22,6 +22,7 @@ spec:
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}
+          project: {{ .Values.spec.project }}
           source:
             repoURL: {{ .Values.spec.source.repoURL }}
             targetRevision: {{ .Values.spec.source.targetRevision }}

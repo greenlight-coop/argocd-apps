@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: kiali-operator
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     repoURL: https://kiali.org/helm-charts
     chart: kiali-operator

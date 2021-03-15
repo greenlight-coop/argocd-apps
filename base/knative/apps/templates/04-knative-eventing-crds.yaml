@@ -11,7 +11,7 @@ spec:
   destination:
     namespace: default
     server: {{ .Values.spec.destination.server }}
-  project: greenlight-project
+  project: {{ .Values.spec.project }}
   source:
     path: base/knative/knative-eventing-crds
     repoURL: {{ .Values.spec.source.repoURL }}
