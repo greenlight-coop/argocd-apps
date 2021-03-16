@@ -18,6 +18,7 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
+      releaseName: cert-manager
       values: |
         cert-manager:
           serviceAccount:

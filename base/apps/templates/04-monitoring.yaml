@@ -17,6 +17,7 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
+      releaseName: monitoring
       values: |
         domainName: {{ .Values.domainName }}
         useStagingCertificates: {{ .Values.useStagingCertificates }}
