@@ -1,7 +1,5 @@
 domainName: ""
 spec:
-  destination:
-    server: ""
   source:
     repoURL: ""
     targetRevision: ""

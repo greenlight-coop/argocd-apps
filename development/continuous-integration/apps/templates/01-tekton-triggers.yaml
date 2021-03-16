@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: tekton-triggers
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
     path: development/continuous-integration/tekton-triggers

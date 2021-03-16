@@ -11,7 +11,7 @@ metadata:
 spec:
   destination:
     namespace: kafka
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
     path: base/kafka/apps

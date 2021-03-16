@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: default
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
     path: base/istio/apps
