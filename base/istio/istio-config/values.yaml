@@ -1,0 +1,9 @@
+adminEmail: ""
+certManager:
+  enabled: ""
+domainName: ""
+googleProjectId: ""
+httpNodePort: ""
+httpsNodePort: ""
+jwtPolicy: ""
+useStagingCertificates: ""

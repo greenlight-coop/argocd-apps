@@ -1,0 +1,18 @@
+adminEmail: ""
+certManager:
+  enabled: ""
+domainName: ""
+googleProjectId: ""
+istio:
+  httpNodePort: ""
+  httpsNodePort: ""
+  jwtPolicy: ""
+metricsServer:
+  enabled: ""
+spec:
+  destination:
+    server: ""
+  source:
+    repoURL: ""
+    targetRevision: ""
+useStagingCertificates: ""

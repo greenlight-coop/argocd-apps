@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.baseName }}-istio
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: {{ .Values.spec.project }}
+  source:
+    path: base/istio/apps
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      releaseName: istio
+      values: |
+        adminEmail: {{ .Values.adminEmail }}
+        baseName: {{ .Values.baseName }}
+        certManager:
+          enabled: {{ .Values.certManager.enabled }}
+        domainName: {{ .Values.domainName }}
+        googleProjectId: {{ .Values.googleProjectId }}
+        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        httpNodePort: {{ .Values.istio.httpNodePort }}
+        httpsNodePort: {{ .Values.istio.httpsNodePort }}
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          project: {{ .Values.spec.project }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
