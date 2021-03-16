@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio-kiali-install
+  name: {{ .Values.baseName }}-istio-kiali-install
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "4"

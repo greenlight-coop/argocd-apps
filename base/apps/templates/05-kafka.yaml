@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kafka
+  name: {{ .Values.baseName }}-kafka
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "5"
@@ -19,6 +19,7 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       values: |
+        baseName: {{ .Values.baseName }}
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}

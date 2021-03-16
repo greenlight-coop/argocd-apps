@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-dns
+  name: {{ .Values.baseName }}-external-dns
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"

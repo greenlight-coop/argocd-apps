@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: knative-serving-core
+  name: {{ .Values.baseName }}-knative-serving-core
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"

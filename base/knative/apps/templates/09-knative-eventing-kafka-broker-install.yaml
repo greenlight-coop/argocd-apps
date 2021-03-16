@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: knative-eventing-kafka-broker-install
+  name: {{ .Values.baseName }}-knative-eventing-kafka-broker-install
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "9"

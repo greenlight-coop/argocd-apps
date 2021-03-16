@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: istio
+  name: {{ .Values.baseName }}-istio
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "3"
@@ -19,6 +19,7 @@ spec:
     helm:
       values: |
         adminEmail: {{ .Values.adminEmail }}
+        baseName: {{ .Values.baseName }}
         certManager:
           enabled: {{ .Values.certManager.enabled }}
         domainName: {{ .Values.domainName }}
