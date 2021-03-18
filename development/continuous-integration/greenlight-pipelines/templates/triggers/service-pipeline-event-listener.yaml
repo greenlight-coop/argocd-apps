@@ -24,6 +24,8 @@ spec:
             overlays:
               - key: build_type
                 expression: "'service'"
+              - key: hub_organization
+                expression: "body.owner.login.replace('-', '')"
     - name: close-pr-pipeline-trigger
       template:
         ref: close-pr-pipeline-trigger-template
