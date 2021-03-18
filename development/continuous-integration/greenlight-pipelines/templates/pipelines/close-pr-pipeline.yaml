@@ -7,6 +7,10 @@ spec:
   params:
     - name: project-name
       type: string
+    - name: repository-full-name
+      type: string
+    - name: hub-organization
+      type: string
     - name: build-type
       type: string
     - name: git-revision
@@ -40,7 +44,7 @@ spec:
         name: github-set-status
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME
@@ -90,7 +94,7 @@ spec:
         name: delete-pull-request-images
       params:
         - name: organization
-          value: greenlightcoop
+          value: $(params.hub-organization)
         - name: repository
           value: $(params.project-name)
         - name: pull-request-number
@@ -141,7 +145,7 @@ spec:
           workspace: status-workspace
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME

@@ -42,6 +42,8 @@ spec:
             overlays:
               - key: build_type
                 expression: "'service'"
+              - key: hub_organization
+                expression: "body.owner.login.replace('-', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
@@ -62,3 +64,5 @@ spec:
                 expression: "'service'"
               - key: branch_name
                 expression: "body.ref.split('/')[2]"
+              - key: hub_organization
+                expression: "body.owner.login.replace('-', '')"

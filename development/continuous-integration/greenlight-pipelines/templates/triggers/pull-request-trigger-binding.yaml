@@ -7,6 +7,8 @@ spec:
   params:
     - name: project-name
       value: $(body.repository.name)
+    - name: repository-full-name
+      value: $(body.repository.full_name)
     - name: git-revision
       value: $(body.pull_request.head.sha)
     - name: git-branch
@@ -23,3 +25,5 @@ spec:
       value: prvw-pr-$(body.number)
     - name: build-type
       value: $(extensions.build_type)
+    - name: hub-organization
+      value: $(extensions.hub_organization)
