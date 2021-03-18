@@ -6,6 +6,8 @@ spec:
   params:
     - name: project-name
       description: The repo name in GitHub
+    - name: repository-full-name
+      description: The repo name in GitHub qualified by the user/organization (e.g. greenlight-coop/helloworld)
     - name: git-revision
       description: The revision to clone and build
   resourcetemplates:
@@ -21,6 +23,8 @@ spec:
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: repository-full-name
+            value: $(tt.params.repository-full-name)
           - name: git-revision
             value: $(tt.params.git-revision)
         workspaces:
