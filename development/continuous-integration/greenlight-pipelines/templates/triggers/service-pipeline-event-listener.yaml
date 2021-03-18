@@ -25,7 +25,7 @@ spec:
               - key: build_type
                 expression: "'service'"
               - key: hub_organization
-                expression: "body.owner.login.replace('-', '')"
+                expression: "body.organization.login.replace('-', '')"
     - name: close-pr-pipeline-trigger
       template:
         ref: close-pr-pipeline-trigger-template
@@ -45,7 +45,7 @@ spec:
               - key: build_type
                 expression: "'service'"
               - key: hub_organization
-                expression: "body.owner.login.replace('-', '')"
+                expression: "body.organization.login.replace('-', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
