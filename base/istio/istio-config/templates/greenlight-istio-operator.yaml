@@ -2,7 +2,7 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 metadata:
   namespace: istio-system
-  name: istio-minimal-operator
+  name: greenlight-istio-operator
 spec:
   values:
     global:
@@ -39,20 +39,3 @@ spec:
               targetPort: 8443
               nodePort: {{ .Values.httpsNodePort }}
           {{- end }}
-      - name: cluster-local-gateway
-        enabled: true
-        label:
-          istio: cluster-local-gateway
-          app: cluster-local-gateway
-        k8s:
-          service:
-            type: ClusterIP
-            ports:
-            - port: 15020
-              name: status-port
-            - port: 80
-              name: http2
-              targetPort: 8080
-            - port: 443
-              name: https
-              targetPort: 8443
