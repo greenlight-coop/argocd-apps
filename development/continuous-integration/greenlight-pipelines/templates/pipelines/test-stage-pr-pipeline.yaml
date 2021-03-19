@@ -90,7 +90,7 @@ spec:
       params:
         - name: command
           value: |
-            kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
+            kubectl get application -n argocd $(params.project-name)-pr-$(params.git-pr-number) \
               -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/api-functional-tests']}"
     - name: get-ui-functional-tests-image
       taskRef:
@@ -100,7 +100,7 @@ spec:
       params:
         - name: command
           value: |
-            kubectl get application -n argocd greenlight-stage-test-pr-$(params.git-pr-number) \
+            kubectl get application -n argocd $(params.project-name)-pr-$(params.git-pr-number) \
               -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
     - name: wait-for-stage-ready
       taskRef:
@@ -109,9 +109,9 @@ spec:
         - name: script
           value: |
             sleep 5
-            for ksvc in `kubectl -n test-pr-$(params.git-pr-number) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
+            for ksvc in `kubectl -n $(params.project-name)-pr-$(params.git-pr-number) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
             do 
-              kubectl wait -n test-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
+              kubectl wait -n $(params.project-name)-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
             done
       runAfter:
         - deploy-test-stage
@@ -130,7 +130,7 @@ spec:
         - name: test-image
           value: $(tasks.get-api-functional-tests-image.results.output)
         - name: base-url
-          value: https://test-pr-$(params.git-pr-number).{{ .Values.domainName }}
+          value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
           value: api-pr-$(params.git-pr-number)
       workspaces:
@@ -147,7 +147,7 @@ spec:
         - name: test-image
           value: $(tasks.get-ui-functional-tests-image.results.output)
         - name: base-url
-          value: https://test-pr-$(params.git-pr-number).{{ .Values.domainName }}
+          value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
           value: ui-pr-$(params.git-pr-number)
       workspaces:
