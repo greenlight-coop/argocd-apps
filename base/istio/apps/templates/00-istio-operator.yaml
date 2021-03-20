@@ -20,9 +20,6 @@ spec:
       releaseName: istio-operator
       values: |
         enableCRDTemplates: true
-        global:
-          hub: docker.io/istio
-          tag: 1.9.1
   syncPolicy:
     automated:
       prune: true
