@@ -469,7 +469,6 @@ kind: CustomResourceDefinition
 metadata:
   name: clustertasks.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -535,7 +534,6 @@ kind: CustomResourceDefinition
 metadata:
   name: conditions.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -588,7 +586,6 @@ kind: CustomResourceDefinition
 metadata:
   name: images.caching.internal.knative.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     knative.dev/crd-install: "true"
 spec:
@@ -627,7 +624,6 @@ kind: CustomResourceDefinition
 metadata:
   name: pipelines.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -693,7 +689,6 @@ kind: CustomResourceDefinition
 metadata:
   name: pipelineruns.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -775,7 +770,6 @@ kind: CustomResourceDefinition
 metadata:
   name: pipelineresources.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -828,7 +822,6 @@ kind: CustomResourceDefinition
 metadata:
   name: runs.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -895,7 +888,6 @@ kind: CustomResourceDefinition
 metadata:
   name: tasks.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
@@ -961,7 +953,6 @@ kind: CustomResourceDefinition
 metadata:
   name: taskruns.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-pipelines
     pipeline.tekton.dev/release: "v0.21.0"
     version: "v0.21.0"
