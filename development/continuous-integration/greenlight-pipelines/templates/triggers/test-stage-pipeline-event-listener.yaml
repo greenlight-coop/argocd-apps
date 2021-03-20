@@ -24,6 +24,8 @@ spec:
             overlays:
               - key: build_type
                 expression: "'test'"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"
     - name: test-stage-close-pr-pipeline-trigger
       template:
         ref: test-stage-close-pr-pipeline-trigger-template
@@ -42,4 +44,6 @@ spec:
             overlays:
               - key: build_type
                 expression: "'test'"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"
 

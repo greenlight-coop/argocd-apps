@@ -26,3 +26,5 @@ spec:
                 expression: "'deployment'"
               - key: branch_name
                 expression: "body.ref.split('/')[2]"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"

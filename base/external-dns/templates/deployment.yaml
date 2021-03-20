@@ -20,7 +20,7 @@ spec:
         args:
         - --source=ingress
         - --source=service
-        - --domain-filter=greenlightcoop.dev
+        - --domain-filter={{ .Values.domainName }}
         - --provider=google
         - --registry=txt
         - --txt-owner-id=greenlight-external-dns-identifier

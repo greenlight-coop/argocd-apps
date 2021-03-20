@@ -24,6 +24,8 @@ spec:
             overlays:
               - key: build_type
                 expression: "'image'"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"
     - name: close-pr-pipeline-trigger
       template:
         ref: close-pr-pipeline-trigger-template
@@ -42,6 +44,8 @@ spec:
             overlays:
               - key: build_type
                 expression: "'image'"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
@@ -62,3 +66,5 @@ spec:
                 expression: "'image'"
               - key: branch_name
                 expression: "body.ref.split('/')[2]"
+              - key: hub_organization
+                expression: "body.organization.login.replace('-', '')"

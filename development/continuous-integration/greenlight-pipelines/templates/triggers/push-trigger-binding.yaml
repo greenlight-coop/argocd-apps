@@ -7,10 +7,14 @@ spec:
   params:
     - name: project-name
       value: $(body.repository.name)
+    - name: repository-full-name
+      value: $(body.repository.full_name)
     - name: git-revision
       value: $(body.after)
     - name: build-type
       value: $(extensions.build_type)
     - name: git-branch
       value: $(extensions.branch_name)
+    - name: hub-organization
+      value: $(extensions.hub_organization)
 

@@ -6,6 +6,10 @@ spec:
   params:
     - name: project-name
       description: The repo name in GitHub, also used as the name for the Kaniko image
+    - name: repository-full-name
+      description: The repo name in GitHub qualified by the user/organization (e.g. greenlight-coop/helloworld)
+    - name: hub-organization
+      description: The Docker Hub organization name (e.g. greenlightcoop)
     - name: build-type
       description: Indicates the type of project to build. Current supported values are 'service' and 'image'
     - name: preview-namespace
@@ -31,6 +35,10 @@ spec:
         params:
           - name: project-name
             value: $(tt.params.project-name)
+          - name: repository-full-name
+            value: $(tt.params.repository-full-name)
+          - name: hub-organization
+            value: $(tt.params.hub-organization)
           - name: build-type
             value: $(tt.params.build-type)
           - name: preview-namespace

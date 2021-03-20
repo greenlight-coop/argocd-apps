@@ -7,6 +7,8 @@ spec:
   params:
     - name: project-name
       type: string
+    - name: repository-full-name
+      type: string
     - name: git-revision
       type: string
   workspaces:
@@ -30,7 +32,7 @@ spec:
         name: github-set-status
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME
@@ -48,7 +50,7 @@ spec:
         name: git-clone
       params:
         - name: url
-          value: git@github.com:greenlight-coop/$(params.project-name).git
+          value: git@github.com:$(params.repository-full-name).git
         - name: revision
           value: $(params.git-revision)
       workspaces:
@@ -84,7 +86,7 @@ spec:
       params:
         - name: script
           value: |
-            sleep 5
+            sleep 20
             for ksvc in `kubectl -n $(params.project-name) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
             do 
               kubectl wait -n $(params.project-name) --for=condition=Ready --timeout=60s ksvc/$ksvc
@@ -117,7 +119,7 @@ spec:
           workspace: status-workspace
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME

@@ -7,6 +7,8 @@ spec:
   params:
     - name: project-name
       type: string
+    - name: repository-full-name
+      type: string
     - name: git-revision
       type: string
     - name: git-pr-number
@@ -31,7 +33,7 @@ spec:
         name: github-set-status
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME
@@ -50,9 +52,9 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd Application results-api-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd Application results-ui-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd Application greenlight-stage-test-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd applications.argoproj.io api-$(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd applications.argoproj.io ui-$(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
@@ -93,7 +95,7 @@ spec:
           workspace: status-workspace
       params:
         - name: REPO_FULL_NAME
-          value: greenlight-coop/$(params.project-name)
+          value: $(params.repository-full-name)
         - name: SHA
           value: $(params.git-revision)
         - name: GITHUB_TOKEN_SECRET_NAME
