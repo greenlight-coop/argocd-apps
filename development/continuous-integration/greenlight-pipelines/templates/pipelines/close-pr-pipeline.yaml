@@ -67,7 +67,7 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io results-$(params.preview-namespace)
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir

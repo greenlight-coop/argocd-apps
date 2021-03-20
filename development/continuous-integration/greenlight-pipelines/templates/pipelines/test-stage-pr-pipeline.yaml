@@ -132,7 +132,7 @@ spec:
         - name: base-url
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
-          value: api-pr-$(params.git-pr-number)
+          value: api-$(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
         - name: source
           workspace: git-source
@@ -149,7 +149,7 @@ spec:
         - name: base-url
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: results-identifier
-          value: ui-pr-$(params.git-pr-number)
+          value: ui-$(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
         - name: source
           workspace: git-source

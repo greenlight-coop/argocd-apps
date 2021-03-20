@@ -52,7 +52,7 @@ spec:
         apiVersion: argoproj.io/v1alpha1
         kind: Application
         metadata:
-          name: results-$(params.results-identifier)
+          name: $(params.results-identifier)
           namespace: argocd
           finalizers:
             - resources-finalizer.argocd.argoproj.io
@@ -67,7 +67,7 @@ spec:
             targetRevision: HEAD
             helm:
               values: |
-                identifier: results-$(params.results-identifier)
+                identifier: $(params.results-identifier)
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
@@ -84,7 +84,7 @@ spec:
                 factor: 2
                 maxDuration: 3m
         EOF
-        echo 'https://results-$(params.results-identifier).{{ .Values.domainName }}' > $(results.report-url.path)
+        echo 'https://$(params.results-identifier).{{ .Values.domainName }}' > $(results.report-url.path)
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)
