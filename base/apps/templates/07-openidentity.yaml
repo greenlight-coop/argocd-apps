@@ -18,8 +18,8 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       releaseName: openidentity
-      # values: |
-      #   domainName: {{ .Values.domainName }}
+      values: |
+        domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
       prune: true
