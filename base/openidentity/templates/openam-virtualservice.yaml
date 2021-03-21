@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: openam-virtualservice
+spec:
+  gateways:
+  - istio-system/istio-gateway
+  hosts:
+  - openam.{{ .Values.domainName }}
+  http:
+  - route:
+    - destination:
+        host: openam
+        port:
+          number: 8080
