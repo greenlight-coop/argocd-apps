@@ -51,7 +51,7 @@ spec:
         terminationMessagePolicy: File
         volumeMounts:
         - name: openam-data
-          mountPath: /usr/openam/config
+          mountPath: /usr/openam/config_mount
   volumeClaimTemplates:
   - metadata:
       name: openam-data
