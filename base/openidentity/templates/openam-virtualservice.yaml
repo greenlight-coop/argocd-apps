@@ -9,6 +9,8 @@ spec:
   - openam.{{ .Values.domainName }}
   http:
   - route:
+      rewrite:
+      uri: /openam
     - destination:
         host: openam
         port:
