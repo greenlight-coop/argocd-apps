@@ -19,7 +19,6 @@ spec:
     helm:
       releaseName: keycloak
       values: |
-        adminPassword: {{ .Values.adminPassword }}
         domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
