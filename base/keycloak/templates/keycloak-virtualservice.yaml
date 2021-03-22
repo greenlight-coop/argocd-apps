@@ -6,10 +6,10 @@ spec:
   gateways:
   - istio-system/istio-gateway
   hosts:
-  - openam.{{ .Values.domainName }}
+  - keycloak.{{ .Values.domainName }}
   http:
   - route:
     - destination:
-        host: openam
+        host: keycloak
         port:
           number: 8080
