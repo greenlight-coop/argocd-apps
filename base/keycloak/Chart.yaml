@@ -1,6 +1,6 @@
 apiVersion: v2
-name: openidentity
-description: Installs and configures Open Identity Platform components
+name: keycloak
+description: Installs and configures Keycloak components
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -13,12 +13,13 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/openidentity
+    path: base/keycloak
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
-      releaseName: openidentity
+      releaseName: keycloak
       values: |
+        adminPassword: {{ .Values.adminPassword }}
         domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
