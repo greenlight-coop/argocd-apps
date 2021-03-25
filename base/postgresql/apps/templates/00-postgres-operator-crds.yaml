@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-keycloak
+  name: {{ .Values.baseName }}-postgres-operator-crds
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -13,13 +13,9 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/keycloak
+    path: base/postgresql/postgres-operator-crds
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      releaseName: keycloak
-      values: |
-        domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
       prune: true
