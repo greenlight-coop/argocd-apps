@@ -16,6 +16,10 @@ spec:
     path: base/postgresql/postgresql-install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      releaseName: postgresql-install
+      values: |
+        baseName: {{ .Values.baseName }}
   syncPolicy:
     automated:
       prune: true

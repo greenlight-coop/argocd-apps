@@ -1,11 +1,10 @@
-
 apiVersion: "acid.zalan.do/v1"
 kind: postgresql
 metadata:
-  name: acid-cluster
+  name: {{ .Values.baseName }}-cluster
   namespace: default
 spec:
-  teamId: "acid"
+  teamId: {{ .Values.baseName }}
   volume:
     size: 1Gi
   numberOfInstances: 2
