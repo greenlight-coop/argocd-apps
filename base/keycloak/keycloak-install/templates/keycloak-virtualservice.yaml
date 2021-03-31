@@ -10,10 +10,11 @@ spec:
   - istio-system/istio-gateway
   hosts:
   - keycloak.{{ .Values.domainName }}
-  http:
+  tls:
   - match:
-    - uri:
-        prefix: /
+    - port: 443
+      sniHosts:
+      - keycloak.{{ .Values.domainName }}
     route:
     - destination:
         port:
