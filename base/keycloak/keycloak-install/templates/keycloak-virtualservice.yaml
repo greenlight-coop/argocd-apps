@@ -6,10 +6,10 @@ metadata:
   labels:
     app: sso
 spec:
-  gateways:
-  - istio-system/istio-gateway
   hosts:
   - keycloak.{{ .Values.domainName }}
+  gateways:
+  - istio-system/istio-gateway
   tls:
   - match:
     - port: 443
