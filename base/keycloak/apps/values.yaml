@@ -1,0 +1,8 @@
+baseName: ""
+spec:
+  destination:
+    server: ""
+  project: ""
+  source:
+    repoURL: ""
+    targetRevision: ""
