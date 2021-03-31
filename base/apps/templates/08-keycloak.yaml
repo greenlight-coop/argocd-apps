@@ -20,6 +20,7 @@ spec:
       releaseName: keycloak
       values: |
         baseName: {{ .Values.baseName }}
+        domainName: {{ .Values.domainName }}
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}
