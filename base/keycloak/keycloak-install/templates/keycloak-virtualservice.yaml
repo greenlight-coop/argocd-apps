@@ -9,7 +9,7 @@ spec:
   hosts:
   - keycloak.{{ .Values.domainName }}
   gateways:
-  - istio-system/istio-gateway
+  - keycloak-gateway
   tls:
   - match:
     - port: 443
