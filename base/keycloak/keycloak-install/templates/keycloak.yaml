@@ -3,7 +3,7 @@ kind: Keycloak
 metadata:
   name: keycloak
   labels:
-    app: sso
+    app: keycloak
 spec:
   instances: 2
   extensions:
