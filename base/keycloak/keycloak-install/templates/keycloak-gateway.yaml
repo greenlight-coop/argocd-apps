@@ -1,0 +1,17 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: keycloak-gateway
+  namespace: keycloak
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - keycloak.{{ .Values.domainName }}
+    port:
+      name: tls
+      number: 443
+      protocol: TLS
+    tls:
+      mode: PASSTHROUGH
