@@ -1,2 +1,2 @@
 resources:
-  - knative-serving-core-0.21.0.yaml
+  - knative-serving-core.yaml
