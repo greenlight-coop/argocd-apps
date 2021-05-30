@@ -1,2 +1,2 @@
 resources:
-  - knative-serving-crds-0.21.0.yaml
+  - knative-serving-crds.yaml

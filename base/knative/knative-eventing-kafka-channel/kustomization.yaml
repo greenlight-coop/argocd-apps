@@ -1,3 +1,0 @@
-resources:
-  - knative-eventing-channel-consolidated-0.21.0.yaml
-  - kafka-channel-config-map.yaml
