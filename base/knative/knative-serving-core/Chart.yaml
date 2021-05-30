@@ -1,7 +1,7 @@
 apiVersion: v2
 name: knative-serving-core
 description: >-
-  Helm chart that configures Knative Seriving core components as described in these instructions:
+  Helm chart that configures Knative Serving core components as described in these instructions:
   https://knative.dev/docs/install/any-kubernetes-cluster/
 type: application
 version: 0.1.0
