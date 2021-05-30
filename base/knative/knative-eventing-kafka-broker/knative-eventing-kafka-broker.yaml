@@ -22,7 +22,7 @@ data:
   config-kafka-broker-producer.properties: |
     key.serializer=org.apache.kafka.common.serialization.StringSerializer
     value.serializer=io.cloudevents.kafka.CloudEventSerializer
-    acks=1
+    acks=all
     buffer.memory=33554432
     # compression.type=snappy
     retries=2147483647
@@ -37,7 +37,6 @@ data:
     receive.buffer.bytes=-1
     request.timeout.ms=30000
     enable.idempotence=false
-    # interceptor.classes=""
     max.in.flight.requests.per.connection=5
     metadata.max.age.ms=300000
     # metric.reporters=""
@@ -238,7 +237,7 @@ spec:
         runAsUser: 65532
       containers:
         - name: kafka-broker-dispatcher
-          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:c1453630-7634-11eb-b5da-ba807f8f42f2
+          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:f5a68cb2-b7ed-11eb-979e-7ea9745f906d
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
@@ -399,7 +398,7 @@ spec:
               weight: 100
       containers:
         - name: kafka-broker-receiver
-          image: gcr.io/knative-releases/knative-kafka-broker-receiver:c1453630-7634-11eb-b5da-ba807f8f42f2
+          image: gcr.io/knative-releases/knative-kafka-broker-receiver:f5a68cb2-b7ed-11eb-979e-7ea9745f906d
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
