@@ -17,7 +17,7 @@ spec:
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     kustomize:
-      version: v3.9.1
+      version: v4.1.2
   syncPolicy:
     automated:
       prune: true
