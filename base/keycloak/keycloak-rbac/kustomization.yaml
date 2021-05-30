@@ -1,4 +1,4 @@
 resources:
-- role-13.0.0.yaml
-- role_binding-13.0.0.yaml
-- service_account-13.0.0.yaml
+- role.yaml
+- role_binding.yaml
+- service_account.yaml
