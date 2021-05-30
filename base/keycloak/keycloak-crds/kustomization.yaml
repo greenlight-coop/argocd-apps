@@ -1,6 +1,6 @@
 resources:
-- keycloak.org_keycloakbackups_crd-13.0.0.yaml
-- keycloak.org_keycloakclients_crd-13.0.0.yaml
-- keycloak.org_keycloakrealms_crd-13.0.0.yaml
-- keycloak.org_keycloaks_crd-13.0.0.yaml
-- keycloak.org_keycloakusers_crd-13.0.0.yaml
+- keycloak.org_keycloakbackups_crd.yaml
+- keycloak.org_keycloakclients_crd.yaml
+- keycloak.org_keycloakrealms_crd.yaml
+- keycloak.org_keycloaks_crd.yaml
+- keycloak.org_keycloakusers_crd.yaml
