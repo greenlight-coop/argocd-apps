@@ -16,6 +16,8 @@ spec:
     path: base/knative/knative-serving-core
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    kustomize:
+      version: v3.6.1
   syncPolicy:
     automated:
       prune: true
