@@ -1,2 +1,2 @@
 resources:
-  - net-istio-release-0.21.0.yaml
+  - net-istio-release.yaml
