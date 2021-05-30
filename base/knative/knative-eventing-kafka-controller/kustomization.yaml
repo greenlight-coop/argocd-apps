@@ -1,2 +1,0 @@
-resources:
-  - knative-eventing-kafka-controller.yaml
