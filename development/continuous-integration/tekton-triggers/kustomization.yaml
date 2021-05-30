@@ -1,2 +1,3 @@
 resources:
-  - tekton-triggers-release-0.12.0.yaml
+  - tekton-triggers-interceptors.yaml
+  - tekton-triggers-release.yaml
