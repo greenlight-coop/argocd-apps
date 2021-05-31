@@ -1,0 +1,51 @@
+{{- if .Values.cassandraEnabled.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.baseName }}-k8ssandra
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "8"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: default
+    server: {{ .Values.spec.destination.server }}
+  project: {{ .Values.spec.project }}
+  source:
+    repoURL: https://helm.k8ssandra.io/
+    chart: k8ssandra
+    targetRevision: 1.1.0
+    helm:
+      releaseName: k8ssandra
+      values: |
+        cassandra:
+          version: "3.11.10"
+          allowMultipleNodesPerWorker: true
+          heap:
+            size: 1G
+            newGenSize: 1G
+          resources:
+            requests:
+              cpu: 1000m
+              memory: 2Gi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          datacenters:
+          - name: dc1
+            size: 1
+            racks:
+            - name: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+{{- end }}
