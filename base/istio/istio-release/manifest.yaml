@@ -7,24 +7,24 @@ dashboards:
   pilot-dashboard: 7645
 dependencies:
   api:
-    sha: 561dc276d04d1614cb44c43ac52301b4e0a9ac6a
+    sha: c42041d3366de5456b706f661dfc007a4413e3a6
   client-go:
     goversionenabled: true
-    sha: d50a7c1b358bf83dd7c415d32eb9a250d5a07006
+    sha: e6f28edf3fce8ed90f5cdd947a61e8fdab801c9f
   envoy:
-    sha: 5d9cc9986fe4294f129bef3fb8337fa24b434c15
+    sha: 98c1c9e9a40804b93b074badad1cdf284b47d58b
   gogo-genproto:
-    sha: 432f642bc06549c48d6dd717152b8a4bc90a2c70
+    sha: 954676fb66eed52d937ab6308e12bb31bb3f49b0
   istio:
-    sha: 2dd7b6207f02cec8b42f4263ac197434f4ec9b4a
+    sha: d26cba7e341587453ffeb978f5cf6fbc32f346f8
   pkg:
-    sha: 2d0a1c8bd9e5278139e2b7f539660acf422025cb
+    sha: a723cf65d46881c415ce71a7ed6e2c6e7c90a666
   proxy:
-    sha: 8787f0f63f7ba9b7f974ef80dff3259963a61809
+    sha: 436f365a8007cd8a13a9f1321e7cce94bcc8883e
   test-infra:
-    sha: 1d3383ece05b93f10be45b4b020c692e4dc36af1
+    sha: 3d449bcc1edc70771470ae41b79c904f9ab1d24c
   tools:
-    sha: ea11b991531ff3344973b73e46ca0cc494589414
+    sha: 29e4a8ef5b7506720da5f143f962d93aa445dbc6
 docker: docker.io/istio
 ignoreVulnerability: false
-version: 1.9.1
+version: 1.10.0
