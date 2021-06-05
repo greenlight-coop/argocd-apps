@@ -37,57 +37,63 @@ spec:
     - name: generate-image-tag
       image: $(params.node-image)
       script: |
-        #!/usr/bin/env node
-        const fs = require('fs')
-        const _ = require('lodash')
-        const docker = require('$(workspaces.node-modules.path)/docker-functions')
+        #!/usr/bin/env bash
+        set -xe
+        ls -al /tekton/creds-secrets/docker-registry-credentials
+        ls -al /tekton/home/.docker
+        cat /tekton/creds-secrets/docker-registry-credentials
 
-        const dockerHubDomain = '$(params.docker-hub-domain)'
-        const dockerHubUrl = `https://${dockerHubDomain}/v2/`
+        # #!/usr/bin/env node
+        # const fs = require('fs')
+        # const _ = require('lodash')
+        # const docker = require('$(workspaces.node-modules.path)/docker-functions')
 
-        const organization = '$(params.organization)'
-        const repository = '$(params.repository)'
-        const branchName = '$(params.branch-name)'
-        const pullRequestNumber = '$(params.pull-request-number)'
-        const commitNumber = '$(params.pull-request-commit-number)'
+        # const dockerHubDomain = '$(params.docker-hub-domain)'
+        # const dockerHubUrl = `https://${dockerHubDomain}/v2/`
 
-        generateImageTag()
+        # const organization = '$(params.organization)'
+        # const repository = '$(params.repository)'
+        # const branchName = '$(params.branch-name)'
+        # const pullRequestNumber = '$(params.pull-request-number)'
+        # const commitNumber = '$(params.pull-request-commit-number)'
 
-        async function generateImageTag () {
-          try {
-            const auth = await getAuth(dockerHubUrl)
-            const config = {
-              dockerHubDomain, 
-              organization, 
-              repository, 
-              username: auth.username, 
-              password: auth.password
-            }
-            const api = docker.getHubAPI(config)
+        # generateImageTag()
 
-            let imageTag = '0.1.0'
-            const releaseTags = await api.getReleaseTags()
-            if (releaseTags.length > 0) {
-              const mostRecentTag = _.last(releaseTags)
-              const semanticVersion = docker.getSemanticVersion(mostRecentTag)
+        # async function generateImageTag () {
+        #   try {
+        #     const auth = await getAuth(dockerHubUrl)
+        #     const config = {
+        #       dockerHubDomain, 
+        #       organization, 
+        #       repository, 
+        #       username: auth.username, 
+        #       password: auth.password
+        #     }
+        #     const api = docker.getHubAPI(config)
 
-              semanticVersion.patch = semanticVersion.patch + 1
-              imageTag = semanticVersion.toString()
-            }
+        #     let imageTag = '0.1.0'
+        #     const releaseTags = await api.getReleaseTags()
+        #     if (releaseTags.length > 0) {
+        #       const mostRecentTag = _.last(releaseTags)
+        #       const semanticVersion = docker.getSemanticVersion(mostRecentTag)
 
-            if (branchName !== 'main' && branchName !== 'master') {
-              imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
-            }
+        #       semanticVersion.patch = semanticVersion.patch + 1
+        #       imageTag = semanticVersion.toString()
+        #     }
 
-            console.log('Generated image tag version: %s', imageTag)
-            fs.writeFileSync('$(results.image-tag.path)', imageTag)
-          } catch (err) {
-            console.log(err)
-            throw err
-          }
-        }
+        #     if (branchName !== 'main' && branchName !== 'master') {
+        #       imageTag = imageTag + '-' + branchName.replace('/', '-') + '-pr-' + pullRequestNumber + '-commit-' + commitNumber
+        #     }
+
+        #     console.log('Generated image tag version: %s', imageTag)
+        #     fs.writeFileSync('$(results.image-tag.path)', imageTag)
+        #   } catch (err) {
+        #     console.log(err)
+        #     throw err
+        #   }
+        # }
         
-        async function getAuth (apiUrl) {
-          const config = JSON.parse(fs.readFileSync('/tekton/home/.docker/config.json', 'utf8'))
-          return config.auths[apiUrl]
-        } 
+        # async function getAuth (apiUrl) {
+        #   const config = JSON.parse(fs.readFileSync('/tekton/home/.docker/config.json', 'utf8'))
+        #   return config.auths[apiUrl]
+        # } 
