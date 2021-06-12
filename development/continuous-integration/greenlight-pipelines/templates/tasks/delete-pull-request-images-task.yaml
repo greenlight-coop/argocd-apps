@@ -64,6 +64,6 @@ spec:
         }
         
         async function getAuth (apiUrl) {
-          const config = JSON.parse(fs.readFileSync('/tekton/home/.docker/config.json', 'utf8'))
+          const config = JSON.parse(fs.readFileSync('/tekton/creds-secrets/docker-registry-credentials/.dockerconfigjson', 'utf8'))
           return config.auths[apiUrl]
         } 
