@@ -39,6 +39,7 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -xe
+        sleep 100000
         ls -al /tekton/creds-secrets/docker-registry-credentials
         ls -al /tekton/home/.docker
         cat /tekton/creds-secrets/docker-registry-credentials
