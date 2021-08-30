@@ -1,27 +1,26 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-monitoring
+  name: {{ .Values.baseName }}-promtail
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: default
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/monitoring/apps
-    repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
+    repoURL: https://grafana.github.io/helm-charts
+    chart: promtail
+    targetRevision: 3.8.1
     helm:
-      releaseName: monitoring
+      releaseName: promtail
       values: |
-        domainName: {{ .Values.domainName }}
-        kubePrometheusStack:
-          enabled: {{ .Values.kubePrometheusStack.enabled }}
+        config:
+          lokiAddress: http://loki:3100/loki/api/v1/push
   syncPolicy:
     automated:
       prune: true

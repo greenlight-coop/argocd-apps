@@ -21,4 +21,8 @@ spec:
     - destination:
         port:
           number: 80
+        {{- if .Values.kubePrometheusStack.enabled }}
+        host: prometheus-grafana
+        {{- else }}
         host: k8ssandra-grafana
+        {{- end }}
