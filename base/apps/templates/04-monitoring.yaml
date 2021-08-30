@@ -19,6 +19,7 @@ spec:
     helm:
       releaseName: monitoring
       values: |
+        baseName: {{ .Values.baseName }}
         domainName: {{ .Values.domainName }}
         kubePrometheusStack:
           enabled: {{ .Values.kubePrometheusStack.enabled }}
