@@ -1,0 +1,4 @@
+baseName: ""
+domainName: ""
+kubePrometheusStack:
+  enabled: ""
