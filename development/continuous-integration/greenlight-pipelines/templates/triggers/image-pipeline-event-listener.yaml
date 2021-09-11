@@ -1,4 +1,4 @@
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: EventListener
 metadata:
   name: image-pipeline-event-listener
@@ -13,19 +13,28 @@ spec:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
       interceptors:
-        - github:
-            secretRef:
-              secretName: webhook-secret
-              secretKey: webhookSecretValue
-            eventTypes:
-              - pull_request
-        - cel:
-            filter: "body.action in ['opened', 'reopened', 'synchronize']"
-            overlays:
-              - key: build_type
-                expression: "'image'"
-              - key: hub_organization
-                expression: "body.organization.login.replace('-', '')"
+        - name: GitHub pull request
+          ref:
+            name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: webhook-secret
+                secretKey: webhookSecretValue
+            - name: eventTypes
+              value: ["pull_request"]
+        - name: "CEL filter: PR opened, reopened or synchronized"
+          ref:
+            name: cel
+          params:
+            - name: filter
+              value: "body.action in ['opened', 'reopened', 'synchronize']"
+            - name: overlays
+              value:
+                - key: build_type
+                  expression: "'image'"
+                - key: hub_organization
+                  expression: "body.organization.login.replace('-', '')"
     - name: close-pr-pipeline-trigger
       template:
         ref: close-pr-pipeline-trigger-template
@@ -33,19 +42,28 @@ spec:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
       interceptors:
-        - github:
-            secretRef:
-              secretName: webhook-secret
-              secretKey: webhookSecretValue
-            eventTypes:
-              - pull_request
-        - cel:
-            filter: "body.action in ['closed']"
-            overlays:
-              - key: build_type
-                expression: "'image'"
-              - key: hub_organization
-                expression: "body.organization.login.replace('-', '')"
+        - name: GitHub pull request
+          ref:
+            name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: webhook-secret
+                secretKey: webhookSecretValue
+            - name: eventTypes
+              value: ["pull_request"]
+        - name: "CEL filter: PR closed"
+          ref:
+            name: cel
+          params:
+            - name: filter
+              value: "body.action in ['closed']"
+            - name: overlays
+              value:
+                - key: build_type
+                  expression: "'image'"
+                - key: hub_organization
+                  expression: "body.organization.login.replace('-', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
@@ -53,18 +71,27 @@ spec:
         - kind: TriggerBinding
           ref: push-trigger-binding
       interceptors:
-        - github:
-            secretRef:
-              secretName: webhook-secret
-              secretKey: webhookSecretValue
-            eventTypes:
-              - push
-        - cel:
-            filter: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
-            overlays:
-              - key: build_type
-                expression: "'image'"
-              - key: branch_name
-                expression: "body.ref.split('/')[2]"
-              - key: hub_organization
-                expression: "body.organization.login.replace('-', '')"
+        - name: GitHub push
+          ref:
+            name: github
+          params:
+            - name: secretRef
+              value:
+                secretName: webhook-secret
+                secretKey: webhookSecretValue
+            - name: eventTypes
+              value: ["push"]
+        - name: "CEL filter: main branch pushed"
+          ref:
+            name: cel
+          params:
+            - name: filter
+              value: "body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master'"
+            - name: overlays
+              value:
+                - key: build_type
+                  expression: "'image'"
+                - key: branch_name
+                  expression: "body.ref.split('/')[2]"
+                - key: hub_organization
+                  expression: "body.organization.login.replace('-', '')"
