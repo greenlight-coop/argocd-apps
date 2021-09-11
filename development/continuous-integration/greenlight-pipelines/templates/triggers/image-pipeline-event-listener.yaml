@@ -32,7 +32,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'image'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
     - name: close-pr-pipeline-trigger
@@ -61,7 +61,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'image'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
     - name: main-pipeline-trigger
@@ -90,7 +90,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'image'"
                 - key: branch_name
                   expression: "body.ref.split('/')[2]"
                 - key: hub_organization

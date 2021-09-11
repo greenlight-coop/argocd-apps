@@ -32,7 +32,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'test'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
     - name: test-stage-close-pr-pipeline-trigger
@@ -61,7 +61,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'test'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
 

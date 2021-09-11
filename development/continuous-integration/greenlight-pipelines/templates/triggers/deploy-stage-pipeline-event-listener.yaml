@@ -32,7 +32,7 @@ spec:
             - name: overlays
               value:
                 - key: build_type
-                  expression: "'service'"
+                  expression: "'deployment'"
                 - key: branch_name
                   expression: "body.ref.split('/')[2]"
                 - key: hub_organization
