@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: https://kiali.org/helm-charts
     chart: kiali-operator
-    targetRevision: 1.40.0
+    targetRevision: 1.37.0
     helm:
       releaseName: istio-kiali-operator
   syncPolicy:
