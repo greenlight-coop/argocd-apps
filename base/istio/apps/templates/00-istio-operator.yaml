@@ -1,3 +1,4 @@
+# Installs IstioOperator from Istio 1.10.4 release.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

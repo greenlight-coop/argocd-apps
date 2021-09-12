@@ -5,12 +5,12 @@
 - name: {{.Prefix}}sidecar-injector.istio.io
   clientConfig:
     {{- if .Values.istiodRemote.injectionURL }}
-    url: "{{ .Values.istiodRemote.injectionURL }}"
+    url: {{ .Values.istiodRemote.injectionURL }}
     {{- else }}
     service:
       name: istiod{{- if not (eq .Values.revision "") }}-{{ .Values.revision }}{{- end }}
       namespace: {{ .Release.Namespace }}
-      path: "{{ .Values.istiodRemote.injectionPath }}"
+      path: "/inject"
     {{- end }}
     caBundle: ""
   sideEffects: None

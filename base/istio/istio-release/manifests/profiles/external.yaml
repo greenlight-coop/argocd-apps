@@ -14,9 +14,9 @@ spec:
     istiodRemote:
       enabled: true
   values:
-    global:
-      externalIstiod: true
-      omitSidecarInjectorConfigMap: true
-      configCluster: false
+    telemetry:
+      enabled: false
     pilot:
       configMap: false
+    global:
+      omitSidecarInjectorConfigMap: true
