@@ -1,0 +1,3 @@
+# Knative net-istio release v0.25.1
+resources:
+  - net-istio-release.yaml

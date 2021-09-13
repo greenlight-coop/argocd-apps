@@ -1,8 +1,0 @@
-apiVersion: v2
-name: knative-istio
-description: >-
-  Helm chart that configures Knative Seriving net-istio components as described in these instructions:
-  https://knative.dev/docs/install/any-kubernetes-cluster/
-type: application
-version: 0.1.0
-appVersion: 0.23.0
