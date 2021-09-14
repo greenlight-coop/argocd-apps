@@ -15,9 +15,7 @@ spec:
   source:
     path: base/knative/knative-config
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      releaseName: knative-config    
+    targetRevision: {{ .Values.spec.source.targetRevision }} 
   syncPolicy:
     automated:
       prune: true
