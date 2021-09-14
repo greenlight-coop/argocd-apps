@@ -1,4 +1,0 @@
-# Tekton Triggers release v0.16.0
-resources:
-  - tekton-triggers-interceptors.yaml
-  - tekton-triggers-release.yaml
