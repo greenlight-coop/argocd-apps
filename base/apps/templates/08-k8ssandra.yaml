@@ -21,7 +21,7 @@ spec:
       releaseName: k8ssandra
       values: |
         cassandra:
-          version: "3.11.10"
+          version: "4.0.0"
           allowMultipleNodesPerWorker: true
           heap:
             size: 1G

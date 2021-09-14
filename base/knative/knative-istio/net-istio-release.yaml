@@ -160,8 +160,8 @@ data:
 
     # A gateway and Istio service to serve external traffic.
     # The configuration format should be
-    # `gateway.{{ "{{" }}gateway_namespace{{ "}}" }}.{{ "{{" }}gateway_name{{ "}}" }}: "{{ "{{" }}ingress_name{{ "}}" }}.{{ "{{" }}ingress_namespace{{ "}}" }}.svc.cluster.local"`.
-    # The {{ "{{" }}gateway_namespace{{ "}}" }} is optional; when it is omitted, the system will search for
+    # `gateway.{{gateway_namespace}}.{{gateway_name}}: "{{ingress_name}}.{{ingress_namespace}}.svc.cluster.local"`.
+    # The {{gateway_namespace}} is optional; when it is omitted, the system will search for
     # the gateway in the serving system namespace `knative-serving`
     gateway.knative-serving.knative-ingress-gateway: "istio-ingressgateway.istio-system.svc.cluster.local"
 
@@ -173,10 +173,10 @@ data:
     # sidecar injection (like Knative's istio-ci-no-mesh.yaml).  Since every pod
     # is outside of the service mesh in that case, a cluster-local  service
     # will need to be exposed to a cluster-local gateway to be accessible.
-    # The configuration format should be `local-gateway.{{ "{{" }}local_gateway_namespace{{ "}}" }}.
-    # {{ "{{" }}local_gateway_name{{ "}}" }}: "{{ "{{" }}cluster_local_gateway_name{{ "}}" }}.
-    # {{ "{{" }}cluster_local_gateway_namespace{{ "}}" }}.svc.cluster.local"`. The
-    # {{ "{{" }}local_gateway_namespace{{ "}}" }} is optional; when it is omitted, the system
+    # The configuration format should be `local-gateway.{{local_gateway_namespace}}.
+    # {{local_gateway_name}}: "{{cluster_local_gateway_name}}.
+    # {{cluster_local_gateway_namespace}}.svc.cluster.local"`. The
+    # {{local_gateway_namespace}} is optional; when it is omitted, the system
     # will search for the local gateway in the serving system namespace
     # `knative-serving`
     local-gateway.knative-serving.knative-local-gateway: "knative-local-gateway.istio-system.svc.cluster.local"

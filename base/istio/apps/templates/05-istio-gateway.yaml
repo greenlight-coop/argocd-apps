@@ -15,9 +15,7 @@ spec:
   source:
     path: base/istio/istio-gateway
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      releaseName: istio-gateway    
+    targetRevision: {{ .Values.spec.source.targetRevision }}  
   syncPolicy:
     automated:
       prune: true
