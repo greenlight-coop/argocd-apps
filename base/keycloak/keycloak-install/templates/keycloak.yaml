@@ -7,7 +7,7 @@ metadata:
 spec:
   instances: 2
   extensions:
-    - https://github.com/aerogear/keycloak-metrics-spi/releases/download/1.0.4/keycloak-metrics-spi-1.0.4.jar
+    - https://github.com/aerogear/keycloak-metrics-spi/releases/download/2.5.1/keycloak-metrics-spi-2.5.1.jar
   externalAccess:
     enabled: false
     host: keycloak.{{ .Values.domainName }}

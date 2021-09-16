@@ -1,3 +1,4 @@
+# Keycloak Operator 15.0.2
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
