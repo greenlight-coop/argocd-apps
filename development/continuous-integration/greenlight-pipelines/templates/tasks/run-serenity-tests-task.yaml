@@ -14,7 +14,7 @@ spec:
         If not provided, the source workspace is expected to contain a Node module with the script 'test-features:ci'.
 
         Note: if the default value is updated, the reference in the run-integration-tests step must be updated as well.
-      default: greenlightcoop/serenity-js-runner:0.1.4
+      default: greenlightcoop/serenity-js-runner:0.1.10
     - name: base-url
       description: The base URL to pass to the tests as environment variable BASE_URL
       type: string
@@ -96,7 +96,7 @@ spec:
           value: $(workspaces.source.path)/site/$(params.results-identifier)
       script: |
         #!/usr/bin/env bash
-        if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.4" ]
+        if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.10" ]
         then
           npm install
           npm run test-features:ci
