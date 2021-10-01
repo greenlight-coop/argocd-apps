@@ -39,3 +39,6 @@ spec:
               targetPort: 8443
               nodePort: {{ .Values.httpsNodePort }}
           {{- end }}
+
+  meshConfig:
+    accessLogFile: /dev/stdout
