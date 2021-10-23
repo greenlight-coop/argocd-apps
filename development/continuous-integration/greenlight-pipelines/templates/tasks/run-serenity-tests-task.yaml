@@ -64,7 +64,7 @@ spec:
           source:
             path: expose-pipeline-workspace-content
             repoURL: git@github.com:greenlight-coop/greenlight-helm-charts.git
-            targetRevision: {{ .Values.spec.source.targetRevision }}
+            targetRevision: {{ .Values.targetRevision }}
             helm:
               values: |
                 identifier: $(params.results-identifier)
