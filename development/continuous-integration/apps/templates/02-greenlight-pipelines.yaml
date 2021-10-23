@@ -19,7 +19,7 @@ spec:
     helm:
       values: |
         domainName: {{ .Values.domainName }}
-        targetRevision: {{ .Values.spec.source.targetRevision }}
+        targetRevision: {{ .Values.targetRevision }}
   syncPolicy:
     automated:
       prune: true
