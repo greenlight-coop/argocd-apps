@@ -14,17 +14,32 @@ spec:
         If not provided, the source workspace is expected to contain a Node module with the script 'test-features:ci'.
 
         Note: if the default value is updated, the reference in the run-integration-tests step must be updated as well.
+      type: string
       default: greenlightcoop/serenity-js-runner:0.1.10
     - name: base-url
-      description: The base URL to pass to the tests as environment variable BASE_URL
+      description: The base URL to pass to the tests as the environment variable BASE_URL
       type: string
+    - name: keycloak-base-url
+      description: >-
+        The base URL of the Keycloak server used for authentication, passed to the tests as the environment 
+        variable KEYCLOAK_BASE_URL
+      type: string
+      default: unused
+    - name: keycloak-realm
+      description: >-
+        The name of the Keycloak realm used for authentication, passed to the tests as the environment 
+        variable KEYCLOAK_REALM
+      type: string
+      default: unused
     - name: results-identifier
       description: >-
         Unique identifier for the test results; used to generate the results report URL and for later deletion of the resources
         that provide the report.
+      type: string
     - name: kubectl-image
       default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
       description: Kubectl wrapper image
+      type: string
   workspaces:
     - name: source
   results:
@@ -92,6 +107,10 @@ spec:
       env:
         - name: BASE_URL
           value: $(params.base-url)
+        - name: KEYCLOAK_BASE_URL
+          value: $(params.keycloak-base-url)
+        - name: KEYCLOAK_REALM
+          value: $(params.keycloak-realm)
         - name: BDD_REPORT_DIR
           value: $(workspaces.source.path)/site/$(params.results-identifier)
       script: |
