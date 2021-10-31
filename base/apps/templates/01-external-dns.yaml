@@ -21,6 +21,7 @@ spec:
       releaseName: external-dns
       values: |
         domainName: {{ .Values.domainName }}
+        provider: {{ .Values.provider }}
         googleProjectId: {{ .Values.googleProjectId }}
   syncPolicy:
     automated:

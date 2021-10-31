@@ -21,6 +21,6 @@ spec:
         - --source=ingress
         - --source=service
         - --domain-filter={{ .Values.domainName }}
-        - --provider=google
+        - --provider={{ .Values.provider }}
         - --registry=txt
         - --txt-owner-id=greenlight-external-dns-identifier
