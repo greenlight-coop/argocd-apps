@@ -24,3 +24,11 @@ spec:
         - --provider={{ .Values.provider }}
         - --registry=txt
         - --txt-owner-id=greenlight-external-dns-identifier
+{{- if eq .Values.provider "linode" }}
+        env:
+          - name: LINODE_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: linode-token
+                key: token
+{{- end }}
