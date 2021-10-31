@@ -1,11 +1,10 @@
-{{- if .Values.certManager.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-cert-manager
+  name: {{ .Values.baseName }}-cert-manager-install
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: "0"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -14,13 +13,21 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/cert-manager/apps
-    repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: 1.6.0
     helm:
       releaseName: cert-manager
       values: |
-        googleProjectId: {{ .Values.googleProjectId }}
+        installCRDs:  true
+        serviceAccount:
+          annotations:
+              iam.gke.io/gcp-service-account: dns-admin@{{ .Values.googleProjectId }}.iam.gserviceaccount.com
+{{- if eq .Values.provider "google" }}
+        extraArgs:
+        - --cluster-issuer-ambient-credentials=true
+        - --issuer-ambient-credentials=true
+{{- end }}
   syncPolicy:
     automated:
       prune: true
@@ -33,4 +40,3 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-{{- end }}

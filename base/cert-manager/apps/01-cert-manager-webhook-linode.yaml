@@ -1,11 +1,10 @@
-{{- if .Values.certManager.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-cert-manager
+  name: {{ .Values.baseName }}-cert-manager-webhook-linode
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -14,13 +13,11 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/cert-manager/apps
-    repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
+    path: releases/download/v0.1.0/cert-manager-webhook-linode-v0.1.0.tgz
+    repoURL: https://github.com/slicen/cert-manager-webhook-linode/
+    targetRevision: 0.1.0
     helm:
-      releaseName: cert-manager
-      values: |
-        googleProjectId: {{ .Values.googleProjectId }}
+      releaseName: cert-manager-webhook-linode
   syncPolicy:
     automated:
       prune: true
@@ -33,4 +30,3 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-{{- end }}
