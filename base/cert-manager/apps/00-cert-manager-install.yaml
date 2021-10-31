@@ -20,10 +20,10 @@ spec:
       releaseName: cert-manager
       values: |
         installCRDs:  true
+{{- if eq .Values.provider "google" }}
         serviceAccount:
           annotations:
               iam.gke.io/gcp-service-account: dns-admin@{{ .Values.googleProjectId }}.iam.gserviceaccount.com
-{{- if eq .Values.provider "google" }}
         extraArgs:
         - --cluster-issuer-ambient-credentials=true
         - --issuer-ambient-credentials=true

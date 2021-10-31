@@ -1,6 +1,6 @@
 apiVersion: v2
 name: cert-manager
-description: Installs cert-manager and configures the associated ClusterIssuer
+description: Installs cert-manager and configures additional resources if necessary
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -22,7 +22,3 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 appVersion: 0.1.0
 
-dependencies:
-- name: cert-manager
-  version: 1.5.3
-  repository: https://charts.jetstack.io

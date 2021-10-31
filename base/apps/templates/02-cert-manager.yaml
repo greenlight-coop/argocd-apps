@@ -21,6 +21,7 @@ spec:
       releaseName: cert-manager
       values: |
         googleProjectId: {{ .Values.googleProjectId }}
+        provider: {{ .Values.provider }}
   syncPolicy:
     automated:
       prune: true

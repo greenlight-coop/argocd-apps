@@ -25,9 +25,10 @@ spec:
           enabled: {{ .Values.certManager.enabled }}
         domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
-        jwtPolicy: {{ .Values.istio.jwtPolicy }}
         httpNodePort: {{ .Values.istio.httpNodePort }}
         httpsNodePort: {{ .Values.istio.httpsNodePort }}
+        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        provider: {{ .Values.provider }}
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}
