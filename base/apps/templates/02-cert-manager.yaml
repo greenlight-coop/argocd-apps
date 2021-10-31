@@ -22,6 +22,13 @@ spec:
       values: |
         googleProjectId: {{ .Values.googleProjectId }}
         provider: {{ .Values.provider }}
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          project: {{ .Values.spec.project }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
