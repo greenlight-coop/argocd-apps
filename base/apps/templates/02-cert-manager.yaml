@@ -20,6 +20,7 @@ spec:
     helm:
       releaseName: cert-manager
       values: |
+        baseName: {{ .Values.baseName }}
         googleProjectId: {{ .Values.googleProjectId }}
         provider: {{ .Values.provider }}
         spec:
