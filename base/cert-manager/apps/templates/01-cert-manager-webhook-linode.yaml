@@ -18,6 +18,9 @@ spec:
     targetRevision: v0.1.0
     helm:
       releaseName: cert-manager-webhook-linode
+      values: |
+        api:
+          groupName: greenlightcoop.dev
   syncPolicy:
     automated:
       prune: true
