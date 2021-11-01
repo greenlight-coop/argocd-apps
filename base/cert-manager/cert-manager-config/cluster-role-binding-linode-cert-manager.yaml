@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cert-manager-webhook-linode:domain-solver
+  name: cert-manager-webhook-linode-cert-manager:domain-solver
   labels:
     app: cert-manager-webhook-linode
     release: cert-manager-webhook-linode
