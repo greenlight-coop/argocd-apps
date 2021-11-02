@@ -13,9 +13,9 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: deploy/cert-manager-webhook-linode
-    repoURL: https://github.com/slicen/cert-manager-webhook-linode
-    targetRevision: v0.1.0
+    path: base/cert-manager/cert-manager-webhook-linode
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }} 
     helm:
       releaseName: cert-manager-webhook-linode
       values: |
