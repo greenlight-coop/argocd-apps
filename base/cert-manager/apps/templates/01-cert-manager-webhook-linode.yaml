@@ -21,6 +21,8 @@ spec:
       values: |
         api:
           groupName: greenlightcoop.dev
+        deployment:
+          secretName: linode-token
   syncPolicy:
     automated:
       prune: true
