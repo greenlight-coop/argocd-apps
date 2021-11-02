@@ -18,7 +18,7 @@ spec:
   {{- else if eq .Values.provider "linode" }}
         webhook:
           solverName: linode
-          groupName: acme.slicen.me
+          groupName: greenlightcoop.dev
           config:
             apiKeySecretRef:
               name: linode-token
