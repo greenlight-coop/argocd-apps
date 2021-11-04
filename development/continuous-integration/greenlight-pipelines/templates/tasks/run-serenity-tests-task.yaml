@@ -6,7 +6,7 @@ metadata:
 spec:
   description: >-
     This Task runs Serenity/JS integration tests. Test results are written into the source workspace at the subdirectory
-    './site' and exposed at the URL https://${results-identifier}.apps.greenlightcoop.dev
+    './site' and exposed at the URL https://${results-identifier}.app.greenlightcoop.dev
   params:
     - name: test-image
       description: >-
