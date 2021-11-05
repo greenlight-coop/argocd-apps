@@ -14,16 +14,22 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/cert-manager
+    path: base/cert-manager/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       releaseName: cert-manager
       values: |
-        cert-manager:
-          serviceAccount:
-            annotations:
-              iam.gke.io/gcp-service-account: dns-admin@{{ .Values.googleProjectId }}.iam.gserviceaccount.com
+        baseName: {{ .Values.baseName }}
+        googleProjectId: {{ .Values.googleProjectId }}
+        provider: {{ .Values.provider }}
+        spec:
+          destination:
+            server: {{ .Values.spec.destination.server }}
+          project: {{ .Values.spec.project }}
+          source:
+            repoURL: {{ .Values.spec.source.repoURL }}
+            targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true

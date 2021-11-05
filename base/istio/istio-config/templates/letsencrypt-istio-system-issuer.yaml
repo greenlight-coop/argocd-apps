@@ -12,6 +12,16 @@ spec:
       name: letsencrypt-issuer-tls-key
     solvers:
     - dns01:
+  {{- if eq .Values.provider "google" }}
         cloudDNS:
           project: {{ .Values.googleProjectId }}
+  {{- else if eq .Values.provider "linode" }}
+        webhook:
+          solverName: linode
+          groupName: greenlightcoop.dev
+          config:
+            apiKeySecretRef:
+              name: linode-token
+              key: token
+  {{- end }}
 {{- end }}

@@ -1,28 +1,22 @@
-{{- if .Values.externalDns.enabled }}
+{{- if eq .Values.provider "linode" }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-external-dns
+  name: {{ .Values.baseName }}-cert-manager-webhook-linode-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: cert-manager
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/external-dns
+    path: base/cert-manager/cert-manager-webhook-linode-config
     repoURL: {{ .Values.spec.source.repoURL }}
-    targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      releaseName: external-dns
-      values: |
-        domainName: {{ .Values.domainName }}
-        provider: {{ .Values.provider }}
-        googleProjectId: {{ .Values.googleProjectId }}
+    targetRevision: {{ .Values.spec.source.targetRevision }} 
   syncPolicy:
     automated:
       prune: true

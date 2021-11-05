@@ -27,6 +27,7 @@ spec:
         httpNodePort: {{ .Values.httpNodePort }}
         httpsNodePort: {{ .Values.httpsNodePort }}
         jwtPolicy: {{ .Values.jwtPolicy }}
+        provider: {{ .Values.provider }}
         useStagingCertificates: {{ .Values.useStagingCertificates }}
   syncPolicy:
     automated:

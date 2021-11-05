@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.baseName }}-cert-manager-install
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cert-manager
+    server: {{ .Values.spec.destination.server }}
+  project: {{ .Values.spec.project }}
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    targetRevision: 1.5.4
+    helm:
+      releaseName: cert-manager
+      values: |
+        installCRDs:  true
+{{- if eq .Values.provider "google" }}
+        serviceAccount:
+          annotations:
+              iam.gke.io/gcp-service-account: dns-admin@{{ .Values.googleProjectId }}.iam.gserviceaccount.com
+        extraArgs:
+        - --cluster-issuer-ambient-credentials=true
+        - --issuer-ambient-credentials=true
+{{- end }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

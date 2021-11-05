@@ -2,6 +2,7 @@ adminEmail: ""
 certManager:
   enabled: ""
 domainName: ""
+provider: ""
 googleProjectId: ""
 istio:
   httpNodePort: ""
