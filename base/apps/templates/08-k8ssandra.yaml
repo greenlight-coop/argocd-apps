@@ -23,7 +23,10 @@ spec:
         cassandra:
           version: "4.0.0"
           allowMultipleNodesPerWorker: true
-  {{- if eq .Values.provider "linode" }}
+  {{- if eq .Values.provider "digitalocean" }}
+          cassandraLibDirVolume:
+            storageClass: do-block-storage-waitforfirstconsumer
+  {{- else if eq .Values.provider "linode" }}
           cassandraLibDirVolume:
             storageClass: linode-block-storage-retain-waitforfirstconsumer
   {{- end }}
@@ -42,6 +45,8 @@ spec:
             size: 1
             racks:
             - name: default
+        stargate:
+          enabled: false
   syncPolicy:
     automated:
       prune: true
