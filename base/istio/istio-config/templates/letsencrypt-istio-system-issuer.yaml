@@ -23,5 +23,10 @@ spec:
             apiKeySecretRef:
               name: linode-token
               key: token
+  {{- else if eq .Values.provider "digitalocean" }}
+        digitalocean:
+          tokenSecretRef:
+            name: digitalocean-token
+            key: token
   {{- end }}
 {{- end }}
