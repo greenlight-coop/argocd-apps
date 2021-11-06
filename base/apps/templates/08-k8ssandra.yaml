@@ -45,8 +45,8 @@ spec:
             size: 1
             racks:
             - name: default
-          stargate:
-            enabled: false
+        stargate:
+          enabled: false
   syncPolicy:
     automated:
       prune: true
