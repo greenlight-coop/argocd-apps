@@ -43,7 +43,7 @@ spec:
                   - ReadWriteOnce
                 resources:
                   requests:
-                    storage: 1Ki
+                    storage: 1Gi
           - name: node-modules
             configMap:
               name: node-modules
