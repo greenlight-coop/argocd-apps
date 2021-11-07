@@ -1,26 +1,34 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-keycloak
+  name: {{ .Values.baseName }}-istio
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "4"
   finalizers:
-    - resources-finalizer.argocd.argoproj.io
+  - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: default
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
-    path: base/keycloak/apps
+    path: base/istio/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
-      releaseName: keycloak
+      releaseName: istio
       values: |
+        adminEmail: {{ .Values.adminEmail }}
         baseName: {{ .Values.baseName }}
+        certManager:
+          enabled: {{ .Values.certManager.enabled }}
         domainName: {{ .Values.domainName }}
+        googleProjectId: {{ .Values.googleProjectId }}
+        httpNodePort: {{ .Values.istio.httpNodePort }}
+        httpsNodePort: {{ .Values.istio.httpsNodePort }}
+        jwtPolicy: {{ .Values.istio.jwtPolicy }}
+        provider: {{ .Values.provider }}
         spec:
           destination:
             server: {{ .Values.spec.destination.server }}
@@ -28,6 +36,7 @@ spec:
           source:
             repoURL: {{ .Values.spec.source.repoURL }}
             targetRevision: {{ .Values.spec.source.targetRevision }}
+        useStagingCertificates: {{ .Values.useStagingCertificates }}
   syncPolicy:
     automated:
       prune: true
