@@ -1,29 +1,28 @@
+# rook-nfs version 1.7.3
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: greenlight-pipelines
+  name: {{ .Values.baseName }}-rook-nfs-server
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "3"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: greenlight-pipelines
-    server: https://kubernetes.default.svc
+    namespace: rook-nfs
+    server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: development/continuous-integration/greenlight-pipelines
+    path: base/rook-nfs/rook-nfs-server
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
-    helm:
-      values: |
-        domainName: {{ .Values.domainName }}
-        targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
     automated:
       prune: true
-      selfHeal: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true 
     retry:
       limit: 5
       backoff:

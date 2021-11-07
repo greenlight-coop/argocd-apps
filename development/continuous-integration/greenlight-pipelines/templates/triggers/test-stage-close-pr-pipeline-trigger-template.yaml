@@ -21,6 +21,9 @@ spec:
       spec:
         pipelineRef:
           name: test-stage-close-pr-pipeline
+        podTemplate:
+          securityContext:
+            runAsUser: 0
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
@@ -40,6 +43,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+                storageClassName: rook-nfs-share1
           - name: status-workspace
             volumeClaimTemplate:
               spec:
@@ -47,7 +51,8 @@ spec:
                   - ReadWriteOnce
                 resources:
                   requests:
-                    storage: 1Gi
+                    storage: 1Ki
+                storageClassName: rook-nfs-share1
           - name: kubeconfig-dir
             emptyDir: {}
           - name: manifest-dir
