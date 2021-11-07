@@ -39,6 +39,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+                storageClassName: rook-nfs-share1
           - name: status-workspace
             volumeClaimTemplate:
               spec:
