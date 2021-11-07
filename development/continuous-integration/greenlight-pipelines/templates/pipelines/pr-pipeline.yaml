@@ -165,9 +165,6 @@ spec:
           values: ["service"]
       taskRef:
         name: set-outcome-status
-      podTemplate:
-        securityContext:
-          runAsUser: 0
       runAfter:
         - set-default-outcome
         - run-integration-tests
@@ -197,6 +194,9 @@ spec:
     - name: publish-outcome-status-to-github
       taskRef:
         name: github-set-status-from-outcome
+      podTemplate:
+        securityContext:
+          runAsUser: 0
       workspaces:
         - name: status-workspace
           workspace: status-workspace
