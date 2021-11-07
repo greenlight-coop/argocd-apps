@@ -59,6 +59,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
+                storageClassName: rook-nfs-share1
           - name: node-modules
             configMap:
               name: node-modules

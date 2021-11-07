@@ -51,6 +51,7 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
+                storageClassName: rook-nfs-share1
           - name: kubeconfig-dir
             emptyDir: {}
           - name: manifest-dir
