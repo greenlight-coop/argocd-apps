@@ -25,4 +25,4 @@ spec:
 
         const fs = require('fs')
         fs.writeFileSync('$(workspaces.status-workspace.path)/status', '$(params.status)')
-        await doSleep()
+        doSleep()
