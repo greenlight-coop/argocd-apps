@@ -19,6 +19,9 @@ spec:
       spec:
         pipelineRef:
           name: deploy-stage-pipeline
+        podTemplate:
+          securityContext:
+            runAsUser: 0
         serviceAccountName: pipeline-sa
         params:
           - name: project-name
@@ -43,7 +46,7 @@ spec:
                   - ReadWriteOnce
                 resources:
                   requests:
-                    storage: 1Gi
+                    storage: 1Ki
           - name: node-modules
             configMap:
               name: node-modules

@@ -97,9 +97,6 @@ spec:
         import json
         import os
         import http.client
-        import time #DELETE
-
-        time.sleep(600) #DELETE
 
         with open('$(workspaces.status-workspace.path)/status', 'r') as file:
             status = file.read().replace('\n', '')
