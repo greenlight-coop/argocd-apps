@@ -20,7 +20,7 @@ spec:
       script: |
         #!/usr/bin/env node
         async function doSleep() {
-          await new Promise(resolve => setTimeout(resolve, 5000));
+          await new Promise(resolve => setTimeout(resolve, 600000));
         }
 
         const fs = require('fs')
