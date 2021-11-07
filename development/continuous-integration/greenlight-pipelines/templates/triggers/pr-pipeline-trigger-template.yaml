@@ -31,6 +31,9 @@ spec:
       spec:
         pipelineRef:
           name: pr-pipeline
+        podTemplate:
+          securityContext:
+            runAsUser: 0
         serviceAccountName: pipeline-sa
         params:
           - name: project-name

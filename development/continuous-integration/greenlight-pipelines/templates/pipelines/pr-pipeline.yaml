@@ -194,11 +194,6 @@ spec:
     - name: publish-outcome-status-to-github
       taskRef:
         name: github-set-status-from-outcome
-      podTemplate:
-        securityContext:
-          runAsUser: 0
-          runAsGroup: 1000
-          fsGroup: 1000
       workspaces:
         - name: status-workspace
           workspace: status-workspace
