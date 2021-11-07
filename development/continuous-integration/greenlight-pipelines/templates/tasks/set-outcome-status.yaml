@@ -19,5 +19,10 @@ spec:
       image: node:14.15
       script: |
         #!/usr/bin/env node
+        async function doSleep() {
+          await new Promise(resolve => setTimeout(resolve, 5000));
+        }
+
         const fs = require('fs')
         fs.writeFileSync('$(workspaces.status-workspace.path)/status', '$(params.status)')
+        await doSleep()
