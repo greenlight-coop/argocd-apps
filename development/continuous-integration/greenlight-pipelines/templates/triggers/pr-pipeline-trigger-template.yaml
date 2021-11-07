@@ -56,15 +56,16 @@ spec:
             volumeClaimTemplate:
               spec:
                 accessModes:
-                  - ReadWriteOnce
+                  - ReadWriteMany
                 resources:
                   requests:
                     storage: 1Gi
+                storageClassName: rook-nfs-share1
           - name: status-workspace
             volumeClaimTemplate:
               spec:
                 accessModes:
-                  - ReadWriteOnce
+                  - ReadWriteMany
                 resources:
                   requests:
                     storage: 1Ki
