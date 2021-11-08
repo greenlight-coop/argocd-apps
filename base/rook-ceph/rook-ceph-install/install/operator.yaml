@@ -2,5 +2,6 @@ kind: ConfigMap
 apiVersion: v1
 metadata:
   name: rook-ceph-operator-config
+  namespace: rook-ceph
 data:
   CSI_RBD_GRPC_METRICS_PORT: "9093"
