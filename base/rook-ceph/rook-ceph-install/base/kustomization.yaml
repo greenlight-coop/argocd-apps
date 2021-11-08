@@ -4,3 +4,4 @@ resources:
   - common.yaml
   - filesystem.yaml
   - operator.yaml
+  - storageclass.yaml
