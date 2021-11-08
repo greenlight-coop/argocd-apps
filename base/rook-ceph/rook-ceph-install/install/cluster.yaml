@@ -4,22 +4,22 @@ metadata:
   name: rook-ceph
   namespace: rook-ceph # namespace:cluster
 spec:
-  placement:
-    all:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: doks.digitalocean.com/node-pool
-              operator: In
-              values:
-              - base-pool
-      podAffinity:
-      podAntiAffinity:
-      topologySpreadConstraints:
-      tolerations:
-      - key: base-pool
-        operator: Exists
+  # placement:
+  #   all:
+  #     nodeAffinity:
+  #       requiredDuringSchedulingIgnoredDuringExecution:
+  #         nodeSelectorTerms:
+  #         - matchExpressions:
+  #           - key: doks.digitalocean.com/node-pool
+  #             operator: In
+  #             values:
+  #             - base-pool
+  #     podAffinity:
+  #     podAntiAffinity:
+  #     topologySpreadConstraints:
+  #     tolerations:
+  #     - key: base-pool
+  #       operator: Exists
   storage:
     config:
       databaseSizeMB: "1024"
