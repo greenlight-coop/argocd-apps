@@ -23,7 +23,7 @@ spec:
         cassandra:
           version: "4.0.0"
           allowMultipleNodesPerWorker: true
-  {{- if Values.rook.enabled }}
+  {{- if .Values.rook.enabled }}
           cassandraLibDirVolume:
             storageClass: rook-ceph-block-waitforfirstconsumer
   {{- else if eq .Values.provider "linode" }}
