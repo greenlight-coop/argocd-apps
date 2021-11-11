@@ -14,7 +14,7 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/rook-ceph/rook-ceph-install/install
+    path: base/rook-ceph/rook-ceph-install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:

@@ -1,9 +1,0 @@
-baseName: ""
-provider: ""
-spec:
-  destination:
-    server: ""
-  project: ""
-  source:
-    repoURL: ""
-    targetRevision: ""

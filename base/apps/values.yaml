@@ -2,6 +2,8 @@ adminEmail: ""
 certManager:
   enabled: ""
 domainName: ""
+externalDns:
+  enabled: ""
 provider: ""
 googleProjectId: ""
 istio:
@@ -9,6 +11,8 @@ istio:
   httpsNodePort: ""
   jwtPolicy: ""
 metricsServer:
+  enabled: ""
+rook:
   enabled: ""
 spec:
   destination:
