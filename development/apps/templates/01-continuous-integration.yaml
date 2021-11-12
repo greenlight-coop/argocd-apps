@@ -19,6 +19,8 @@ spec:
     helm:
       values: |
         domainName: {{ .Values.domainName }}
+        rook:
+          enabled: {{ .Values.rook.enabled }}
         spec:
           project: {{ .Values.spec.project }}
           source:

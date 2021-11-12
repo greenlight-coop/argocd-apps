@@ -63,6 +63,9 @@ spec:
                 resources:
                   requests:
                     storage: 1Gi
+{{- if .Values.rook.enabled }}
+                storageClassName: rook-ceph-block
+{{- end }}
           - name: status-workspace
             volumeClaimTemplate:
               spec:
@@ -71,6 +74,9 @@ spec:
                 resources:
                   requests:
                     storage: 1Ki
+{{- if .Values.rook.enabled }}
+                storageClassName: rook-ceph-block
+{{- end }}
           - name: node-modules
             configMap:
               name: node-modules

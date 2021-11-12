@@ -1,4 +1,6 @@
 domainName: ""
+rook:
+  enabled: ""
 spec:
   source:
     repoURL: ""

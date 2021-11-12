@@ -1,2 +1,4 @@
 domainName: ""
+rook:
+  enabled: ""
 targetRevision: ""
