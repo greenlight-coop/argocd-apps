@@ -1,2 +1,4 @@
 baseName: ""
 domainName: ""
+rook:
+  enabled: ""
