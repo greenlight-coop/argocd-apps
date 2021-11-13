@@ -23,12 +23,9 @@ spec:
         cassandra:
           version: "4.0.0"
           allowMultipleNodesPerWorker: true
-  {{- if eq .Values.provider "digitalocean" }}
+  {{- if .Values.rook.enabled }}
           cassandraLibDirVolume:
-            storageClass: do-block-storage-waitforfirstconsumer
-  {{- else if eq .Values.provider "linode" }}
-          cassandraLibDirVolume:
-            storageClass: linode-block-storage-retain-waitforfirstconsumer
+            storageClass: rook-ceph-block-waitforfirstconsumer
   {{- end }}
           heap:
             size: 1G

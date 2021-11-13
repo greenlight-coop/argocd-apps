@@ -1,8 +1,8 @@
-{{- if .Values.certManager.enabled }}
+{{- if .Values.rook.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-rook-nfs
+  name: {{ .Values.baseName }}-rook-ceph
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "3"
@@ -10,17 +10,18 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: rook-nfs
+    namespace: rook-ceph
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/rook-nfs/apps
+    path: base/rook-ceph/apps
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
-      releaseName: rook-nfs
+      releaseName: rook-ceph
       values: |
         baseName: {{ .Values.baseName }}
+        domainName: {{ .Values.domainName }}
         provider: {{ .Values.provider }}
         spec:
           destination:

@@ -22,6 +22,8 @@ spec:
         domainName: {{ .Values.domainName }}
         kubePrometheusStack:
           enabled: {{ .Values.kubePrometheusStack.enabled }}
+        nodeLogging:
+          enabled: {{ .Values.nodeLogging.enabled }}
   syncPolicy:
     automated:
       prune: true

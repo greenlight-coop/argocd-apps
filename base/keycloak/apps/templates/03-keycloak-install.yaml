@@ -20,6 +20,8 @@ spec:
       values: |
         baseName: {{ .Values.baseName }}
         domainName: {{ .Values.domainName }}  
+        rook:
+          enabled: {{ .Values.rook.enabled }}
   syncPolicy:
     automated:
       prune: true

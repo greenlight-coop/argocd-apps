@@ -13,3 +13,6 @@ spec:
     host: keycloak.{{ .Values.domainName }}
   podDisruptionBudget:
     enabled: true
+{{- if .Values.rook.enabled }}
+  storageClassName: rook-ceph-block
+{{- end }}

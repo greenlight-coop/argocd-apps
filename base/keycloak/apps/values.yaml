@@ -1,5 +1,7 @@
 baseName: ""
 domainName: ""
+rook:
+  enabled: ""
 spec:
   destination:
     server: ""

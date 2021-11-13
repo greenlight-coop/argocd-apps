@@ -1,6 +1,6 @@
+baseName: ""
+clusterStorageClassName: ""
 domainName: ""
-rook:
-  enabled: ""
 spec:
   destination:
     server: ""

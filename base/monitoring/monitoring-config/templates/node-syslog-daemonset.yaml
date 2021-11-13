@@ -1,3 +1,4 @@
+{{- if .Values.nodeLogging.enabled }}
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -40,3 +41,4 @@ spec:
       - name: varlog
         hostPath:
           path: /var/log
+{{- end }}

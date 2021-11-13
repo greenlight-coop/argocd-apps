@@ -2,21 +2,30 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-rook-nfs-webhook
+  name: {{ .Values.baseName }}-rook-ceph-install
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "2"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: rook-nfs
+    namespace: rook-ceph
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/rook-nfs/rook-nfs-webhook
+    path: base/rook-ceph/rook-ceph-install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      values: |
+        baseName: {{ .Values.baseName }}
+{{- if eq .Values.provider "digitalocean" }}
+        clusterStorageClassName: do-block-storage
+{{- else if eq .Values.provider "linode" }}
+        clusterStorageClassName: linode-block-storage-retain
+{{- end }}
+        domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
       prune: true

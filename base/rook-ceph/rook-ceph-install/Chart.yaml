@@ -1,6 +1,6 @@
 apiVersion: v2
-name: rook-nfs
-description: Configures Rook NFS for the cluster
+name: rook-ceph-install
+description: Installs Rook Ceph resources for the cluster
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -1,4 +1,5 @@
 baseName: ""
+domainName: ""
 provider: ""
 spec:
   destination:
