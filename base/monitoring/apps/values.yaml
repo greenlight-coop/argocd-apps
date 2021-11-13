@@ -2,3 +2,5 @@ baseName: ""
 domainName: ""
 kubePrometheusStack:
   enabled: ""
+nodeLogging:
+  enabled: ""

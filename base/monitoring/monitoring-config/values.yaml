@@ -1,3 +1,5 @@
 domainName: ""
 kubePrometheusStack:
   enabled: ""
+nodeLogging:
+  enabled: ""
