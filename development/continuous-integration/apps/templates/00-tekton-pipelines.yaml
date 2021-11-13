@@ -1,3 +1,4 @@
+# tekton-pipeline v0.29.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
