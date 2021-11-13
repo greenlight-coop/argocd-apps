@@ -9,10 +9,10 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.12.0
+    app.kubernetes.io/version: v0.21.0
     argocd.argoproj.io/instance: tekton-dashboard
-    dashboard.tekton.dev/release: v0.12.0
-    version: v0.12.0
+    dashboard.tekton.dev/release: v0.21.0
+    version: v0.21.0
 spec:
   gateways:
   - istio-system/istio-gateway
