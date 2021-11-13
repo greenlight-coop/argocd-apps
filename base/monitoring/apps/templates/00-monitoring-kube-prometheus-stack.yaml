@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://prometheus-community.github.io/helm-charts
     chart: kube-prometheus-stack
-    targetRevision: 20.0.1
+    targetRevision: 19.3.0
     helm:
       releaseName: kube-prometheus-stack
       values: |
@@ -33,6 +33,4 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
-    syncOptions:
-      - Replace=true
 {{- end }}
