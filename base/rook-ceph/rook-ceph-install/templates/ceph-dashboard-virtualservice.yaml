@@ -17,5 +17,5 @@ spec:
     route:
     - destination:
         port:
-          number: 7000
+          number: 8080
         host: rook-ceph-mgr-dashboard
