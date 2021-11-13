@@ -26,9 +26,6 @@ spec:
   {{- if .Values.rook.enabled }}
           cassandraLibDirVolume:
             storageClass: rook-ceph-block-waitforfirstconsumer
-  {{- else if eq .Values.provider "linode" }}
-          cassandraLibDirVolume:
-            storageClass: linode-block-storage-retain-waitforfirstconsumer
   {{- end }}
           heap:
             size: 1G

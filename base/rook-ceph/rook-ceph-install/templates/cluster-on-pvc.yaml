@@ -28,7 +28,7 @@ spec:
     # size appropriate for monitor data will be used.
     volumeClaimTemplate:
       spec:
-        storageClassName: do-block-storage
+        storageClassName: {{ .Values.clusterStorageClassName }}
         resources:
           requests:
             storage: 4Gi
@@ -127,7 +127,7 @@ spec:
                 requests:
                   storage: 32Gi
               # IMPORTANT: Change the storage class depending on your environment
-              storageClassName: do-block-storage
+              storageClassName:  {{ .Values.clusterStorageClassName }}
               volumeMode: Block
               accessModes:
                 - ReadWriteOnce

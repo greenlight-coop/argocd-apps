@@ -17,6 +17,15 @@ spec:
     path: base/rook-ceph/rook-ceph-install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
+    helm:
+      values: |
+        baseName: {{ .Values.baseName }}
+{{- if eq .Values.provider "digitalocean" }}
+        clusterStorageClassName: do-block-storage
+{{- else if eq .Values.provider "linode" }}
+        clusterStorageClassName: linode-block-storage-retain
+{{- end }}
+        domainName: {{ .Values.domainName }}
   syncPolicy:
     automated:
       prune: true

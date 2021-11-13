@@ -1,6 +1,6 @@
 baseName: ""
+clusterStorageClassName: ""
 domainName: ""
-provider: ""
 spec:
   destination:
     server: ""
