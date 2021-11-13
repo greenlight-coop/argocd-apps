@@ -442,7 +442,6 @@ kind: CustomResourceDefinition
 metadata:
   name: clusterinterceptors.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
@@ -498,7 +497,6 @@ kind: CustomResourceDefinition
 metadata:
   name: clustertriggerbindings.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
@@ -568,7 +566,6 @@ kind: CustomResourceDefinition
 metadata:
   name: eventlisteners.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
@@ -674,7 +671,6 @@ kind: CustomResourceDefinition
 metadata:
   name: triggers.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
@@ -746,7 +742,6 @@ kind: CustomResourceDefinition
 metadata:
   name: triggerbindings.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
@@ -820,7 +815,6 @@ kind: CustomResourceDefinition
 metadata:
   name: triggertemplates.triggers.tekton.dev
   labels:
-    app.kubernetes.io/instance: default
     app.kubernetes.io/part-of: tekton-triggers
     triggers.tekton.dev/release: "v0.17.1"
     version: "v0.17.1"
