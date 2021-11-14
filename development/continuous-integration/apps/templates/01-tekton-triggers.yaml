@@ -1,3 +1,4 @@
+# Tekton Triggers v0.17.1
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
