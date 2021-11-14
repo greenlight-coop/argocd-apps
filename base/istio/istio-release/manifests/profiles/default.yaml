@@ -4,7 +4,7 @@ metadata:
   namespace: istio-system
 spec:
   hub: docker.io/istio
-  tag: 1.10.4
+  tag: 1.11.4
 
   # You may override parts of meshconfig by uncommenting the following lines.
   meshConfig:
@@ -34,7 +34,7 @@ spec:
     cni:
       enabled: false
     
-    # istiod remote configuration when istiod isn't installed on the cluster
+    # Remote and config cluster configuration for an external istiod
     istiodRemote:
       enabled: false
 
