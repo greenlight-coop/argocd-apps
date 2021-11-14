@@ -22,7 +22,7 @@ data:
   config-kafka-broker-producer.properties: |
     key.serializer=org.apache.kafka.common.serialization.StringSerializer
     value.serializer=io.cloudevents.kafka.CloudEventSerializer
-    acks=1
+    acks=all
     buffer.memory=33554432
     # compression.type=snappy
     retries=2147483647
@@ -133,7 +133,7 @@ data:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: knative-kafka-data-plane
+  name: knative-kafka-broker-data-plane
   labels:
     kafka.eventing.knative.dev/release: devel
 rules:
@@ -143,6 +143,8 @@ rules:
       - secrets
     verbs:
       - get
+      - list
+      - watch
 
 ---
 # Copyright 2020 The Knative Authors
@@ -161,7 +163,7 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: knative-kafka-data-plane
+  name: knative-kafka-broker-data-plane
   namespace: knative-eventing
   labels:
     kafka.eventing.knative.dev/release: devel
@@ -183,16 +185,16 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: knative-kafka-data-plane
+  name: knative-kafka-broker-data-plane
   labels:
     kafka.eventing.knative.dev/release: devel
 subjects:
   - kind: ServiceAccount
-    name: knative-kafka-data-plane
+    name: knative-kafka-broker-data-plane
     namespace: knative-eventing
 roleRef:
   kind: ClusterRole
-  name: knative-kafka-data-plane
+  name: knative-kafka-broker-data-plane
   apiGroup: rbac.authorization.k8s.io
 
 ---
@@ -231,13 +233,12 @@ spec:
         app: kafka-broker-dispatcher
         kafka.eventing.knative.dev/release: devel
     spec:
-      serviceAccountName: knative-kafka-data-plane
+      serviceAccountName: knative-kafka-broker-data-plane
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65532
       containers:
         - name: kafka-broker-dispatcher
-          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:5ed856a0-10e2-11ec-a86f-42a167c7911c
+          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:eaa56d0e-3c0b-11ec-8fb6-ba7ae261641f
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
@@ -382,10 +383,9 @@ spec:
         app: kafka-broker-receiver
         kafka.eventing.knative.dev/release: devel
     spec:
-      serviceAccountName: knative-kafka-data-plane
+      serviceAccountName: knative-kafka-broker-data-plane
       securityContext:
         runAsNonRoot: true
-        runAsUser: 65532
       # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
         podAntiAffinity:
@@ -398,7 +398,7 @@ spec:
               weight: 100
       containers:
         - name: kafka-broker-receiver
-          image: gcr.io/knative-releases/knative-kafka-broker-receiver:5ed856a0-10e2-11ec-a86f-42a167c7911c
+          image: gcr.io/knative-releases/knative-kafka-broker-receiver:eaa56d0e-3c0b-11ec-8fb6-ba7ae261641f
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config

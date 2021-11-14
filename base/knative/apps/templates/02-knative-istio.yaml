@@ -1,4 +1,4 @@
-# Knative net-istio release v0.25.1
+# Knative net-istio release v1.0.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
