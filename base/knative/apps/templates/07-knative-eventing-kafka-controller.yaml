@@ -1,4 +1,4 @@
-# Knative Eventing Kafka Broker release v0.22.5
+# Knative Eventing Kafka Broker release v1.0.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

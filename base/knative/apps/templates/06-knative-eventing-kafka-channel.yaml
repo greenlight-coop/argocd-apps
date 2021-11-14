@@ -1,4 +1,4 @@
-# Knative Eventing Kafka release v0.25.2
+# Knative Eventing Kafka release v1.0.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
