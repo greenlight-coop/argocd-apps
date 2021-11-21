@@ -1,4 +1,5 @@
 adminEmail: ""
+baseName: ""
 domainName: ""
 googleProjectId: ""
 provider: ""

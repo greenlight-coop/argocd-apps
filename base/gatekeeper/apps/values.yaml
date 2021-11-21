@@ -1,3 +1,4 @@
+baseName: ""
 spec:
   destination:
     server: ""

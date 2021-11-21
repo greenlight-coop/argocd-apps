@@ -21,6 +21,7 @@ spec:
       releaseName: gatekeeper
       values: |
         spec:
+          baseName: {{ .Values.baseName }}
           destination:
             server: {{ .Values.spec.destination.server }}
           project: {{ .Values.spec.project }}
