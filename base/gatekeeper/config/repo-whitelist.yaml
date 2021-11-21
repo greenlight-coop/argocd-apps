@@ -1,0 +1,18 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sAllowedRepos
+metadata:
+  name: repo-whitelist
+spec:
+  enforcementAction: warn # remove after configuration
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "default"
+  parameters:
+    repos:
+      - "gcr.io/cloud-builders"
+      - "gcr.io/tekton-releases"
+      - "greenlightcoop/"
+      - "moby/buildkit"
