@@ -12,9 +12,14 @@ spec:
       - "default"
   parameters:
     repos:
+      - "docker.io/grafana/"
       - "gcr.io/cloud-builders"
       - "gcr.io/tekton-releases"
       - "grafana/loki"
+      - "grafana/grafana"
       - "greenlightcoop/"
+      - "k8s.gcr.io/kube-state-metrics"
       - "moby/buildkit"
       - "quay.io/kiwigrid"
+      - "quay.io/prometheus"
+      - "quay.io/prometheus-operator"
