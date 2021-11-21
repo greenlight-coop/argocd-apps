@@ -14,5 +14,7 @@ spec:
     repos:
       - "gcr.io/cloud-builders"
       - "gcr.io/tekton-releases"
+      - "grafana/loki"
       - "greenlightcoop/"
       - "moby/buildkit"
+      - "quay.io/kiwigrid"
