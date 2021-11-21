@@ -20,8 +20,8 @@ spec:
     helm:
       releaseName: gatekeeper
       values: |
+        baseName: {{ .Values.baseName }}
         spec:
-          baseName: {{ .Values.baseName }}
           destination:
             server: {{ .Values.spec.destination.server }}
           project: {{ .Values.spec.project }}

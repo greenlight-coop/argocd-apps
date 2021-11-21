@@ -1,4 +1,4 @@
-# Installs IstioOperator from Istio 1.11.4 release.
+# OPA Gatekeeper v3.7.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
