@@ -13,9 +13,10 @@ spec:
   parameters:
     repos:
       - "docker.io/busybox"
-      - "docker.io/grafana/"
       - "docker.io/datastax"
+      - "docker.io/grafana/"
       - "docker.io/k8ssandra"
+      - "docker.io/thelastpickle"
       - "gcr.io/cloud-builders"
       - "gcr.io/tekton-releases"
       - "grafana/loki"
