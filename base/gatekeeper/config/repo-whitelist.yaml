@@ -22,6 +22,7 @@ spec:
       - "grafana/loki"
       - "grafana/grafana"
       - "greenlightcoop/"
+      - "jettech/kube-webhook-certgen"
       - "k8s.gcr.io/external-dns"
       - "k8s.gcr.io/kube-state-metrics"
       - "k8ssandra/cass-management-api"
