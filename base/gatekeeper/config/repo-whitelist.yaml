@@ -3,7 +3,7 @@ kind: K8sAllowedRepos
 metadata:
   name: repo-whitelist
 spec:
-  enforcementAction: warn # remove after configuration
+  enforcementAction: deny
   match:
     kinds:
       - apiGroups: [""]
