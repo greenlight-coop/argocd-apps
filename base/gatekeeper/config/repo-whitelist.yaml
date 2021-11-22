@@ -1,0 +1,34 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sAllowedRepos
+metadata:
+  name: repo-whitelist
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - "default"
+  parameters:
+    repos:
+      - "docker.io/busybox"
+      - "docker.io/datastax"
+      - "docker.io/grafana/"
+      - "docker.io/k8ssandra"
+      - "docker.io/thelastpickle"
+      - "gcr.io/cloud-builders"
+      - "gcr.io/tekton-releases"
+      - "grafana/loki"
+      - "grafana/grafana"
+      - "greenlightcoop/"
+      - "jettech/kube-webhook-certgen"
+      - "k8s.gcr.io/external-dns"
+      - "k8s.gcr.io/kube-state-metrics"
+      - "k8ssandra/cass-management-api"
+      - "kiwigrid/k8s-sidecar"
+      - "moby/buildkit"
+      - "nginx"
+      - "quay.io/kiwigrid"
+      - "quay.io/prometheus"
+      - "quay.io/prometheus-operator"

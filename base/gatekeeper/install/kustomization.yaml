@@ -1,0 +1,3 @@
+# OPA Gatekeeper v3.7.0
+resources:
+  - gatekeeper.yaml

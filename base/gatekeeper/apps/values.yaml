@@ -1,8 +1,4 @@
-adminEmail: ""
 baseName: ""
-domainName: ""
-googleProjectId: ""
-provider: ""
 spec:
   destination:
     server: ""
@@ -10,4 +6,3 @@ spec:
   source:
     repoURL: ""
     targetRevision: ""
-useStagingCertificates: ""
