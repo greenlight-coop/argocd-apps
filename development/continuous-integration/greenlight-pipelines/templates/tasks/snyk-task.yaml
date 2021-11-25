@@ -23,6 +23,6 @@ spec:
               name: snyk
               key: token
       script: |
-        snyk code test --fail-on=all
+        snyk code test --fail-on=all --org=etavela
         snyk test --fail-on=all
         snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
