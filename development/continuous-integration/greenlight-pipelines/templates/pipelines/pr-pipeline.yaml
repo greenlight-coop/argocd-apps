@@ -121,6 +121,17 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: snyk
+      taskRef:
+        name: snyk
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: image
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: deploy-preview-application
       when:
         - input: $(params.build-type)
@@ -129,7 +140,7 @@ spec:
       taskRef:
         name: deploy-preview-application
       runAfter:
-        - build-and-push-image
+        - snyk
         - ensure-preview-namespace-exists
       params:
         - name: project-name

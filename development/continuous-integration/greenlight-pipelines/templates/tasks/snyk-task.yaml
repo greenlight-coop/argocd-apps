@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: snyk
+spec:
+  description: >-
+    Runs various snyk tools (test, scan, container) on workspace resources. Task fails if there's a
+    vulnerability found with an available remediation.
+  params:
+    - name: image
+      description: Tag of image in Docker Hub to assess.
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: parse-templates
+      image: greenlightcoop/snyk-tools:0.1.0
+      workingDir: $(workspaces.source.path)
+      env:
+        - name: SNYK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: $(params.github-token-secret)
+              key: bot-token
+      script: |
+        snyk code --fail-on=all
+        snyk test --fail-on=all
+        snyk container test --fail-on=all ${image}
