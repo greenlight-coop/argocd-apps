@@ -23,6 +23,6 @@ spec:
               name: snyk
               key: token
       script: |
-        snyk code --fail-on=all
+        snyk code test --fail-on=all
         snyk test --fail-on=all
         snyk container test --fail-on=all ${image}
