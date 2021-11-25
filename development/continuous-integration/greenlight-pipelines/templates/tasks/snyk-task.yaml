@@ -20,8 +20,8 @@ spec:
         - name: SNYK_TOKEN
           valueFrom:
             secretKeyRef:
-              name: $(params.github-token-secret)
-              key: bot-token
+              name: snyk
+              key: token
       script: |
         snyk code --fail-on=all
         snyk test --fail-on=all
