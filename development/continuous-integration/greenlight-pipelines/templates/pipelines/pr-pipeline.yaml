@@ -196,7 +196,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - build-and-push-image
+        - snyk
       params:
         - name: status
           value: success
