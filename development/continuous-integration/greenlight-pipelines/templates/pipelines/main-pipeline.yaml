@@ -88,12 +88,23 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: snyk
+      taskRef:
+        name: snyk
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: image
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - build-and-push-image
+        - snyk
       params:
         - name: status
           value: success
