@@ -23,7 +23,13 @@ spec:
               name: snyk
               key: token
       script: |
-        snyk code test --fail-on=all --org=etavela
+        #!/usr/bin/env bash
+        if [ -d "$(workspaces.source.path)/src" ] 
+        then
+          snyk code test --fail-on=all --org=etavela
+        else
+          echo 'No src directory, skipping snyk code test'
+        fi
         snyk test --fail-on=all
         snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
         snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile
