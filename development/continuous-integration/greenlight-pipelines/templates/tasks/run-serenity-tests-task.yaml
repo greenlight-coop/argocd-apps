@@ -119,6 +119,8 @@ spec:
         then
           cd $(workspaces.source.path)
           npm install
+          pwd
+          sleep 600
           npm run test-features:ci
         else
           cd /usr/src/app
