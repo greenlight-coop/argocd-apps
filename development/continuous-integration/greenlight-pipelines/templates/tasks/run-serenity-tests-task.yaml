@@ -117,6 +117,7 @@ spec:
         #!/usr/bin/env bash
         if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.12@sha256:116584ee8ecedbd5c035d9a68ad32b0f9f3593202adf6fee2768b40b9420af1d" ]
         then
+          cd $(workspaces.source.path)
           npm install
           npm run test-features:ci
         else
