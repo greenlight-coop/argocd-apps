@@ -24,7 +24,7 @@ spec:
               key: token
       script: |
         #!/usr/bin/env bash
-        snyk config set org=greenlight
+        snyk config set org=etavela
         snyk config set disableSuggestions=true
         if [ -d "$(workspaces.source.path)/src" ] 
         then
