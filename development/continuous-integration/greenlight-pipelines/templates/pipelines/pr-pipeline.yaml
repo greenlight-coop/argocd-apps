@@ -129,8 +129,6 @@ spec:
       params:
         - name: image
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
-        - name: project-name
-          value: $(params.hub-organization)/$(params.project-name)          
       workspaces:
         - name: source
           workspace: git-source

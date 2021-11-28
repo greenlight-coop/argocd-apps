@@ -10,9 +10,6 @@ spec:
     - name: image
       description: Tag of image in Docker Hub to assess.
       type: string
-    - name: project-name
-      description: Name of the project in Snyk
-      type: string
   workspaces:
     - name: source
   steps:
@@ -35,7 +32,7 @@ spec:
         else
           echo 'No src directory, skipping snyk code test'
         fi
-        snyk test --fail-on=all --project-name=$(params.project-name)
-        snyk monitor --project-name=$(params.project-name)
-        snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile --project-name=$(params.project-name)
-        snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile --project-name=$(params.project-name)
+        snyk test --fail-on=all
+        snyk monitor
+        snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
+        snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile
