@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: snyk-monitor
+spec:
+  description: >-
+    Sets up Snyk monitoring on project assets.
+  params:
+    - name: image
+      description: Tag of image in Docker Hub to assess.
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: apply-snyk-tools
+      image: greenlightcoop/snyk-tools:0.1.0@sha256:a02128bcae761e779f5c41aed9a3e6fa4bba661cf178aa4f20a9359e19cfec8b
+      workingDir: $(workspaces.source.path)
+      env:
+        - name: SNYK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: snyk
+              key: token
+      script: |
+        #!/usr/bin/env bash
+        snyk config set org=greenlight
+        snyk config set disableSuggestions=true
+        snyk monitor
+        snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile

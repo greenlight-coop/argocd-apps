@@ -83,6 +83,19 @@ spec:
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+        - name: BUILDKIT_CLIENT_IMAGE
+          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: snyk-monitor
+      taskRef:
+        name: snyk-monitor
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: image
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
         - name: source
           workspace: git-source
@@ -91,7 +104,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - build-and-push-image
+        - snyk-monitor
       params:
         - name: status
           value: success
