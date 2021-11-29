@@ -196,7 +196,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - snyk
+        - snyk-test
       params:
         - name: status
           value: success
