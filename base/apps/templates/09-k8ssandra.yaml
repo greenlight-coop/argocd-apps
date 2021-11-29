@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://helm.k8ssandra.io/
     chart: k8ssandra
-    targetRevision: 1.3.3
+    targetRevision: 1.4.0
     helm:
       releaseName: k8ssandra
       values: |
