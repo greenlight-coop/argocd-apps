@@ -21,6 +21,14 @@ spec:
       releaseName: kube-prometheus-stack
       values: |
         grafana:
+          datasources:
+            datasources.yaml:
+              apiVersion: 1
+              datasources:
+              - name: Loki
+                type: loki
+                access: proxy
+                url: http://loki:3100
           plugins:
           - grafana-polystat-panel
   syncPolicy:
