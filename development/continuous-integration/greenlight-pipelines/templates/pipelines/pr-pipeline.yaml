@@ -121,9 +121,9 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: snyk
+    - name: snyk-test
       taskRef:
-        name: snyk
+        name: snyk-test
       runAfter:
         - build-and-push-image
       params:
@@ -140,7 +140,7 @@ spec:
       taskRef:
         name: deploy-preview-application
       runAfter:
-        - snyk
+        - snyk-test
         - ensure-preview-namespace-exists
       params:
         - name: project-name

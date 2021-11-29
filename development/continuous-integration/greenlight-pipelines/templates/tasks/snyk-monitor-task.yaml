@@ -1,11 +1,10 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: snyk
+  name: snyk-monitor
 spec:
   description: >-
-    Runs various snyk tools (test, scan, container) on workspace resources. Task fails if there's a
-    vulnerability found with an available remediation.
+    Sets up Snyk monitoring on project assets.
   params:
     - name: image
       description: Tag of image in Docker Hub to assess.
@@ -26,13 +25,5 @@ spec:
         #!/usr/bin/env bash
         snyk config set org=greenlight
         snyk config set disableSuggestions=true
-        if [ -d "$(workspaces.source.path)/src" ] 
-        then
-          snyk code test --fail-on=all
-        else
-          echo 'No src directory, skipping snyk code test'
-        fi
-        snyk test --fail-on=all
         snyk monitor
-        snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
         snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile

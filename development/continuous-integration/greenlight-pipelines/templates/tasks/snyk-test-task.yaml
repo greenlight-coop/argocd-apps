@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: snyk-test
+spec:
+  description: >-
+    Runs various snyk tools (test, scan, container) on workspace resources. Task fails if there's a
+    vulnerability found with an available remediation.
+  params:
+    - name: image
+      description: Tag of image in Docker Hub to assess.
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: apply-snyk-tools
+      image: greenlightcoop/snyk-tools:0.1.0@sha256:a02128bcae761e779f5c41aed9a3e6fa4bba661cf178aa4f20a9359e19cfec8b
+      workingDir: $(workspaces.source.path)
+      env:
+        - name: SNYK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: snyk
+              key: token
+      script: |
+        #!/usr/bin/env bash
+        snyk config set org=greenlight
+        snyk config set disableSuggestions=true
+        if [ -d "$(workspaces.source.path)/src" ] 
+        then
+          snyk code test --fail-on=all
+        else
+          echo 'No src directory, skipping snyk code test'
+        fi
+        snyk test --fail-on=all
+        snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
