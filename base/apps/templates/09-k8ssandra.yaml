@@ -42,6 +42,16 @@ spec:
             size: 1
             racks:
             - name: default
+        kube-prometheus-stack:
+          grafana:
+            datasources:
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: Loki
+                  type: loki
+                  access: proxy
+                  url: http://loki:3100
         stargate:
           enabled: false
   syncPolicy:
