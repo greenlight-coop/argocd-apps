@@ -14,23 +14,11 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    repoURL: https://prometheus-community.github.io/helm-charts
-    chart: kube-prometheus-stack
-    targetRevision: 21.0.0
+    path: base/monitoring/kube-prometheus-stack
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       releaseName: kube-prometheus-stack
-      values: |
-        grafana:
-          datasources:
-            datasources.yaml:
-              apiVersion: 1
-              datasources:
-              - name: Loki
-                type: loki
-                access: proxy
-                url: http://loki:3100
-          plugins:
-          - grafana-polystat-panel
   syncPolicy:
     automated:
       prune: true

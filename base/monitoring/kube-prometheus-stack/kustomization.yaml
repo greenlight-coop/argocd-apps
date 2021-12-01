@@ -1,0 +1,7 @@
+namePrefix: kustomize-
+
+resources:
+- ./all.yaml
+
+patchesStrategicMerge:
+- overlays/crd-prometheuses.yaml
