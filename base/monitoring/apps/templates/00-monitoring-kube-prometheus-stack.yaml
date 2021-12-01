@@ -19,6 +19,8 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       releaseName: kube-prometheus-stack
+    plugin:
+      name: kustomized-helm
   syncPolicy:
     automated:
       prune: true
