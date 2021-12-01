@@ -3,5 +3,5 @@ namePrefix: kustomize-
 resources:
 - ./all.yaml
 
-patches:
+patchesJson6902:
 - overlays/crd-prometheuses.yaml
