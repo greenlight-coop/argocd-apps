@@ -10,6 +10,5 @@ patchesJson6902:
     name: prometheuses.monitoring.coreos.com
   patch: |-
     - op: add
-      # path: /metadata/annotations/argocd.argoproj.io\/sync-options
-      path: /metadata/annotations/argocd.argoproj.io
+      path: /metadata/annotations['argocd.argoproj.io/sync-options']
       value: Replace=true
