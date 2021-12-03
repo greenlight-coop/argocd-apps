@@ -1,18 +1,5 @@
-namePrefix: kustomize-
-
 resources:
 - ./all.yaml
-
-# patchesJson6902:
-# - target:
-#     version: v1
-#     kind: CustomResourceDefinition
-#     name: prometheuses.monitoring.coreos.com
-#   patch: |-
-#     [
-#       {"op": "add", "path": "/metadata/annotations/argocd.argoproj.io']", "value": "Replace=true"}
-#     ]
-# {"op": "add", "path": "/metadata/annotations['argocd.argoproj.io/sync-options']", "value": "Replace=true"}
 
 patches:
 - path: overlays/crd-prometheuses.yaml
