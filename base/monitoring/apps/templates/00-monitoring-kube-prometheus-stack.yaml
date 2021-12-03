@@ -20,7 +20,8 @@ spec:
     plugin:
       name: kustomized-helm
       env:
-        RELEASE_NAME: kube-prometheus-stack
+        - name: RELEASE_NAME
+          value: kube-prometheus-stack
   syncPolicy:
     automated:
       prune: true
