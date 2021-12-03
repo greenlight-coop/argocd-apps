@@ -1,0 +1,9 @@
+resources:
+- ./all.yaml
+
+patches:
+- path: overlays/crd-prometheuses.yaml
+  target:
+    version: v1
+    kind: CustomResourceDefinition
+    name: prometheuses.monitoring.coreos.com
