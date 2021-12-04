@@ -14,9 +14,9 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    repoURL: https://helm.k8ssandra.io/
-    chart: k8ssandra
-    targetRevision: 1.3.3
+    path: base/k8ssandra/charts/k8ssandra
+    repoURL: {{ .Values.spec.source.repoURL }}
+    targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       releaseName: k8ssandra
       values: |
@@ -42,6 +42,16 @@ spec:
             size: 1
             racks:
             - name: default
+        kube-prometheus-stack:
+          grafana:
+            datasources:
+              datasources.yaml:
+                apiVersion: 1
+                datasources:
+                - name: Loki
+                  type: loki
+                  access: proxy
+                  url: http://loki:3100
         stargate:
           enabled: false
   syncPolicy:
