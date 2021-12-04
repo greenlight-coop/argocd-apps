@@ -22,6 +22,12 @@ spec:
       env:
         - name: RELEASE_NAME
           value: k8ssandra
+        - name: VALUES_FILES
+  {{- if .Values.rook.enabled }}
+          value: values.yaml,values-rook.yaml
+  {{- else }}
+          value: values.yaml
+  {{- end }}
   syncPolicy:
     automated:
       prune: true

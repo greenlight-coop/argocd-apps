@@ -1,10 +1,6 @@
 cassandra:
   version: "4.0.0"
   allowMultipleNodesPerWorker: true
-{{- if .Values.rook.enabled }}
-  cassandraLibDirVolume:
-    storageClass: rook-ceph-block-waitforfirstconsumer
-{{- end }}
   heap:
     size: 1G
     newGenSize: 1G
