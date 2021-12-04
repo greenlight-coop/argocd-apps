@@ -24,7 +24,7 @@ spec:
           value: k8ssandra
         - name: VALUES_FILES
   {{- if .Values.rook.enabled }}
-          value: values.yaml,values-rook.yaml
+          value: values.yaml values-rook.yaml
   {{- else }}
           value: values.yaml
   {{- end }}
