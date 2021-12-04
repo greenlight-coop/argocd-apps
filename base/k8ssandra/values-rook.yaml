@@ -1,3 +1,32 @@
 cassandra:
+  version: "4.0.0"
+  allowMultipleNodesPerWorker: true
   cassandraLibDirVolume:
     storageClass: rook-ceph-block-waitforfirstconsumer
+  heap:
+    size: 1G
+    newGenSize: 1G
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 2Gi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+  datacenters:
+  - name: dc1
+    size: 1
+    racks:
+    - name: default
+kube-prometheus-stack:
+  grafana:
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          url: http://loki:3100
+stargate:
+  enabled: false
