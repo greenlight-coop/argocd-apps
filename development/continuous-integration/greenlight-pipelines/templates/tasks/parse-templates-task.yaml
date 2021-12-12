@@ -21,4 +21,6 @@ spec:
         - name: VALUES
           value: $(params.values)
       script: |
-        npm start
+        #!/usr/bin/env bash
+        set -ex
+        dumb-init node dist/index.js
