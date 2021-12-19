@@ -47,9 +47,18 @@ cni:
     brokenPodLabelKey: "cni.istio.io/uninitialized"
     brokenPodLabelValue: "true"
 
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+
   # Experimental taint controller for further race condition mitigation
   taint:
     enabled: false
+  
+  resourceQuotas:
+    enabled: false
+    pods: 5000
 
 # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
 revision: ""
@@ -64,7 +73,7 @@ global:
   hub: docker.io/istio
 
   # Default tag for Istio images.
-  tag: 1.11.4
+  tag: 1.12.1
 
   # Specify image pull policy if default behavior isn't desired.
   # Default behavior: latest images will be Always else IfNotPresent.
@@ -77,3 +86,9 @@ global:
   # Must be set for any cluster configured with private docker registry.
   imagePullSecrets: []
   # - private-registry-key
+
+  # Default resources allocated
+  defaultResources:
+     requests:
+       cpu: 100m
+       memory: 100Mi

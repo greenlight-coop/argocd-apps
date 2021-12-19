@@ -9,6 +9,103 @@ metadata:
     chart: istio
     heritage: Tiller
     release: istio
+  name: wasmplugins.extensions.istio.io
+spec:
+  group: extensions.istio.io
+  names:
+    categories:
+    - istio-io
+    - extensions-istio-io
+    kind: WasmPlugin
+    listKind: WasmPluginList
+    plural: wasmplugins
+    singular: wasmplugin
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: 'CreationTimestamp is a timestamp representing the server time
+        when this object was created. It is not guaranteed to be set in happens-before
+        order across separate operations. Clients may not set this value. It is represented
+        in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for
+        lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata'
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        properties:
+          spec:
+            description: 'Extend the functionality provided by the Istio proxy through
+              WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html'
+            properties:
+              imagePullPolicy:
+                description: The pull behaviour to be applied when fetching an OCI
+                  image.
+                enum:
+                - UNSPECIFIED_POLICY
+                - IfNotPresent
+                - Always
+                type: string
+              imagePullSecret:
+                description: Credentials to use for OCI image pulling.
+                type: string
+              phase:
+                description: Determines where in the filter chain this `WasmPlugin`
+                  is to be injected.
+                enum:
+                - UNSPECIFIED_PHASE
+                - AUTHN
+                - AUTHZ
+                - STATS
+                type: string
+              pluginConfig:
+                description: The configuration that will be passed on to the plugin.
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
+              pluginName:
+                type: string
+              priority:
+                description: Determines ordering of `WasmPlugins` in the same `phase`.
+                nullable: true
+                type: integer
+              selector:
+                properties:
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    type: object
+                type: object
+              sha256:
+                description: SHA256 checksum that will be used to verify Wasm module
+                  or OCI container.
+                type: string
+              url:
+                description: URL of a Wasm module or OCI container.
+                type: string
+              verificationKey:
+                type: string
+            type: object
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app: istio-pilot
+    chart: istio
+    heritage: Tiller
+    release: istio
   name: destinationrules.networking.istio.io
 spec:
   group: networking.istio.io
@@ -220,8 +317,8 @@ spec:
                             localityLbSetting:
                               properties:
                                 distribute:
-                                  description: 'Optional: only one of distribute or
-                                    failover can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -243,8 +340,8 @@ spec:
                                   nullable: true
                                   type: boolean
                                 failover:
-                                  description: 'Optional: only failover or distribute
-                                    can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -253,6 +350,13 @@ spec:
                                       to:
                                         type: string
                                     type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints to do priority
+                                    based load balancing.
+                                  items:
+                                    type: string
                                   type: array
                               type: object
                             simple:
@@ -460,8 +564,8 @@ spec:
                                   localityLbSetting:
                                     properties:
                                       distribute:
-                                        description: 'Optional: only one of distribute
-                                          or failover can be set.'
+                                        description: 'Optional: only one of distribute,
+                                          failover or failoverPriority can be set.'
                                         items:
                                           properties:
                                             from:
@@ -483,8 +587,8 @@ spec:
                                         nullable: true
                                         type: boolean
                                       failover:
-                                        description: 'Optional: only failover or distribute
-                                          can be set.'
+                                        description: 'Optional: only one of distribute,
+                                          failover or failoverPriority can be set.'
                                         items:
                                           properties:
                                             from:
@@ -493,6 +597,13 @@ spec:
                                             to:
                                               type: string
                                           type: object
+                                        type: array
+                                      failoverPriority:
+                                        description: failoverPriority is an ordered
+                                          list of labels used to sort endpoints to
+                                          do priority based load balancing.
+                                        items:
+                                          type: string
                                         type: array
                                     type: object
                                   simple:
@@ -555,6 +666,9 @@ spec:
                                     type: string
                                   credentialName:
                                     type: string
+                                  insecureSkipVerify:
+                                    nullable: true
+                                    type: boolean
                                   mode:
                                     enum:
                                     - DISABLE
@@ -587,6 +701,9 @@ spec:
                               type: string
                             credentialName:
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -763,8 +880,8 @@ spec:
                       localityLbSetting:
                         properties:
                           distribute:
-                            description: 'Optional: only one of distribute or failover
-                              can be set.'
+                            description: 'Optional: only one of distribute, failover
+                              or failoverPriority can be set.'
                             items:
                               properties:
                                 from:
@@ -785,8 +902,8 @@ spec:
                             nullable: true
                             type: boolean
                           failover:
-                            description: 'Optional: only failover or distribute can
-                              be set.'
+                            description: 'Optional: only one of distribute, failover
+                              or failoverPriority can be set.'
                             items:
                               properties:
                                 from:
@@ -795,6 +912,12 @@ spec:
                                 to:
                                   type: string
                               type: object
+                            type: array
+                          failoverPriority:
+                            description: failoverPriority is an ordered list of labels
+                              used to sort endpoints to do priority based load balancing.
+                            items:
+                              type: string
                             type: array
                         type: object
                       simple:
@@ -997,8 +1120,8 @@ spec:
                             localityLbSetting:
                               properties:
                                 distribute:
-                                  description: 'Optional: only one of distribute or
-                                    failover can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -1020,8 +1143,8 @@ spec:
                                   nullable: true
                                   type: boolean
                                 failover:
-                                  description: 'Optional: only failover or distribute
-                                    can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -1030,6 +1153,13 @@ spec:
                                       to:
                                         type: string
                                     type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints to do priority
+                                    based load balancing.
+                                  items:
+                                    type: string
                                   type: array
                               type: object
                             simple:
@@ -1091,6 +1221,9 @@ spec:
                               type: string
                             credentialName:
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -1123,6 +1256,9 @@ spec:
                         type: string
                       credentialName:
                         type: string
+                      insecureSkipVerify:
+                        nullable: true
+                        type: boolean
                       mode:
                         enum:
                         - DISABLE
@@ -1348,8 +1484,8 @@ spec:
                             localityLbSetting:
                               properties:
                                 distribute:
-                                  description: 'Optional: only one of distribute or
-                                    failover can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -1371,8 +1507,8 @@ spec:
                                   nullable: true
                                   type: boolean
                                 failover:
-                                  description: 'Optional: only failover or distribute
-                                    can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -1381,6 +1517,13 @@ spec:
                                       to:
                                         type: string
                                     type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints to do priority
+                                    based load balancing.
+                                  items:
+                                    type: string
                                   type: array
                               type: object
                             simple:
@@ -1588,8 +1731,8 @@ spec:
                                   localityLbSetting:
                                     properties:
                                       distribute:
-                                        description: 'Optional: only one of distribute
-                                          or failover can be set.'
+                                        description: 'Optional: only one of distribute,
+                                          failover or failoverPriority can be set.'
                                         items:
                                           properties:
                                             from:
@@ -1611,8 +1754,8 @@ spec:
                                         nullable: true
                                         type: boolean
                                       failover:
-                                        description: 'Optional: only failover or distribute
-                                          can be set.'
+                                        description: 'Optional: only one of distribute,
+                                          failover or failoverPriority can be set.'
                                         items:
                                           properties:
                                             from:
@@ -1621,6 +1764,13 @@ spec:
                                             to:
                                               type: string
                                           type: object
+                                        type: array
+                                      failoverPriority:
+                                        description: failoverPriority is an ordered
+                                          list of labels used to sort endpoints to
+                                          do priority based load balancing.
+                                        items:
+                                          type: string
                                         type: array
                                     type: object
                                   simple:
@@ -1683,6 +1833,9 @@ spec:
                                     type: string
                                   credentialName:
                                     type: string
+                                  insecureSkipVerify:
+                                    nullable: true
+                                    type: boolean
                                   mode:
                                     enum:
                                     - DISABLE
@@ -1715,6 +1868,9 @@ spec:
                               type: string
                             credentialName:
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -1891,8 +2047,8 @@ spec:
                       localityLbSetting:
                         properties:
                           distribute:
-                            description: 'Optional: only one of distribute or failover
-                              can be set.'
+                            description: 'Optional: only one of distribute, failover
+                              or failoverPriority can be set.'
                             items:
                               properties:
                                 from:
@@ -1913,8 +2069,8 @@ spec:
                             nullable: true
                             type: boolean
                           failover:
-                            description: 'Optional: only failover or distribute can
-                              be set.'
+                            description: 'Optional: only one of distribute, failover
+                              or failoverPriority can be set.'
                             items:
                               properties:
                                 from:
@@ -1923,6 +2079,12 @@ spec:
                                 to:
                                   type: string
                               type: object
+                            type: array
+                          failoverPriority:
+                            description: failoverPriority is an ordered list of labels
+                              used to sort endpoints to do priority based load balancing.
+                            items:
+                              type: string
                             type: array
                         type: object
                       simple:
@@ -2125,8 +2287,8 @@ spec:
                             localityLbSetting:
                               properties:
                                 distribute:
-                                  description: 'Optional: only one of distribute or
-                                    failover can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -2148,8 +2310,8 @@ spec:
                                   nullable: true
                                   type: boolean
                                 failover:
-                                  description: 'Optional: only failover or distribute
-                                    can be set.'
+                                  description: 'Optional: only one of distribute,
+                                    failover or failoverPriority can be set.'
                                   items:
                                     properties:
                                       from:
@@ -2158,6 +2320,13 @@ spec:
                                       to:
                                         type: string
                                     type: object
+                                  type: array
+                                failoverPriority:
+                                  description: failoverPriority is an ordered list
+                                    of labels used to sort endpoints to do priority
+                                    based load balancing.
+                                  items:
+                                    type: string
                                   type: array
                               type: object
                             simple:
@@ -2219,6 +2388,9 @@ spec:
                               type: string
                             credentialName:
                               type: string
+                            insecureSkipVerify:
+                              nullable: true
+                              type: boolean
                             mode:
                               enum:
                               - DISABLE
@@ -2251,6 +2423,9 @@ spec:
                         type: string
                       credentialName:
                         type: string
+                      insecureSkipVerify:
+                        nullable: true
+                        type: boolean
                       mode:
                         enum:
                         - DISABLE
@@ -2906,6 +3081,7 @@ spec:
                 - NONE
                 - STATIC
                 - DNS
+                - DNS_ROUND_ROBIN
                 type: string
               subjectAltNames:
                 items:
@@ -3029,6 +3205,7 @@ spec:
                 - NONE
                 - STATIC
                 - DNS
+                - DNS_ROUND_ROBIN
                 type: string
               subjectAltNames:
                 items:
@@ -3800,11 +3977,35 @@ spec:
                     redirect:
                       description: A HTTP rule can either redirect or forward (default)
                         traffic.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       properties:
                         authority:
                           type: string
+                        derivePort:
+                          enum:
+                          - FROM_PROTOCOL_DEFAULT
+                          - FROM_REQUEST_PORT
+                          type: string
+                        port:
+                          description: On a redirect, overwrite the port portion of
+                            the URL with this value.
+                          type: integer
                         redirectCode:
                           type: integer
+                        scheme:
+                          description: On a redirect, overwrite the scheme portion
+                            of the URL with this value.
+                          type: string
                         uri:
                           type: string
                       type: object
@@ -4519,11 +4720,35 @@ spec:
                     redirect:
                       description: A HTTP rule can either redirect or forward (default)
                         traffic.
+                      oneOf:
+                      - not:
+                          anyOf:
+                          - required:
+                            - port
+                          - required:
+                            - derivePort
+                      - required:
+                        - port
+                      - required:
+                        - derivePort
                       properties:
                         authority:
                           type: string
+                        derivePort:
+                          enum:
+                          - FROM_PROTOCOL_DEFAULT
+                          - FROM_REQUEST_PORT
+                          type: string
+                        port:
+                          description: On a redirect, overwrite the port portion of
+                            the URL with this value.
+                          type: integer
                         redirectCode:
                           type: integer
+                        scheme:
+                          description: On a redirect, overwrite the scheme portion
+                            of the URL with this value.
+                          type: string
                         uri:
                           type: string
                       type: object
@@ -5419,8 +5644,8 @@ spec:
                         type: string
                       type: array
                     forwardOriginalToken:
-                      description: If set to true, the orginal token will be kept
-                        for the ustream request.
+                      description: If set to true, the original token will be kept
+                        for the upstream request.
                       type: boolean
                     fromHeaders:
                       description: List of header locations from which JWT is expected.
@@ -5515,8 +5740,8 @@ spec:
       openAPIV3Schema:
         properties:
           spec:
-            description: Telemetry defines how the telemetry is generated for workloads
-              within a mesh.
+            description: 'Telemetry configuration for workloads. See more details
+              at: https://istio.io/docs/reference/config/telemetry.html'
             properties:
               accessLogging:
                 description: Optional.
