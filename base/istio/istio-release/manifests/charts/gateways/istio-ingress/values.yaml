@@ -48,11 +48,6 @@ gateways:
     loadBalancerSourceRanges: []
     serviceAnnotations: {}
 
-    # Enable cross-cluster access using SNI matching
-    zvpn:
-      enabled: false
-      suffix: global
-
     # To generate an internal load balancer:
     # --set serviceAnnotations.cloud.google.com/load-balancer-type=internal
     #serviceAnnotations:
@@ -82,12 +77,7 @@ gateways:
       annotations: {}
 
     ### Advanced options ############
-    env:
-      # A gateway with this mode ensures that pilot generates an additional
-      # set of clusters for internal services but without Istio mTLS, to
-      # enable cross cluster routing.
-      ISTIO_META_ROUTER_MODE: "standard"
-
+    env: {}
     nodeSelector: {}
     tolerations: []
 
@@ -169,7 +159,7 @@ global:
   hub: docker.io/istio
 
   # Default tag for Istio images.
-  tag: 1.11.4
+  tag: 1.12.1
 
   # Specify image pull policy if default behavior isn't desired.
   # Default behavior: latest images will be Always else IfNotPresent.

@@ -1,4 +1,4 @@
-# Installs addons from Istio 1.11.4 release.
+# Installs addons from Istio 1.12.1 release.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
