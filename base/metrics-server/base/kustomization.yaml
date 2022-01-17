@@ -1,3 +1,3 @@
-# metrics-server v0.5.1
+# metrics-server v0.5.2
 resources:
 - metrics-server-components.yaml
