@@ -100,6 +100,7 @@ spec:
                 maxDuration: 3m
         EOF
         echo 'https://$(params.results-identifier).{{ .Values.domainName }}' > $(results.report-url.path)
+        echo 'Results: https://$(params.results-identifier).{{ .Values.domainName }}'
 
     - name: run-integration-tests
       workingDir: $(workspaces.source.path)
