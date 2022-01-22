@@ -15,13 +15,24 @@ spec:
   project: {{ .Values.spec.project }}
   source:
     path: base/monitoring/kube-prometheus-stack
+  source:
+    path: base/monitoring/kube-prometheus-stack
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
-    plugin:
-      name: kustomized-helm
-      env:
-        - name: RELEASE_NAME
-          value: kube-prometheus-stack
+    helm:
+      releaseName: kube-prometheus-stack
+      values: |
+        grafana:
+          datasources:
+            datasources.yaml:
+              apiVersion: 1
+              datasources:
+              - name: Loki
+                type: loki
+                access: proxy
+                url: http://loki:3100
+          plugins:
+          - grafana-polystat-panel
   syncPolicy:
     automated:
       prune: true
