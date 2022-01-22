@@ -1,5 +1,0 @@
-kind: CustomResourceDefinition
-metadata:
-  annotations:
-    argocd.argoproj.io/sync-options: Replace=true
-  name: prometheuses.monitoring.coreos.com
