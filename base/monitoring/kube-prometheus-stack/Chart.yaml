@@ -1,30 +1,52 @@
 apiVersion: v2
-name: kube-prometheus-stack
-description: >
-  Provides a patched version of the kube-prometheus-stack that can be deployed
-  via Argo CD.
-
-# A chart can be either an 'application' or a 'library' chart.
-#
-# Application charts are a collection of templates that can be packaged into versioned archives
-# to be deployed.
-#
-# Library charts provide useful utilities or functions for the chart developer. They're included as
-# a dependency of application charts to inject those utilities and functions into the rendering
-# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+description: kube-prometheus-stack collects Kubernetes manifests, Grafana dashboards, and Prometheus rules combined with documentation and scripts to provide easy to operate end-to-end Kubernetes cluster monitoring with Prometheus using the Prometheus Operator.
+icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
+engine: gotpl
 type: application
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
-version: 0.1.1
-
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: "21.0.3"
+maintainers:
+  - name: andrewgkew
+    email: andrew@quadcorps.co.uk
+  - name: bismarck
+  - name: desaintmartin
+    email: cedric@desaintmartin.fr
+  - name: gianrubio
+    email: gianrubio@gmail.com
+  - name: gkarthiks
+    email: github.gkarthiks@gmail.com
+  - name: scottrigby
+    email: scott@r6by.com
+  - name: Xtigyro
+    email: miroslav.hadzhiev@gmail.com
+name: kube-prometheus-stack
+sources:
+  - https://github.com/prometheus-community/helm-charts
+  - https://github.com/prometheus-operator/kube-prometheus
+version: 30.1.0
+appVersion: 0.53.1
+kubeVersion: ">=1.16.0-0"
+home: https://github.com/prometheus-operator/kube-prometheus
+keywords:
+- operator
+- prometheus
+- kube-prometheus
+annotations:
+  "artifacthub.io/operator": "true"
+  "artifacthub.io/links": |
+    - name: Chart Source
+      url: https://github.com/prometheus-community/helm-charts
+    - name: Upstream Project
+      url: https://github.com/prometheus-operator/kube-prometheus
 
 dependencies:
-- name: kube-prometheus-stack
-  version: 21.0.3
+- name: kube-state-metrics
+  version: "4.4.*"
   repository: https://prometheus-community.github.io/helm-charts
+  condition: kubeStateMetrics.enabled
+- name: prometheus-node-exporter
+  version: "2.5.*"
+  repository: https://prometheus-community.github.io/helm-charts
+  condition: nodeExporter.enabled
+- name: grafana
+  version: "6.20.*"
+  repository: https://grafana.github.io/helm-charts
+  condition: grafana.enabled
