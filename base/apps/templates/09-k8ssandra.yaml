@@ -21,7 +21,7 @@ spec:
       releaseName: k8ssandra
       values: |
         cassandra:
-          version: "4.0.0"
+          version: "4.0.1"
           allowMultipleNodesPerWorker: true
   {{- if .Values.rook.enabled }}
           cassandraLibDirVolume:
