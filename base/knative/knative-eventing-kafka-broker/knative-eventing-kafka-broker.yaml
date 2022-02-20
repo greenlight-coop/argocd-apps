@@ -235,7 +235,7 @@ spec:
         runAsNonRoot: true
       containers:
         - name: kafka-broker-dispatcher
-          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:071f1083b2d6878201b37d12c9edc124ba82b25f028396f59a68b520604cc874
+          image: gcr.io/knative-releases/knative-kafka-broker-dispatcher:e0d71c0bde279dc258d4e833c99a96899a358f37f85415dbf04a78965bd38842
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config
@@ -394,7 +394,7 @@ spec:
               weight: 100
       containers:
         - name: kafka-broker-receiver
-          image: gcr.io/knative-releases/knative-kafka-broker-receiver:ab0408d1134dfdd87a2325e7b79b35c96a5a754de0e272252617a9c91070d8b4
+          image: gcr.io/knative-releases/knative-kafka-broker-receiver:520dc2f082aa8a1e2134e485f5c636ab8400e82d5a701a11803d42f11b0abbf3
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/config

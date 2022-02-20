@@ -1,4 +1,4 @@
-# Knative Eventing CRDs release v1.1.0
+# Knative Eventing CRDs release v1.2.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
