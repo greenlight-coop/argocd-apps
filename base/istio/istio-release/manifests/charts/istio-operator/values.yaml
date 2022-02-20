@@ -1,5 +1,5 @@
 hub: docker.io/istio
-tag: 1.12.2
+tag: 1.13.0
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.
@@ -24,6 +24,15 @@ operator:
     requests:
       cpu: 50m
       memory: 128Mi
+
+# Node labels for pod assignment
+nodeSelector: {}
+
+# Tolerations for pod assignment
+tolerations: []
+
+# Affinity for pod assignment
+affinity: {}
 
 # Additional labels and annotations to apply on the pod level for monitoring and logging configuration.
 podLabels: {}
