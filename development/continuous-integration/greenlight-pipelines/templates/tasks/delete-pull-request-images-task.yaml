@@ -12,7 +12,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.12@sha256:196a375bb7c6554e8c507e77fa2dd6750a9f907903a3bcb275ef5ae3f6817d00
+      default: greenlightcoop/node-utils:0.1.13@sha256:df3c5f4f4fa8c6b66cde6395523d7d1d5620a6787191cd81f03d2f8c1c064315
     - name: docker-hub-domain
       description: Docker Hub API
       default: hub.docker.com
