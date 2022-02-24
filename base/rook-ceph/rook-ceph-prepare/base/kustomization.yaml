@@ -1,4 +1,4 @@
-# Rook Ceph v1.7.7
+# Rook Ceph v1.8.5
 resources:
   - common.yaml
   - crds.yaml
