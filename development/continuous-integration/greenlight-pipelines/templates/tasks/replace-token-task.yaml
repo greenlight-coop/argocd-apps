@@ -20,7 +20,7 @@ spec:
   steps:
     - name: replace-token
       workingDir: $(workspaces.source.path)
-      image: busybox:1.32
+      image: busybox:1.34.1@sha256:afcc7f1ac1b49db317a7196c902e61c6c3c4607d63599ee1a82d702d249a0ccb
       script: |
         #!/bin/sh
 

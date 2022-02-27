@@ -102,11 +102,19 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+    - name: generate-npmrc
+      taskRef:
+        name: generate-npmrc
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: build-and-push-image
       taskRef:
         name: buildkit
       runAfter:
-        - clone-git-repo
+        - generate-npmrc
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
@@ -119,7 +127,7 @@ spec:
       taskRef:
         name: snyk-test
       runAfter:
-        - clone-git-repo
+        - generate-npmrc
       workspaces:
         - name: source
           workspace: git-source
