@@ -1,0 +1,100 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: close-pr-pipeline-image
+  namespace: greenlight-pipelines
+spec:
+  params:
+    - name: project-name
+      type: string
+    - name: repository-full-name
+      type: string
+    - name: hub-organization
+      type: string
+    - name: git-revision
+      type: string
+    - name: git-branch
+      type: string
+    - name: git-pr-number
+      type: string
+    - name: git-pr-commit-number
+      type: string
+  workspaces:
+    - name: git-source
+    - name: status-workspace
+    - name: kubeconfig-dir
+    - name: manifest-dir
+    - name: node-modules
+  tasks:
+    - name: set-default-outcome
+      taskRef:
+        name: set-outcome-status
+      params:
+        - name: status
+          value: failure
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+    - name: publish-pending-status-to-github
+      taskRef:
+        name: github-set-status
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.repository-full-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: STATE
+          value: pending
+        - name: DESCRIPTION
+          value: Build started
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: delete-pull-request-images
+      taskRef:
+        name: delete-pull-request-images
+      params:
+        - name: organization
+          value: $(params.hub-organization)
+        - name: repository
+          value: $(params.project-name)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+      workspaces:
+        - name: node-modules
+          workspace: node-modules
+    - name: set-success-outcome
+      taskRef:
+        name: set-outcome-status
+      runAfter:
+        - set-default-outcome
+        - delete-pull-request-images
+      params:
+        - name: status
+          value: success
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+  finally:
+    - name: publish-outcome-status-to-github
+      taskRef:
+        name: github-set-status-from-outcome
+      workspaces:
+        - name: status-workspace
+          workspace: status-workspace
+      params:
+        - name: REPO_FULL_NAME
+          value: $(params.repository-full-name)
+        - name: SHA
+          value: $(params.git-revision)
+        - name: GITHUB_TOKEN_SECRET_NAME
+          value: bot-github-token
+        - name: GITHUB_TOKEN_SECRET_KEY
+          value: botGithubTokenValue
+        - name: DESCRIPTION
+          value: Build complete
+        - name: TARGET_URL
+          value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
