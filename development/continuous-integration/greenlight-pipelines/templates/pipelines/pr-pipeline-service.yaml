@@ -107,6 +107,11 @@ spec:
         name: generate-npmrc
       runAfter:
         - clone-git-repo
+      params:
+        - name: githubTokenSecretName
+          value: bot-github-token
+        - name: githubTokenSecretKey
+          value: botGithubTokenValue
       workspaces:
         - name: source
           workspace: git-source
