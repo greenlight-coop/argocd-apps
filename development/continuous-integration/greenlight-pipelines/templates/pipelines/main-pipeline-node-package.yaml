@@ -62,7 +62,7 @@ spec:
           workspace: git-source
     - name: publish-node-package
       taskRef:
-        name: publis-node-package
+        name: publish-node-package
       runAfter:
         - clone-git-repo
       workspaces:
