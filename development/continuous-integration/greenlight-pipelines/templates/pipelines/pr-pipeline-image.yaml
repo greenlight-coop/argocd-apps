@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pr-pipeline
+  name: pr-pipeline-image
   namespace: greenlight-pipelines
 spec:
   params:
@@ -11,8 +11,6 @@ spec:
       type: string
     - name: hub-organization
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
       type: string
     - name: git-branch
@@ -20,8 +18,6 @@ spec:
     - name: git-pr-number
       type: string
     - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
       type: string
   workspaces:
     - name: git-source
@@ -57,36 +53,9 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: ensure-preview-namespace-exists
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: kubernetes-actions
-      params:
-        - name: script
-          value: |
-            cat <<EOF | kubectl apply -f -
-            apiVersion: v1
-            kind: Namespace
-            metadata:
-              name: $(params.preview-namespace)
-              labels:
-                istio-injection: enabled
-            EOF
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service", "image"]
       params:
         - name: organization
           value: $(params.hub-organization)
@@ -113,10 +82,6 @@ spec:
         - name: output
           workspace: git-source
     - name: build-and-push-image
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service", "image"]
       taskRef:
         name: buildkit
       runAfter:
@@ -126,18 +91,6 @@ spec:
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
         - name: BUILDKIT_CLIENT_IMAGE
           value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: build-node-package
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["node-package"]
-      taskRef:
-        name: build-node-package
-      runAfter:
-        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
@@ -152,66 +105,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: deploy-preview-application
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: deploy-preview-application
-      runAfter:
-        - snyk-test
-        - ensure-preview-namespace-exists
-      params:
-        - name: project-name
-          value: $(params.project-name)
-        - name: namespace
-          value: $(params.preview-namespace)
-        - name: git-revision
-          value: $(params.git-revision)
-        - name: image-version
-          value: $(tasks.generate-image-tag.results.image-tag)
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: run-integration-tests
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: run-serenity-tests
-      runAfter:
-        - deploy-preview-application
-      params:
-        - name: base-url
-          value: http://$(params.project-name).$(params.preview-namespace).svc.cluster.local
-        - name: results-identifier
-          value: $(params.preview-namespace)
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: set-success-outcome-service
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
-      taskRef:
-        name: set-outcome-status
-      runAfter:
-        - set-default-outcome
-        - run-integration-tests
-      params:
-        - name: status
-          value: success
-      workspaces:
-        - name: status-workspace
-          workspace: status-workspace
-    - name: set-success-outcome-nonservice
-      when:
-        - input: $(params.build-type)
-          operator: notin
-          values: ["service"]
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
