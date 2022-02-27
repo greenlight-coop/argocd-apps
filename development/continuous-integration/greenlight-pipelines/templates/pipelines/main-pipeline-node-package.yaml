@@ -73,7 +73,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - snyk-monitor
+        - publish-node-package
       params:
         - name: status
           value: success
