@@ -35,35 +35,6 @@ spec:
                   expression: "'node-package'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
-    - name: close-pr-pipeline-trigger
-      template:
-        ref: close-pr-pipeline-trigger-template
-      bindings:
-        - kind: TriggerBinding
-          ref: pull-request-trigger-binding
-      interceptors:
-        - name: GitHub pull request
-          ref:
-            name: github
-          params:
-            - name: secretRef
-              value:
-                secretName: webhook-secret
-                secretKey: webhookSecretValue
-            - name: eventTypes
-              value: ["pull_request"]
-        - name: "CEL filter: PR closed"
-          ref:
-            name: cel
-          params:
-            - name: filter
-              value: "body.action in ['closed']"
-            - name: overlays
-              value:
-                - key: build_type
-                  expression: "'node-package'"
-                - key: hub_organization
-                  expression: "body.organization.login.replace('-', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
