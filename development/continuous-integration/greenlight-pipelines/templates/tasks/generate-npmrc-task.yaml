@@ -32,5 +32,7 @@ spec:
         #!/bin/sh
 
         set -e
-
+        
         echo "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN\n@greenlight-coop:registry=https://npm.pkg.github.com" > .npmrc
+        ls -al .
+        cat ./.npmrc
