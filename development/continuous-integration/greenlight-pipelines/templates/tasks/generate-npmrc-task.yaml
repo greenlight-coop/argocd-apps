@@ -32,6 +32,5 @@ spec:
         #!/bin/sh
 
         set -e
-        set -x
 
         echo "//npm.pkg.github.com/:_authToken$GITHUBTOKEN=" > .npmrc
