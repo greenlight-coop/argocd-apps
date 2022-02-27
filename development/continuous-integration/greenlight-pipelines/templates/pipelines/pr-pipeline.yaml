@@ -83,6 +83,10 @@ spec:
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service", "image"]
       params:
         - name: organization
           value: $(params.hub-organization)
@@ -109,6 +113,10 @@ spec:
         - name: output
           workspace: git-source
     - name: build-and-push-image
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service", "image"]
       taskRef:
         name: buildkit
       runAfter:
@@ -118,6 +126,18 @@ spec:
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
         - name: BUILDKIT_CLIENT_IMAGE
           value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: build-node-package
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["node-package"]
+      taskRef:
+        name: build-node-package
+      runAfter:
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source

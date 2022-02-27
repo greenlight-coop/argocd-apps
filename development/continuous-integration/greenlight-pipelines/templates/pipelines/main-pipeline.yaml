@@ -54,6 +54,10 @@ spec:
     - name: generate-image-tag
       taskRef:
         name: generate-image-tag
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service", "image"]
       params:
         - name: organization
           value: $(params.hub-organization)
@@ -78,6 +82,10 @@ spec:
     - name: build-and-push-image
       taskRef:
         name: buildkit
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service", "image"]
       runAfter:
         - clone-git-repo
       params:
@@ -88,9 +96,25 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: publish-node-package
+      taskRef:
+        name: publis-node-package
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["node-package"]
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
+      when:
+        - input: $(params.build-type)
+          operator: in
+          values: ["service", "image"]
       runAfter:
         - build-and-push-image
       params:

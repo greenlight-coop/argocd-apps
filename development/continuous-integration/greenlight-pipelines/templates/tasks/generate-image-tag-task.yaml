@@ -7,7 +7,7 @@ spec:
   description: >-
     Provides the Docker image tag to use for the generated image for both main branch builds (e.g. v0.1.0) and
     pull request branch builds (e.g. v0.1.0-feature-5-pr-1-commit-2). Version information is pulled from Docker 
-    Hub if available and defaults to be v0.1.0 for new artifaacts.
+    Hub if available and defaults to be v0.1.0 for new artifacts.
   workspaces:
     - name: node-modules
       description: modules with useful shared behavior
