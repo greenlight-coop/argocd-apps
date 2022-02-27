@@ -131,6 +131,9 @@ spec:
       params:
         - name: image
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: deploy-preview-application
       taskRef:
         name: deploy-preview-application
