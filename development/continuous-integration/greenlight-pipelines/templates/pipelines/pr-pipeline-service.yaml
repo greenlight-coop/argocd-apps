@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pr-pipeline
+  name: pr-pipeline-service
   namespace: greenlight-pipelines
 spec:
   params:
