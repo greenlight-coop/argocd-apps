@@ -65,10 +65,6 @@ spec:
         - name: output
           workspace: git-source
     - name: build-node-package
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["node-package"]
       taskRef:
         name: build-node-package
       runAfter:
