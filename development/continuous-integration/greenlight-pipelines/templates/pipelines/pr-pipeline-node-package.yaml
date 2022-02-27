@@ -11,8 +11,6 @@ spec:
       type: string
     - name: hub-organization
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
       type: string
     - name: git-branch
@@ -20,8 +18,6 @@ spec:
     - name: git-pr-number
       type: string
     - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
       type: string
   workspaces:
     - name: git-source
