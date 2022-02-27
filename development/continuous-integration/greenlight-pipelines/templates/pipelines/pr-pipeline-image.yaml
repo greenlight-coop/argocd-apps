@@ -107,7 +107,7 @@ spec:
       taskRef:
         name: buildkit
       runAfter:
-         - snyk-test
+        - snyk-test
         - generate-npmrc
       params:
         - name: IMAGE
