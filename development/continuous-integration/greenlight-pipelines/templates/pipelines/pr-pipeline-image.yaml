@@ -81,16 +81,16 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-    - name: build-and-push-image
+    - name: generate-npmrc
       taskRef:
-        name: buildkit
+        name: generate-npmrc
       runAfter:
         - clone-git-repo
       params:
-        - name: IMAGE
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
+        - name: githubTokenSecretName
+          value: bot-github-token
+        - name: githubTokenSecretKey
+          value: botGithubTokenValue
       workspaces:
         - name: source
           workspace: git-source
@@ -99,6 +99,21 @@ spec:
         name: snyk-test
       runAfter:
         - clone-git-repo
+        - generate-npmrc
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: buildkit
+      runAfter:
+         - snyk-test
+        - generate-npmrc
+      params:
+        - name: IMAGE
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+        - name: BUILDKIT_CLIENT_IMAGE
+          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
       workspaces:
         - name: source
           workspace: git-source

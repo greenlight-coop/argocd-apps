@@ -187,6 +187,8 @@ spec:
       runAfter:
         - set-default-outcome
         - run-integration-tests
+        - snyk-test
+        - snyk-container-test
       params:
         - name: status
           value: success

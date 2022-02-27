@@ -20,5 +20,19 @@ spec:
         #!/usr/bin/env bash
         set -ex
         
+        # Check codebase and build
         npm ci
         npm run qc
+        npm run build-clean
+
+        # Version and push tag
+        CURRENT_VERSION=$(jq -r .version package.json)
+        if [[ $CURRENT_VERSION == *.0]]
+        then
+          npm version $CURRENT_VERSION --allow-same-version
+        else
+          npm version minor
+        fi
+
+        # Publish the package
+        npm publish
