@@ -120,12 +120,17 @@ spec:
         name: snyk-test
       runAfter:
         - build-and-push-image
-      params:
-        - name: image
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
       workspaces:
         - name: source
           workspace: git-source
+    - name: snyk-container-test
+      taskRef:
+        name: snyk-container-test
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: image
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
     - name: deploy-preview-application
       taskRef:
         name: deploy-preview-application

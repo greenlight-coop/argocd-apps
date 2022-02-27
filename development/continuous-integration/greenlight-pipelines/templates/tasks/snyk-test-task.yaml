@@ -6,10 +6,6 @@ spec:
   description: >-
     Runs various snyk tools (test, scan) on workspace resources. Task fails if there's a
     vulnerability found with an available remediation.
-  params:
-    - name: image
-      description: Tag of image in Docker Hub to assess.
-      type: string
   workspaces:
     - name: source
   steps:

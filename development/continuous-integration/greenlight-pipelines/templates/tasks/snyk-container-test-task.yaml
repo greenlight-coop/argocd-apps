@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: snyk-test
+  name: snyk-container-test
 spec:
   description: >-
     Runs snyk container test on workspace Dockerfile. Task fails if there's a vulnerability found with an available 
