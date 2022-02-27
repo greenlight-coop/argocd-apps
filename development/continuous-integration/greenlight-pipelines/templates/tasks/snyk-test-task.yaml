@@ -4,7 +4,7 @@ metadata:
   name: snyk-test
 spec:
   description: >-
-    Runs various snyk tools (test, scan, container) on workspace resources. Task fails if there's a
+    Runs various snyk tools (test, scan) on workspace resources. Task fails if there's a
     vulnerability found with an available remediation.
   params:
     - name: image
@@ -39,4 +39,3 @@ spec:
         else
           echo 'No package.json, skipping snyk test'
         fi
-        snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
