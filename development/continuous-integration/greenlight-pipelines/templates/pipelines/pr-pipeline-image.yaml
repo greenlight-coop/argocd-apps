@@ -98,7 +98,7 @@ spec:
       taskRef:
         name: snyk-test
       runAfter:
-        - build-and-push-image
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
@@ -119,6 +119,7 @@ spec:
       runAfter:
         - set-default-outcome
         - snyk-test
+        - snyk-container-test
       params:
         - name: status
           value: success

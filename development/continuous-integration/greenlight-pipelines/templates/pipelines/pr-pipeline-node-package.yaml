@@ -76,7 +76,7 @@ spec:
       taskRef:
         name: snyk-test
       runAfter:
-        - build-node-package
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
@@ -85,6 +85,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
+        - build-node-package
         - snyk-test
       params:
         - name: status
