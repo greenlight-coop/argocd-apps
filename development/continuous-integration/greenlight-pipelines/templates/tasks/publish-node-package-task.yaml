@@ -36,7 +36,7 @@ spec:
           npm version minor
         fi
         git push --tags
-        git push
+        git push origin HEAD:main
 
         # Publish the package
         npm publish
