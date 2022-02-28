@@ -77,20 +77,21 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: build-node-package
+    - name: snyk-test
       taskRef:
-        name: build-node-package
+        name: snyk-test
       runAfter:
         - clone-git-repo
         - generate-npmrc
       workspaces:
         - name: source
           workspace: git-source
-    - name: snyk-test
+    - name: build-node-package
       taskRef:
-        name: snyk-test
+        name: build-node-package
       runAfter:
         - clone-git-repo
+        - generate-npmrc
       workspaces:
         - name: source
           workspace: git-source

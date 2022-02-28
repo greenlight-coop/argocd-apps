@@ -13,7 +13,7 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: generate-image-tag
+    - name: publish-node-package
       workingDir: $(workspaces.source.path)
       image: $(params.node-image)
       script: |
@@ -27,7 +27,7 @@ spec:
 
         # Version and push tag
         CURRENT_VERSION=$(jq -r .version package.json)
-        if [[ $CURRENT_VERSION == *.0]]
+        if [[ $CURRENT_VERSION == *.0 ]]
         then
           npm version $CURRENT_VERSION --allow-same-version
         else
