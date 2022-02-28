@@ -28,6 +28,7 @@ spec:
         # Version and push tag
         git config user.email "bot@greenlight.coop"
         git config user.name "greenlight-coop-bot"
+        git fetch --tags
         CURRENT_VERSION=$(npm pkg get version | tr -d '"')
         if [ $(git tag -l "v$CURRENT_VERSION") ]
         then
