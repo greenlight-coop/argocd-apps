@@ -33,6 +33,8 @@ spec:
         else
           npm version minor
         fi
+        git push --tags
+        git push
 
         # Publish the package
         npm publish
