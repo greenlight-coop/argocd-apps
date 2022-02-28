@@ -28,12 +28,12 @@ spec:
         # Version and push tag
         git config user.email "bot@greenlight.coop"
         git config user.name "greenlight-coop-bot"
-        CURRENT_VERSION=$(jq -r .version package.json)
-        if [[ $CURRENT_VERSION == *.0 ]]
+        CURRENT_VERSION=$(npm pkg get version | tr -d '"')
+        if [ $(git tag -l "v$CURRENT_VERSION") ]
         then
-          npm version $CURRENT_VERSION --allow-same-version
-        else
           npm version minor
+        else
+          npm version $CURRENT_VERSION --allow-same-version
         fi
         git push --tags
         git push origin HEAD:main
