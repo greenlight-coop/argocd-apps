@@ -165,7 +165,7 @@ spec:
         - name: git-revision
           value: $(params.git-revision)
         - name: image-version
-          value: $(tasks.generate-image-tag.results.image-tag)
+          value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
