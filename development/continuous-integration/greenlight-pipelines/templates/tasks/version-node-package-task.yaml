@@ -52,12 +52,12 @@ spec:
         fi
         if [ "$(params.branch-name)" != "main" ]
         then
-          CANDIDATE_VERSION=$("echo $(get_current_version)-$(params.branch-name)-pr-$(params.branch-name)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
+          CANDIDATE_VERSION=$("echo $(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
           npm version CANDIDATE_VERSION
         fi
 
-        GIT_PUSH=$(params.git-push)
-        if [ "${GIT_PUSH,,}" = "true" ]; then
+        PUSH_GIT=$(params.push-git)
+        if [ "${PUSH_GIT,,}" = "true" ]; then
           git push --tags
           git push origin HEAD:main
         fi
