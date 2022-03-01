@@ -94,7 +94,7 @@ spec:
         - generate-npmrc
       params:
         - name: push-git
-          value: false
+          value: "false"
         - name: branch-name
           value: $(params.git-branch)
         - name: pull-request-number

@@ -9,7 +9,7 @@ spec:
   params:
     - name: push-git
       description: Whether to push the generated git tag and main to the upstream origin. Set to true or false.
-      default: true
+      default: "true"
     - name: branch-name
       description: the branch being built, either main|master or a feature branch (e.g. feature/5)
     - name: pull-request-number
