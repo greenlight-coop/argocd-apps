@@ -52,7 +52,7 @@ spec:
         fi
         if [ "$(params.branch-name)" != "main" ]
         then
-          CANDIDATE_VERSION=$(echo "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
+          CANDIDATE_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
           npm version $CANDIDATE_VERSION
         fi
 
@@ -63,5 +63,5 @@ spec:
         fi
 
         UPDATED_VERSION=$(npm pkg get version | tr -d '"')
-        echo $UPDATED_VERSION > $(results.node-version.path)
-        echo "v$UPDATED_VERSION" > $(results.github-version.path)
+        echo -n $UPDATED_VERSION > $(results.node-version.path)
+        echo -n "v$UPDATED_VERSION" > $(results.github-version.path)
