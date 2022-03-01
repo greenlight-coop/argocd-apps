@@ -53,7 +53,7 @@ spec:
         if [ "$(params.branch-name)" != "main" ]
         then
           CANDIDATE_VERSION=$(echo "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
-          npm version CANDIDATE_VERSION
+          npm version $CANDIDATE_VERSION
         fi
 
         PUSH_GIT=$(params.push-git)
