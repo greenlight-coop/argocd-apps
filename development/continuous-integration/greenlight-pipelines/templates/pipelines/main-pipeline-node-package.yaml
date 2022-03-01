@@ -73,12 +73,28 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: qc-node-package
+      taskRef:
+        name: qc-node-package
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: version-node-package
+      taskRef:
+        name: version-node-package
+      runAfter:
+        - qc-node-package
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: publish-node-package
       taskRef:
         name: publish-node-package
       runAfter:
-        - clone-git-repo
-        - generate-npmrc
+        - version-node-package
       workspaces:
         - name: source
           workspace: git-source

@@ -20,24 +20,5 @@ spec:
         #!/usr/bin/env bash
         set -ex
         
-        # Check codebase and build
-        npm ci
-        npm run qc
         npm run build-clean
-
-        # Version and push tag
-        git config user.email "bot@greenlight.coop"
-        git config user.name "greenlight-coop-bot"
-        git fetch --tags
-        CURRENT_VERSION=$(npm pkg get version | tr -d '"')
-        if [ $(git tag -l "v$CURRENT_VERSION") ]
-        then
-          npm version patch
-        else
-          npm version $CURRENT_VERSION --allow-same-version
-        fi
-        git push --tags
-        git push origin HEAD:main
-
-        # Publish the package
         npm publish

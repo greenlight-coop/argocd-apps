@@ -86,9 +86,9 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: build-node-package
+    - name: qc-node-package
       taskRef:
-        name: build-node-package
+        name: qc-node-package
       runAfter:
         - clone-git-repo
         - generate-npmrc
@@ -100,8 +100,8 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - build-node-package
         - snyk-test
+        - qc-node-package
       params:
         - name: status
           value: success

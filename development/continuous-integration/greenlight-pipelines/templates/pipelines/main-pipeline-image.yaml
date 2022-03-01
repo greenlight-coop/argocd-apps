@@ -86,12 +86,20 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: version-node-package
+      taskRef:
+        name: version-node-package
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: build-and-push-image
       taskRef:
         name: buildkit
       runAfter:
-        - clone-git-repo
-        - generate-npmrc
+        - version-node-package
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
