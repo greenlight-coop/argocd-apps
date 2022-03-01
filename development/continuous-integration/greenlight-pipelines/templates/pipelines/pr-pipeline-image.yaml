@@ -53,23 +53,6 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: generate-image-tag
-      taskRef:
-        name: generate-image-tag
-      params:
-        - name: organization
-          value: $(params.hub-organization)
-        - name: repository
-          value: $(params.project-name)
-        - name: branch-name
-          value: $(params.git-branch)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
-        - name: pull-request-commit-number
-          value: $(params.git-pr-commit-number)
-      workspaces:
-        - name: node-modules
-          workspace: node-modules
     - name: clone-git-repo
       taskRef:
         name: git-clone
@@ -103,6 +86,24 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: version-node-package
+      taskRef:
+        name: version-node-package
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+      params:
+        - name: push-git
+          value: false
+        - name: branch-name
+          value: $(params.git-branch)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+        - name: pull-request-commit-number
+          value: $(params.git-pr-commit-number)
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: build-and-push-image
       taskRef:
         name: buildkit
@@ -111,7 +112,7 @@ spec:
         - generate-npmrc
       params:
         - name: IMAGE
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
         - name: BUILDKIT_CLIENT_IMAGE
           value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
       workspaces:
@@ -124,7 +125,7 @@ spec:
         - build-and-push-image
       params:
         - name: image
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source

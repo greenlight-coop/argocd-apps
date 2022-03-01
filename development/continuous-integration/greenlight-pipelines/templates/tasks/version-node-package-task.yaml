@@ -7,6 +7,17 @@ spec:
   description: >-
     Updates the version of a Node.js package, creating and pushing a matching GitHub tag.
   params:
+    - name: push-git
+      description: Whether to push the generated git tag and main to the upstream origin. Set to true or false.
+      default: true
+    - name: branch-name
+      description: the branch being built, either main|master or a feature branch (e.g. feature/5)
+    - name: pull-request-number
+      description: GitHub pull request number
+      default: ""
+    - name: pull-request-commit-number
+      description: ascending count of commit in a pull request
+      default: ""
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.15@sha256:69e13f53dc8156e85f4e281367cd5a346f25e90f64d633e71a3f88aed16d8912
@@ -24,20 +35,33 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -ex
+ 
+        get_current_version () {
+          echo $(npm pkg get version | tr -d '"')
+        }
 
         git config user.email "bot@greenlight.coop"
         git config user.name "greenlight-coop-bot"
         git fetch --tags
-        CURRENT_VERSION=$(npm pkg get version | tr -d '"')
+        CURRENT_VERSION=$(get_current_version)
         if [ $(git tag -l "v$CURRENT_VERSION") ]
         then
           npm version patch
         else
           npm version $CURRENT_VERSION --allow-same-version
         fi
-        git push --tags
-        git push origin HEAD:main
+        if [ "$(params.branch-name)" != "main" ]
+        then
+          CANDIDATE_VERSION=$("echo $(get_current_version)-$(params.branch-name)-pr-$(params.branch-name)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
+          npm version CANDIDATE_VERSION
+        fi
+
+        GIT_PUSH=$(params.git-push)
+        if [ "${GIT_PUSH,,}" = "true" ]; then
+          git push --tags
+          git push origin HEAD:main
+        fi
 
         UPDATED_VERSION=$(npm pkg get version | tr -d '"')
-        echo $UPDATED_VERSION >   $(results.node-version.path)
-        echo "v$UPDATED_VERSION" >   $(results.github-version.path)
+        echo $UPDATED_VERSION > $(results.node-version.path)
+        echo "v$UPDATED_VERSION" > $(results.github-version.path)
