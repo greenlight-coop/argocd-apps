@@ -32,7 +32,7 @@ spec:
         CURRENT_VERSION=$(npm pkg get version | tr -d '"')
         if [ $(git tag -l "v$CURRENT_VERSION") ]
         then
-          npm version minor
+          npm version patch
         else
           npm version $CURRENT_VERSION --allow-same-version
         fi
