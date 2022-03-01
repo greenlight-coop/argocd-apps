@@ -9,7 +9,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.15@sha256:69e13f53dc8156e85f4e281367cd5a346f25e90f64d633e71a3f88aed16d8912
+      default: greenlightcoop/node-utils:0.1.16@sha256:ce1058609793883834459f60ccb5823824b0811f5e98eab3b1a64e7254683bfb
   workspaces:
     - name: source
   steps:
