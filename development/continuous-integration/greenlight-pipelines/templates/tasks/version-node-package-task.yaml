@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: version-node-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Updates the version of a Node.js package, creating and pushing a matching GitHub tag.
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.15@sha256:69e13f53dc8156e85f4e281367cd5a346f25e90f64d633e71a3f88aed16d8912
+  results:
+    - name: node-version
+      description: the resulting Node.js package version in
+    - name: github-version
+      description: the tag pushed to GitHub
+  workspaces:
+    - name: source
+  steps:
+    - name: version-node-package
+      workingDir: $(workspaces.source.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+
+        git config user.email "bot@greenlight.coop"
+        git config user.name "greenlight-coop-bot"
+        git fetch --tags
+        CURRENT_VERSION=$(npm pkg get version | tr -d '"')
+        if [ $(git tag -l "v$CURRENT_VERSION") ]
+        then
+          npm version patch
+        else
+          npm version $CURRENT_VERSION --allow-same-version
+        fi
+        git push --tags
+        git push origin HEAD:main
+
+        UPDATED_VERSION=$(npm pkg get version | tr -d '"')
+        echo $UPDATED_VERSION >   $(results.node-version.path)
+        echo "v$UPDATED_VERSION" >   $(results.github-version.path)
