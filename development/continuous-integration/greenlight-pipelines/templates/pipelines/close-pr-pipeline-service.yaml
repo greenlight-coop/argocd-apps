@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: main-pipeline
+  name: close-pr-pipeline-service
   namespace: greenlight-pipelines
 spec:
   params:
@@ -11,17 +11,21 @@ spec:
       type: string
     - name: hub-organization
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
       type: string
     - name: git-branch
       type: string
+    - name: git-pr-number
+      type: string
+    - name: git-pr-commit-number
+      type: string
+    - name: preview-namespace
+      type: string
   workspaces:
     - name: git-source
+    - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: status-workspace
     - name: node-modules
   tasks:
     - name: set-default-outcome
@@ -51,60 +55,51 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: generate-image-tag
+    - name: delete-preview-resources
       taskRef:
-        name: generate-image-tag
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pr-namespace
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-pull-request-images
+      taskRef:
+        name: delete-pull-request-images
       params:
         - name: organization
           value: $(params.hub-organization)
         - name: repository
           value: $(params.project-name)
-        - name: branch-name
-          value: $(params.git-branch)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
       workspaces:
         - name: node-modules
           workspace: node-modules
-    - name: clone-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:$(params.repository-full-name).git
-        - name: revision
-          value: $(params.git-revision)
-      workspaces:
-        - name: output
-          workspace: git-source
-    - name: build-and-push-image
-      taskRef:
-        name: buildkit
-      runAfter:
-        - clone-git-repo
-      params:
-        - name: IMAGE
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: snyk-monitor
-      taskRef:
-        name: snyk-monitor
-      runAfter:
-        - build-and-push-image
-      params:
-        - name: image
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.generate-image-tag.results.image-tag)
-      workspaces:
-        - name: source
-          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - snyk-monitor
+        - delete-preview-resources
+        - delete-pr-namespace
+        - delete-pull-request-images
       params:
         - name: status
           value: success

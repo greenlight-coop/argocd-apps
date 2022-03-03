@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: publish-node-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Publishes a node package version to GitHub.
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.16@sha256:ce1058609793883834459f60ccb5823824b0811f5e98eab3b1a64e7254683bfb
+  workspaces:
+    - name: source
+  steps:
+    - name: publish-node-package
+      workingDir: $(workspaces.source.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+        
+        npm run build-clean
+        npm publish

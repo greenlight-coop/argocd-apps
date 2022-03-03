@@ -15,7 +15,7 @@ spec:
 
         Note: if the default value is updated, the reference in the run-integration-tests step must be updated as well.
       type: string
-      default: greenlightcoop/serenity-js-runner:0.1.14@sha256:28c4d7cbf6150b13d29bf1186edc3b0c2bca39734aaef1289f882a98a87c1329
+      default: greenlightcoop/serenity-js-runner:0.1.15@sha256:88af664adee2f28b5729831cb2ae3cc8786566fc6d52f7ec37a57a56bd3d9e0d
     - name: base-url
       description: The base URL to pass to the tests as the environment variable BASE_URL
       type: string
@@ -116,7 +116,7 @@ spec:
           value: $(workspaces.source.path)/site/$(params.results-identifier)
       script: |
         #!/usr/bin/env bash
-        if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.14@sha256:28c4d7cbf6150b13d29bf1186edc3b0c2bca39734aaef1289f882a98a87c1329" ]
+        if [ "$(params.test-image)" == "greenlightcoop/serenity-js-runner:0.1.15@sha256:88af664adee2f28b5729831cb2ae3cc8786566fc6d52f7ec37a57a56bd3d9e0d" ]
         then
           cd $(workspaces.source.path)
           npm install

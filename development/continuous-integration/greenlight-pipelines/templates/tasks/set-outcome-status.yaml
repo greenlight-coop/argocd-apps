@@ -16,7 +16,7 @@ spec:
       description: the status value to set
   steps:
     - name: set-outcome-status
-      image: node:14.15
+      image: node:16.14.0@sha256:fd86131ddf8e0faa8ba7a3e49b6bf571745946e663e4065f3bff0a07204c1dde
       script: |
         #!/usr/bin/env node
         const fs = require('fs')

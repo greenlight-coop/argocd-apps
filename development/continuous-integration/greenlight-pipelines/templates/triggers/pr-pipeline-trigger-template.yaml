@@ -26,11 +26,11 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: $(tt.params.project-name)-pr-pipeline-run-
+        generateName: $(tt.params.project-name)-pr-pipeline-$(tt.params.build-type)-run-
         namespace: greenlight-pipelines
       spec:
         pipelineRef:
-          name: pr-pipeline
+          name: pr-pipeline-$(tt.params.build-type)
         podTemplate:
           securityContext:
             runAsUser: 0
@@ -42,8 +42,6 @@ spec:
             value: $(tt.params.repository-full-name)
           - name: hub-organization
             value: $(tt.params.hub-organization)
-          - name: build-type
-            value: $(tt.params.build-type)
           - name: preview-namespace
             value: $(tt.params.preview-namespace)
           - name: git-revision

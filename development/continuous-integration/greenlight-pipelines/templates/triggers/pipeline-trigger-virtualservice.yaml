@@ -27,6 +27,14 @@ spec:
         host: el-image-pipeline-event-listener
   - match:
     - uri:
+        exact: /webhook/node-package-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-node-package-pipeline-event-listener
+  - match:
+    - uri:
         exact: /webhook/service-pipeline
     route:
     - destination:

@@ -1,0 +1,67 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: version-node-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Updates the version of a Node.js package, creating and pushing a matching GitHub tag.
+  params:
+    - name: push-git
+      description: Whether to push the generated git tag and main to the upstream origin. Set to true or false.
+      default: "true"
+    - name: branch-name
+      description: the branch being built, either main|master or a feature branch (e.g. feature/5)
+    - name: pull-request-number
+      description: GitHub pull request number
+      default: ""
+    - name: pull-request-commit-number
+      description: ascending count of commit in a pull request
+      default: ""
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.16@sha256:ce1058609793883834459f60ccb5823824b0811f5e98eab3b1a64e7254683bfb
+  results:
+    - name: node-version
+      description: the resulting Node.js package version in
+    - name: github-version
+      description: the tag pushed to GitHub
+  workspaces:
+    - name: source
+  steps:
+    - name: version-node-package
+      workingDir: $(workspaces.source.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+ 
+        get_current_version () {
+          echo $(npm pkg get version | tr -d '"')
+        }
+
+        git config user.email "bot@greenlight.coop"
+        git config user.name "greenlight-coop-bot"
+        git fetch --tags
+        CURRENT_VERSION=$(get_current_version)
+        if [ $(git tag -l "v$CURRENT_VERSION") ]
+        then
+          npm version patch
+        else
+          npm version $CURRENT_VERSION --allow-same-version
+        fi
+        if [ "$(params.branch-name)" != "main" ]
+        then
+          PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
+          npm version $PREVIEW_VERSION
+        fi
+
+        PUSH_GIT=$(params.push-git)
+        if [ "${PUSH_GIT,,}" = "true" ]; then
+          git push --tags
+          git push origin HEAD:main
+        fi
+
+        UPDATED_VERSION=$(npm pkg get version | tr -d '"')
+        echo -n $UPDATED_VERSION > $(results.node-version.path)
+        echo -n "v$UPDATED_VERSION" > $(results.github-version.path)

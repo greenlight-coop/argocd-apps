@@ -1,0 +1,25 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: qc-node-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Runs quality control checks (tests, static analysis, etc.) on a Node.js package.
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.16@sha256:ce1058609793883834459f60ccb5823824b0811f5e98eab3b1a64e7254683bfb
+  workspaces:
+    - name: source
+  steps:
+    - name: qc-node-package
+      workingDir: $(workspaces.source.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+        
+        # Check codebase and build
+        npm ci
+        npm run qc

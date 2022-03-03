@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: close-pr-pipeline
+  name: main-pipeline-service
   namespace: greenlight-pipelines
 spec:
   params:
@@ -11,23 +11,15 @@ spec:
       type: string
     - name: hub-organization
       type: string
-    - name: build-type
-      type: string
     - name: git-revision
       type: string
     - name: git-branch
       type: string
-    - name: git-pr-number
-      type: string
-    - name: git-pr-commit-number
-      type: string
-    - name: preview-namespace
-      type: string
   workspaces:
     - name: git-source
-    - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
+    - name: status-workspace
     - name: node-modules
   tasks:
     - name: set-default-outcome
@@ -57,79 +49,72 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-resources
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+    - name: clone-git-repo
       taskRef:
-        name: kubernetes-actions
+        name: git-clone
       params:
-        - name: script
-          value: |
-            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
+        - name: url
+          value: git@github.com:$(params.repository-full-name).git
+        - name: revision
+          value: $(params.git-revision)
       workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
-    - name: delete-pr-namespace
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+        - name: output
+          workspace: git-source
+    - name: generate-npmrc
       taskRef:
-        name: kubernetes-actions
+        name: generate-npmrc
+      runAfter:
+        - clone-git-repo
       params:
-        - name: script
-          value: |
-            kubectl delete --ignore-not-found namespace $(params.preview-namespace)
+        - name: githubTokenSecretName
+          value: bot-github-token
+        - name: githubTokenSecretKey
+          value: botGithubTokenValue
       workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
-    - name: delete-pull-request-images
+        - name: source
+          workspace: git-source
+    - name: version-node-package
       taskRef:
-        name: delete-pull-request-images
+        name: version-node-package
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
       params:
-        - name: organization
-          value: $(params.hub-organization)
-        - name: repository
-          value: $(params.project-name)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
+        - name: branch-name
+          value: $(params.git-branch)
       workspaces:
-        - name: node-modules
-          workspace: node-modules
-    - name: set-success-outcome-service
-      when:
-        - input: $(params.build-type)
-          operator: in
-          values: ["service"]
+        - name: source
+          workspace: git-source
+    - name: build-and-push-image
+      taskRef:
+        name: buildkit
+      runAfter:
+        - version-node-package
+      params:
+        - name: IMAGE
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
+        - name: BUILDKIT_CLIENT_IMAGE
+          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: snyk-monitor
+      taskRef:
+        name: snyk-monitor
+      runAfter:
+        - build-and-push-image
+      params:
+        - name: image
+          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+    - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - delete-preview-resources
-        - delete-pr-namespace
-        - delete-pull-request-images
-      params:
-        - name: status
-          value: success
-      workspaces:
-        - name: status-workspace
-          workspace: status-workspace
-    - name: set-success-outcome-nonservice
-      when:
-        - input: $(params.build-type)
-          operator: notin
-          values: ["service"]
-      taskRef:
-        name: set-outcome-status
-      runAfter:
-        - set-default-outcome
-        - delete-pull-request-images
+        - snyk-monitor
       params:
         - name: status
           value: success
