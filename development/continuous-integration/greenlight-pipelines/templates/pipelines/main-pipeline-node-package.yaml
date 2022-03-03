@@ -87,6 +87,9 @@ spec:
         name: version-node-package
       runAfter:
         - qc-node-package
+      params:
+        - name: branch-name
+          value: $(params.git-branch)
       workspaces:
         - name: source
           workspace: git-source
