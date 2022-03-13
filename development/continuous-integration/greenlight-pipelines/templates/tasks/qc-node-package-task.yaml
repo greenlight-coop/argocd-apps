@@ -18,7 +18,7 @@ spec:
       image: $(params.node-image)
       script: |
         #!/usr/bin/env bash
-        set -ex
+        # set -ex
         
         # Check codebase and build
         npm ci
