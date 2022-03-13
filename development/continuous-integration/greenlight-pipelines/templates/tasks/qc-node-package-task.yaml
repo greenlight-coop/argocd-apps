@@ -22,4 +22,5 @@ spec:
         
         # Check codebase and build
         npm ci
+        sleep 3600
         npm run qc
