@@ -18,49 +18,50 @@ spec:
     targetRevision: 4.6.2
     helm:
       releaseName: verdaccio
-      service:
-        port: 8080
-      extraEnvVars:
-      - name: GITHUBTOKEN
-        valueFrom:
-          secretKeyRef:
-            name: bot-github-token
-            key: botGithubTokenValue
-      configMap: |
-        web:
-          enable: false
-        uplinks:
-          npmjs:
-            url: https://registry.npmjs.org/
-            agent_options:
-              keepAlive: true
-              maxSockets: 40
-              maxFreeSockets: 10
-          github:
-            url: https://npm.pkg.github.com/
-            auth:
-              type: bearer
-              token_env: GITHUBTOKEN
-            agent_options:
-              keepAlive: true
-              maxSockets: 40
-              maxFreeSockets: 10
-        packages:
-          '@greenlight-coop/*':
-            access: $all
-            publish: $all
-            proxy: github
-          '**':
-            access: $all
-            publish: $authenticated
-            proxy: npmjs
-        persistence:
-          enabled: true
-{{- if .Values.rook.enabled }}
-          storageClass: rook-ceph-block
-{{- end }}
-          accessMode: ReadWriteOnce
-          size: 8Gi
+      values: |
+        service:
+          port: 8080
+        extraEnvVars:
+        - name: GITHUBTOKEN
+          valueFrom:
+            secretKeyRef:
+              name: bot-github-token
+              key: botGithubTokenValue
+        configMap: |
+          web:
+            enable: false
+          uplinks:
+            npmjs:
+              url: https://registry.npmjs.org/
+              agent_options:
+                keepAlive: true
+                maxSockets: 40
+                maxFreeSockets: 10
+            github:
+              url: https://npm.pkg.github.com/
+              auth:
+                type: bearer
+                token_env: GITHUBTOKEN
+              agent_options:
+                keepAlive: true
+                maxSockets: 40
+                maxFreeSockets: 10
+          packages:
+            '@greenlight-coop/*':
+              access: $all
+              publish: $all
+              proxy: github
+            '**':
+              access: $all
+              publish: $authenticated
+              proxy: npmjs
+          persistence:
+            enabled: true
+  {{- if .Values.rook.enabled }}
+            storageClass: rook-ceph-block
+  {{- end }}
+            accessMode: ReadWriteOnce
+            size: 8Gi
   syncPolicy:
     automated:
       prune: true
