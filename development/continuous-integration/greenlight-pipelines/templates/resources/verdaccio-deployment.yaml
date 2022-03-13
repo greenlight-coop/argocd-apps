@@ -30,9 +30,11 @@ spec:
                 secretKeyRef:
                   key: botGithubTokenValue
                   name: bot-github-token
+            - name: VERDACCIO_PORT
+              value: 4873
           image: 'verdaccio/verdaccio:5.8.0'
           imagePullPolicy: IfNotPresent
-          command: ["sleep", "3600"]
+          # command: ["sleep", "3600"]
           livenessProbe:
             httpGet:
               path: /-/ping
