@@ -33,4 +33,4 @@ spec:
 
         set -e
         
-        echo -e "registry=http://verdaccio:8080" > .npmrc
+        echo -e "registry=http://verdaccio:4873" > .npmrc
