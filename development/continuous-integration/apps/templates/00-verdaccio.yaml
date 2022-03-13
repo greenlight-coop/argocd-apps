@@ -29,6 +29,7 @@ spec:
               name: bot-github-token
               key: botGithubTokenValue
         configMap: |
+          listen: 0.0.0.0:8080
           storage: /verdaccio/storage/data
           web:
             enable: false
