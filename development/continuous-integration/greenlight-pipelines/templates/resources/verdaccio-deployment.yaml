@@ -32,7 +32,7 @@ spec:
                   name: bot-github-token
           image: 'verdaccio/verdaccio:5.8.0'
           imagePullPolicy: IfNotPresent
-          command: sh
+          command: ["sh"]
           livenessProbe:
             httpGet:
               path: /-/ping
