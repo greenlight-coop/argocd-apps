@@ -17,6 +17,7 @@ spec:
       - "docker.io/grafana/"
       - "docker.io/k8ssandra"
       - "docker.io/thelastpickle"
+      - "docker.io/verdaccio"
       - "gcr.io/cloud-builders"
       - "gcr.io/tekton-releases"
       - "grafana/loki"
