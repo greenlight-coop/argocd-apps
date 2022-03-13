@@ -10,7 +10,7 @@ metadata:
 spec:
   destination:
     namespace: greenlight-pipelines
-    server: {{ .Values.spec.destination.server }}
+    server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
     repoURL: https://charts.verdaccio.org
