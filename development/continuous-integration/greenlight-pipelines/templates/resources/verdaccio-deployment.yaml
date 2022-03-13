@@ -4,10 +4,7 @@ metadata:
   labels:
     app: verdaccio
     app.kubernetes.io/instance: greenlight-verdaccio
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: verdaccio
-    app.kubernetes.io/version: 5.5.0
-    helm.sh/chart: verdaccio-4.6.2
   name: verdaccio
   namespace: greenlight-pipelines
 spec:
@@ -35,6 +32,7 @@ spec:
                   name: bot-github-token
           image: 'verdaccio/verdaccio:5.8.0'
           imagePullPolicy: IfNotPresent
+          command: sh
           livenessProbe:
             httpGet:
               path: /-/ping
