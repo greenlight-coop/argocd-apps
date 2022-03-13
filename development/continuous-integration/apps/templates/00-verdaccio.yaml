@@ -21,7 +21,7 @@ spec:
       values: |
         service:
           name: verdaccio
-          port: 8080
+          port: 4873
         extraEnvVars:
         - name: GITHUBTOKEN
           valueFrom:
@@ -29,7 +29,7 @@ spec:
               name: bot-github-token
               key: botGithubTokenValue
         configMap: |
-          listen: 0.0.0.0:8080
+          listen: 0.0.0.0:4873
           storage: /verdaccio/storage/data
           web:
             enable: false
