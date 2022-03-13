@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: verdaccio
+    app.kubernetes.io/instance: greenlight-verdaccio
+    app.kubernetes.io/name: verdaccio
+  name: verdaccio
+  namespace: greenlight-pipelines
+data:
+  config.yaml: |-
+    storage: /verdaccio/storage/data
+    web:
+      enable: false
+    uplinks:
+      npmjs:
+        url: https://registry.npmjs.org/
+        agent_options:
+          keepAlive: true
+          maxSockets: 40
+          maxFreeSockets: 10
+      github:
+        url: https://npm.pkg.github.com/
+        auth:
+          type: bearer
+          token_env: GITHUBTOKEN
+        agent_options:
+          keepAlive: true
+          maxSockets: 40
+          maxFreeSockets: 10
+    packages:
+      '@greenlight-coop/*':
+        access: $all
+        publish: $all
+        proxy: github
+      '**':
+        access: $all
+        publish: $authenticated
+        proxy: npmjs

@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: verdaccio
+    app.kubernetes.io/instance: greenlight-verdaccio
+    app.kubernetes.io/name: verdaccio
+  name: verdaccio
+  namespace: greenlight-pipelines
+spec:
+  ports:
+    - name: verdaccio
+      port: 4873
+      protocol: TCP
+      targetPort: http
+  selector:
+    app.kubernetes.io/instance: verdaccio
+    app.kubernetes.io/name: verdaccio
+  type: ClusterIP

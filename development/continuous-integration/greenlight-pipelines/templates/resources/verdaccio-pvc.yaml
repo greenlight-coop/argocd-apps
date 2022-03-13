@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: verdaccio
+    app.kubernetes.io/instance: greenlight-verdaccio
+    app.kubernetes.io/name: verdaccio
+  name: verdaccio
+  namespace: greenlight-pipelines
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+{{- if .Values.rook.enabled }}
+  storageClassName: rook-ceph-block
+{{- end }}
