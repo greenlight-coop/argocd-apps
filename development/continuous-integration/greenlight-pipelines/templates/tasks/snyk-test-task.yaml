@@ -25,7 +25,7 @@ spec:
         snyk config set disableSuggestions=true
         if [ -d "$(workspaces.source.path)/src" ] 
         then
-          snyk code test --fail-on=all
+          snyk code test --fail-on=all || echo 'snyk code test identified potential issues'
         else
           echo 'No src directory, skipping snyk code test'
         fi
