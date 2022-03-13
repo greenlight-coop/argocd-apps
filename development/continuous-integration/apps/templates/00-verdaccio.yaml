@@ -19,8 +19,6 @@ spec:
     helm:
       releaseName: verdaccio
       values: |
-        service:
-          port: 8080
         extraEnvVars:
         - name: GITHUBTOKEN
           valueFrom:
