@@ -55,13 +55,13 @@ spec:
               access: $all
               publish: $authenticated
               proxy: npmjs
-          persistence:
-            enabled: true
-  {{- if .Values.rook.enabled }}
-            storageClass: rook-ceph-block
-  {{- end }}
-            accessMode: ReadWriteOnce
-            size: 8Gi
+        persistence:
+          enabled: true
+{{- if .Values.rook.enabled }}
+          storageClass: rook-ceph-block
+{{- end }}
+          accessMode: ReadWriteOnce
+          size: 8Gi
   syncPolicy:
     automated:
       prune: true
