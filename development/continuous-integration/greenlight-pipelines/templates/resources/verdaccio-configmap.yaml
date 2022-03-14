@@ -30,11 +30,11 @@ data:
           maxFreeSockets: 10
     packages:
       '@greenlight-coop/*':
-        access: $anonymous
-        publish: $anonymous
+        access: $authenticated
+        publish: $authenticated
         proxy: github
       '**':
-        access: $anonymous
+        access: $authenticated
         publish: $authenticated
         proxy: npmjs
     middlewares:
