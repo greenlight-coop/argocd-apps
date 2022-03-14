@@ -9,7 +9,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.16@sha256:ce1058609793883834459f60ccb5823824b0811f5e98eab3b1a64e7254683bfb
+      default: greenlightcoop/node-utils:0.1.17@sha256:1ca2c1abf6d1e3ce74184485856abc3bde47b9fa24f6ebd3df4fc344934b6602
   workspaces:
     - name: source
   steps:
@@ -18,9 +18,8 @@ spec:
       image: $(params.node-image)
       script: |
         #!/usr/bin/env bash
-        # set -ex
+        set -ex
         
         # Check codebase and build
         npm ci
-        sleep 3600
         npm run qc

@@ -33,5 +33,4 @@ spec:
 
         set -e
         
-        # echo -e "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN\n@greenlight-coop:registry=https://npm.pkg.github.com" > .npmrc
-        echo -e "registry=http://verdaccio:4873" > .npmrc
+        echo -e "//npm.pkg.github.com/:_authToken=$GITHUBTOKEN\registry=http://verdaccio:4873" > .npmrc

@@ -54,6 +54,10 @@ spec:
             - mountPath: /verdaccio/storage
               name: storage
               readOnly: false
+            - mountPath: /verdaccio/storage/htpasswd
+              name: htpasswd
+              subPath: htpasswd
+              readOnly: true
             - mountPath: /verdaccio/conf
               name: config
               readOnly: true
@@ -61,9 +65,12 @@ spec:
         fsGroup: 101
       serviceAccountName: default
       volumes:
-        - configMap:
+        - name: config
+          configMap:
             name: verdaccio
-          name: config
+        - name: htpasswd
+          secret:
+            secretName: verdaccio-htpasswd
         - name: storage
           persistentVolumeClaim:
             claimName: verdaccio
