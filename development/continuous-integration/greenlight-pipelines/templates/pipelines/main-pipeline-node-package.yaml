@@ -101,12 +101,18 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: snyk-monitor
+      taskRef:
+        name: snyk-monitor
+      runAfter:
+        - publish-node-package
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
         - publish-node-package
+        - snyk-monitor
       params:
         - name: status
           value: success
