@@ -9,6 +9,7 @@ spec:
     - name: image
       description: Tag of image in Docker Hub to assess.
       type: string
+      default: ""
   workspaces:
     - name: source
   steps:
@@ -32,4 +33,9 @@ spec:
         else
           echo 'No package.json, skipping snyk monitor'
         fi
-        snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile
+        if [ -f "$(workspaces.source.path)/Dockerfile" ] 
+        then
+          snyk container monitor $(params.image) --file=$(workspaces.source.path)/Dockerfile
+        else
+          echo 'No Dockerfile, skipping snyk container monitor'
+        fi
