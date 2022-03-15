@@ -106,6 +106,9 @@ spec:
         name: snyk-monitor
       runAfter:
         - publish-node-package
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
