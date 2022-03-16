@@ -1,4 +1,4 @@
-# Knative Serving CRDs release v1.2.0
+# Knative Serving CRDs release v1.3.0
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
