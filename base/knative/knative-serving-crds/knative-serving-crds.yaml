@@ -18,8 +18,8 @@ metadata:
   name: certificates.networking.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -78,8 +78,8 @@ metadata:
   name: configurations.serving.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
     duck.knative.dev/podspecable: "true"
 spec:
@@ -532,10 +532,6 @@ spec:
                               name:
                                 description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
                                 type: string
-                        maxDurationSeconds:
-                          description: MaxDurationSeconds is the maximum duration in seconds a request will be allowed to stay open.
-                          type: integer
-                          format: int64
                         serviceAccountName:
                           description: 'ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
                           type: string
@@ -786,8 +782,8 @@ metadata:
   name: clusterdomainclaims.networking.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -837,8 +833,8 @@ metadata:
   name: domainmappings.serving.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: serving.knative.dev
@@ -1108,8 +1104,8 @@ metadata:
   name: ingresses.networking.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -1169,8 +1165,8 @@ metadata:
   name: metrics.autoscaling.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: autoscaling.internal.knative.dev
@@ -1293,8 +1289,8 @@ metadata:
   name: podautoscalers.autoscaling.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: autoscaling.internal.knative.dev
@@ -1454,8 +1450,8 @@ metadata:
   name: revisions.serving.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: serving.knative.dev
@@ -1887,10 +1883,6 @@ spec:
                       name:
                         description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
                         type: string
-                maxDurationSeconds:
-                  description: MaxDurationSeconds is the maximum duration in seconds a request will be allowed to stay open.
-                  type: integer
-                  format: int64
                 serviceAccountName:
                   description: 'ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
                   type: string
@@ -2170,8 +2162,8 @@ metadata:
   name: routes.serving.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
     duck.knative.dev/addressable: "true"
 spec:
@@ -2345,8 +2337,8 @@ metadata:
   name: serverlessservices.networking.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: networking.internal.knative.dev
@@ -2417,8 +2409,8 @@ metadata:
   name: services.serving.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
-    serving.knative.dev/release: "v1.2.0"
+    app.kubernetes.io/version: "1.3.0"
+    serving.knative.dev/release: "v1.3.0"
     knative.dev/crd-install: "true"
     duck.knative.dev/addressable: "true"
     duck.knative.dev/podspecable: "true"
@@ -2875,10 +2867,6 @@ spec:
                               name:
                                 description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
                                 type: string
-                        maxDurationSeconds:
-                          description: MaxDurationSeconds is the maximum duration in seconds a request will be allowed to stay open.
-                          type: integer
-                          format: int64
                         serviceAccountName:
                           description: 'ServiceAccountName is the name of the ServiceAccount to use to run this pod. More info: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/'
                           type: string
@@ -3190,7 +3178,7 @@ metadata:
   name: images.caching.internal.knative.dev
   labels:
     app.kubernetes.io/name: knative-serving
-    app.kubernetes.io/version: "1.2.0"
+    app.kubernetes.io/version: "1.3.0"
     knative.dev/crd-install: "true"
 spec:
   group: caching.internal.knative.dev
