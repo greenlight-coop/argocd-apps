@@ -1,4 +1,4 @@
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkas.kafka.strimzi.io
@@ -3734,7 +3734,7 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkausers.kafka.strimzi.io
@@ -4323,7 +4323,7 @@ rules:
   - get
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkatopics.kafka.strimzi.io
@@ -4400,7 +4400,7 @@ spec:
               type: integer
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkabridges.kafka.strimzi.io
@@ -5094,7 +5094,7 @@ spec:
     type: Recreate
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkaconnectors.kafka.strimzi.io
@@ -5156,7 +5156,7 @@ spec:
               type: object
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkaconnects2is.kafka.strimzi.io
@@ -6062,7 +6062,7 @@ spec:
               type: string
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkaconnects.kafka.strimzi.io
@@ -6957,7 +6957,7 @@ spec:
               type: string
 
 ---
-apiVersion: apiextensions.k8s.io/v1beta1
+apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   name: kafkamirrormakers.kafka.strimzi.io
