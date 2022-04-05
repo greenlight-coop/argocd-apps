@@ -32,5 +32,6 @@ spec:
       - "moby/buildkit"
       - "nginx"
       - "quay.io/kiwigrid"
+      - "quay.io/mittwald"
       - "quay.io/prometheus"
       - "quay.io/prometheus-operator"
