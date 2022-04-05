@@ -34,10 +34,12 @@ spec:
         set -xe
 
         export IMAGE_TAG=$(params.image-version)
+        export NAMESPACE=$(params.namespace)
         cp -r preview preview-parsed
         for file in `find preview-parsed -type f`
         do 
           sed -i "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file
+          sed -i "s/\${NAMESPACE}/${NAMESPACE}/g" $file
         done
 
         kubectl apply -n $(params.namespace) -k preview-parsed
