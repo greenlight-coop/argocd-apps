@@ -70,7 +70,7 @@ spec:
         name: git-clone
       params:
         - name: url
-          value: git@github.com:greenlight-helm-charts.git
+          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
         - name: revision
           value: HEAD
       workspaces:
