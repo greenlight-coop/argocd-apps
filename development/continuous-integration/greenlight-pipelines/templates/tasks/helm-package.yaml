@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Generates a versioned Helm package in a checked out copy of the Green Light Helm chart repository,
+    updates the Helm index and optionally pushes the updated Helm repository upstream to GitHub.
+  params:
+    - name: version
+      description: The version tag for the Helm package to create
+    - name: push-git
+      description: Whether to push the updated Helm repository upstream to GitHub. Set to true or false.
+      default: "true"
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.18@sha256:1d97f3e83e5d9994fc1b4ee72e1eb24b6021ff381847c8c4c92ad2742ad45f0b
+  workspaces:
+    - name: source
+    - name: helm
+  steps:
+    - name: helm-package
+      workingDir: $(workspaces.helm.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+ 
+        helm package $(workspaces.helm.path) --version "$(params.version)"
+        helm repo index .
+
+
+        PUSH_GIT=$(params.push-git)
+        if [ "${PUSH_GIT,,}" = "true" ]; then
+          git config user.email "bot@greenlight.coop"
+          git config user.name "greenlight-coop-bot"
+          git add index.yaml
+          git commit -m"Updated chart index; added version $(params.version) of chart"
+          git push origin HEAD:main
+        fi
