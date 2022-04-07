@@ -64,6 +64,7 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+          subPath: source
     - name: clone-helm-git-repo
       taskRef:
         name: git-clone
@@ -89,6 +90,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -101,6 +103,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: helm-package
       taskRef:
         name: helm-package
@@ -113,6 +116,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
         - name: helm
           workspace: git-source
           subPath: helm
