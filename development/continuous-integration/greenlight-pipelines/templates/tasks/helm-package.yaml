@@ -46,7 +46,7 @@ spec:
         if [ "${PUSH_GIT,,}" = "true" ]; then
           git config user.email "bot@greenlight.coop"
           git config user.name "greenlight-coop-bot"
-          git add index.yaml
+          git add .
           git commit -m"Updated chart index; added version $(params.version) of chart"
           git push origin HEAD:main
         fi
