@@ -124,6 +124,9 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
+        - name: helm
+          workspace: git-source
           subPath: helm
     - name: set-success-outcome
       taskRef:
