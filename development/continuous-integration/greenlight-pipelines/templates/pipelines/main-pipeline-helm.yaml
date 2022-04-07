@@ -21,7 +21,6 @@ spec:
       type: string
   workspaces:
     - name: git-source
-    - name: helm-git-source
     - name: status-workspace
     - name: node-modules
     - name: kubeconfig-dir
@@ -75,7 +74,8 @@ spec:
           value: HEAD
       workspaces:
         - name: output
-          workspace: helm-git-source
+          workspace: git-source
+          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -114,7 +114,8 @@ spec:
         - name: source
           workspace: git-source
         - name: helm
-          workspace: helm-git-source
+          workspace: git-source
+          subPath: helm
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status

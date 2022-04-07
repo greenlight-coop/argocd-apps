@@ -21,7 +21,6 @@ spec:
       type: string
   workspaces:
     - name: git-source
-    - name: helm-git-source
     - name: status-workspace
     - name: node-modules
     - name: kubeconfig-dir
