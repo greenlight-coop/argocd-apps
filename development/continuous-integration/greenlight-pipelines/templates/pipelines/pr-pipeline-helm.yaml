@@ -65,6 +65,7 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+          subPath: source
     - name: clone-helm-git-repo
       taskRef:
         name: git-clone
@@ -75,7 +76,8 @@ spec:
           value: HEAD
       workspaces:
         - name: output
-          workspace: helm-git-source
+          workspace: git-source
+          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -89,6 +91,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -107,6 +110,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: helm-package
       taskRef:
         name: helm-package
@@ -121,8 +125,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-        - name: helm
-          workspace: helm-git-source
+          subPath: helm
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
