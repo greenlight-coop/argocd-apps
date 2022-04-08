@@ -199,8 +199,6 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
-        - name: git-revision
-          value: $(params.git-revision)
         - name: helm-chart-version
           value: $(tasks.version-node-package.results.node-version)
       workspaces:
