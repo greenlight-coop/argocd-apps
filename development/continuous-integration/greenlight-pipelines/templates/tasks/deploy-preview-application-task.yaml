@@ -31,7 +31,7 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        export CHART_NAME=$(yq 'name' $(workspaces.source.path)/chart/Chart.yaml)
+        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/chart/Chart.yaml)
 
         helm install -n $(params.namespace) \
           --set debug=true,domainName={{ .Values.domainName }},subdomain=$(params.namespace) \

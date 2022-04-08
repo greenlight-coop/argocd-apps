@@ -38,9 +38,9 @@ spec:
           exit 1
         fi
 
-        export CHART_NAME=$(yq 'name' $HELM_PACKAGE_PATH/Chart.yaml)
-        yq -i 'version = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
-        yq -i 'appVersion = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
+        export CHART_NAME=$(yq '.name' $HELM_PACKAGE_PATH/Chart.yaml)
+        yq -i '.version = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
+        yq -i '.appVersion = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
 
         helm lint $HELM_PACKAGE_PATH
         helm package $HELM_PACKAGE_PATH --version "$(params.version)"
