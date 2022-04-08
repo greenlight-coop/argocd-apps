@@ -14,34 +14,27 @@ spec:
     - name: namespace
       description: The namespace to install the preview into
       type: string
-    - name: git-revision
-      description: The current git-revision, used to access the preview Helm chart
+    - name: helm-chart-version
+      description: The preview Helm chart version to deploy
       type: string
-    - name: image-version
-      description: Version of the Docker image to deploy
-      type: string
-    - name: kubectl-image
-      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
-      description: Kubectl wrapper image
+    - name: helm-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Helm image
   workspaces:
     - name: source
+    - name: helm
   steps:
     - name: deploy-preview-application
       workingDir: $(workspaces.source.path)
-      image: $(params.kubectl-image)
+      image: $(params.helm-image)
       script: |
         #!/usr/bin/env bash
         set -xe
 
-        export IMAGE_TAG=$(params.image-version)
-        export NAMESPACE=$(params.namespace)
-        cp -r preview preview-parsed
-        for file in `find preview-parsed -type f`
-        do 
-          sed -i "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file
-          sed -i "s/\${NAMESPACE}/${NAMESPACE}/g" $file
-        done
+        export CHART_NAME=$(yq 'name' $(workspaces.source.path)/chart/Chart.yaml)
 
-        kubectl apply -n $(params.namespace) -k preview-parsed
+        helm install -n $(params.namespace) \
+          --set debug=true,domainName={{ .Values.domainName }},subdomain=$(params.namespace) \
+          $CHART_NAME ./chart
 
         kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/$(params.project-name)

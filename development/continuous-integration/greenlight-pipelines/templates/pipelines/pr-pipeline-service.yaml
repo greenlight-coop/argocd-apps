@@ -85,6 +85,19 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+          subPath: source
+    - name: clone-helm-git-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
+        - name: revision
+          value: HEAD
+      workspaces:
+        - name: output
+          workspace: git-source
+          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -98,6 +111,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: snyk-test
       taskRef:
         name: snyk-test
@@ -107,6 +121,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -125,6 +140,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: build-and-push-image
       taskRef:
         name: buildkit
@@ -139,6 +155,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: snyk-container-test
       taskRef:
         name: snyk-container-test
@@ -150,10 +167,30 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
+    - name: helm-package
+      taskRef:
+        name: helm-package
+      runAfter:
+        - version-node-package
+        - clone-helm-git-repo
+      params:
+        - name: push-git
+          value: "false"
+        - name: version
+          value: $(tasks.version-node-package.results.node-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
+        - name: helm
+          workspace: git-source
+          subPath: helm
     - name: deploy-preview-application
       taskRef:
         name: deploy-preview-application
       runAfter:
+        - helm-package
         - snyk-test
         - snyk-container-test
         - ensure-preview-namespace-exists
@@ -164,11 +201,15 @@ spec:
           value: $(params.preview-namespace)
         - name: git-revision
           value: $(params.git-revision)
-        - name: image-version
+        - name: helm-chart-version
           value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
+        - name: helm
+          workspace: git-source
+          subPath: helm
     - name: run-integration-tests
       taskRef:
         name: run-serenity-tests
@@ -182,6 +223,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status

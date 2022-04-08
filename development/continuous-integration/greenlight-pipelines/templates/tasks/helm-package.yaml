@@ -15,7 +15,7 @@ spec:
       default: "true"
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.18@sha256:1d97f3e83e5d9994fc1b4ee72e1eb24b6021ff381847c8c4c92ad2742ad45f0b
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
   workspaces:
     - name: source
     - name: helm
@@ -38,15 +38,24 @@ spec:
           exit 1
         fi
 
+        export CHART_NAME=$(yq 'name' $HELM_PACKAGE_PATH/Chart.yaml)
+        yq -i 'version = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
+        yq -i 'appVersion = $(params.version)' $HELM_PACKAGE_PATH/Chart.yaml
+
+        helm lint $HELM_PACKAGE_PATH
         helm package $HELM_PACKAGE_PATH --version "$(params.version)"
         helm repo index .
-
 
         PUSH_GIT=$(params.push-git)
         if [ "${PUSH_GIT,,}" = "true" ]; then
           git config user.email "bot@greenlight.coop"
           git config user.name "greenlight-coop-bot"
           git add .
-          git commit -m"Updated chart index; added version $(params.version) of chart"
+          git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
+          git push origin HEAD:main
+
+          cd $(workspaces.source.path)
+          git add Chart.yaml
+          git commit -m"Updated chart versions to $(params.version)"
           git push origin HEAD:main
         fi

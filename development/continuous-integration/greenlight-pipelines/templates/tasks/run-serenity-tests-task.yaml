@@ -77,9 +77,9 @@ spec:
             server: https://kubernetes.default.svc
           project: greenlight-project
           source:
-            path: expose-pipeline-workspace-content
             repoURL: git@github.com:greenlight-coop/greenlight-helm-charts.git
-            targetRevision: {{ .Values.targetRevision }}
+            chart: expose-pipeline-workspace
+            targetRevision: 0.1.0
             helm:
               values: |
                 identifier: $(params.results-identifier)
