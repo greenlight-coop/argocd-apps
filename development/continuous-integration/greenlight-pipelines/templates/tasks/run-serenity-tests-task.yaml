@@ -77,7 +77,7 @@ spec:
             server: https://kubernetes.default.svc
           project: greenlight-project
           source:
-            repoURL: https://github.com/greenlight-coop/greenlight-helm-charts.git
+            repoURL: https://raw.githubusercontent.com/greenlight-coop/greenlight-helm-charts/main/
             chart: expose-pipeline-workspace
             targetRevision: 0.1.0
             helm:
