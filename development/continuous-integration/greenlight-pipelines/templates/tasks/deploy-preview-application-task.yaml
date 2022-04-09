@@ -20,6 +20,9 @@ spec:
     - name: helm-image
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
       description: Helm image
+    - name: kubectl-image
+      default: gcr.io/cloud-builders/kubectl@sha256:ca8521c92c9b347b8745c4603d395edbf102a6b4015f7adff775639110f308e0 #image is huge
+      description: Kubectl wrapper image
   workspaces:
     - name: source
     - name: helm
@@ -36,5 +39,11 @@ spec:
         helm install -n $(params.namespace) \
           --set debug=true,domainName={{ .Values.domainName }},subdomain=$(params.namespace) \
           $CHART_NAME ./chart
+    - name: wait-until-ready
+      workingDir: $(workspaces.source.path)
+      image: $(params.kubectl-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
 
         kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/$(params.project-name)
