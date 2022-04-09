@@ -39,7 +39,7 @@ metadata:
   name: pipeline-cluster-role
 rules:
   - apiGroups: [""]
-    resources: ["namespaces"]
+    resources: ["namespaces", "secrets"]
     verbs: ["get", "create", "update", "patch", "list", "delete"]
   - apiGroups: ["argoproj.io"]
     resources: ["applications"]
