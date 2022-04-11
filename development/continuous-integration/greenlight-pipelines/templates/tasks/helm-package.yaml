@@ -55,7 +55,7 @@ spec:
           git push origin HEAD:main
 
           cd $(workspaces.source.path)
-          git add Chart.yaml
+          git add chart/Chart.yaml
           git commit -m"Updated chart versions to $(params.version)"
           git push origin HEAD:main
         fi
