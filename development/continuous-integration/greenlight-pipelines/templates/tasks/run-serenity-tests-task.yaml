@@ -125,3 +125,4 @@ spec:
           cd /usr/src/app
           npm run test-features:ci
         fi
+        sleep 6000
