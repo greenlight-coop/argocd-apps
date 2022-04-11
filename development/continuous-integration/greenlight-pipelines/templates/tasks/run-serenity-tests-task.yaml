@@ -86,7 +86,7 @@ spec:
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
-                volumeSubPath: site/$(params.results-identifier)
+                volumeSubPath: source/site/$(params.results-identifier)
                 domainName: {{ .Values.domainName }}
           syncPolicy:
             automated:
@@ -125,4 +125,3 @@ spec:
           cd /usr/src/app
           npm run test-features:ci
         fi
-        sleep 6000
