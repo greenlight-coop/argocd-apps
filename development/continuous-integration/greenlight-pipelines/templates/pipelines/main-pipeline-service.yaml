@@ -60,6 +60,19 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
+          subPath: source
+    - name: clone-helm-git-repo
+      taskRef:
+        name: git-clone
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
+        - name: revision
+          value: HEAD
+      workspaces:
+        - name: output
+          workspace: git-source
+          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -73,6 +86,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -85,6 +99,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: build-and-push-image
       taskRef:
         name: buildkit
@@ -98,6 +113,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
@@ -109,12 +125,34 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
+    - name: helm-package
+      taskRef:
+        name: helm-package
+      runAfter:
+        - version-node-package
+        - clone-helm-git-repo
+        - build-and-push-image
+        - snyk-monitor
+      params:
+        - name: push-git
+          value: "true"
+        - name: version
+          value: $(tasks.version-node-package.results.node-version)
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
+        - name: helm
+          workspace: git-source
+          subPath: helm
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
         - snyk-monitor
+        - helm-package
       params:
         - name: status
           value: success
