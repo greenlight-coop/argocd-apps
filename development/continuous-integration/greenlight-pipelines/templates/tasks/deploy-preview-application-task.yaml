@@ -37,7 +37,7 @@ spec:
         ls -lR $(workspaces.source.path)/charts/preview/
         helm dependency update ./charts/preview
         helm upgrade -i -n $(params.namespace) \
-          --set debug=true,$(params.project-name).domainName={{ .Values.domainName }},$(params.project-name).subdomain=$(params.namespace) \
+          --set $(params.project-name).debug=true,$(params.project-name).domainName={{ .Values.domainName }},$(params.project-name).subdomain=$(params.namespace) \
           $CHART_NAME ./charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
