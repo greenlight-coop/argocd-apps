@@ -98,9 +98,6 @@ spec:
     - name: helm-lint
       taskRef:
         name: helm-lint
-      runAfter:
-        - version-node-package
-        - clone-helm-git-repo
       workspaces:
         - name: source
           workspace: git-source
