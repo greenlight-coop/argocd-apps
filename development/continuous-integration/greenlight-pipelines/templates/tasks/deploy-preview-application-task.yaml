@@ -34,7 +34,6 @@ spec:
 
         mkdir -p $(workspaces.source.path)/charts/preview/charts
         cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
-        ls -lR $(workspaces.source.path)/charts/preview/
         helm dependency update ./charts/preview
         helm upgrade -i -n $(params.namespace) \
           --set $(params.project-name).debug=true,$(params.project-name).domainName={{ .Values.domainName }},$(params.project-name).subdomain=$(params.namespace) \
