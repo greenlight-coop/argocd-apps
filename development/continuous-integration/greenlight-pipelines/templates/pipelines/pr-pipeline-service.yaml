@@ -163,6 +163,8 @@ spec:
     - name: helm-lint
       taskRef:
         name: helm-lint
+      runAfter:
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
