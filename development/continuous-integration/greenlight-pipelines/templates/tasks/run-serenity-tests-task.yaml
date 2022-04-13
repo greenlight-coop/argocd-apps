@@ -86,7 +86,7 @@ spec:
                 namespace: $(context.taskRun.namespace)
                 affinityAssistantInstance: $AFFINITY_ASSISTANT_INSTANCE
                 persistentVolumeClaimName: $(workspaces.source.claim)
-                volumeSubPath: source/site/$(params.results-identifier)
+                volumeSubPath: site/$(params.results-identifier)
                 domainName: {{ .Values.domainName }}
           syncPolicy:
             automated:
