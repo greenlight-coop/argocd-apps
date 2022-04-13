@@ -58,6 +58,8 @@ spec:
     - name: has-preview
       taskRef:
         name: has-preview
+      runAfter:
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
