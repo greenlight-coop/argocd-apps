@@ -55,9 +55,19 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: has-preview
+      taskRef:
+        name: has-preview
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: ensure-preview-namespace-exists
       taskRef:
         name: kubernetes-actions
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       params:
         - name: script
           value: |
@@ -85,19 +95,6 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-          subPath: source
-    - name: clone-helm-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
-        - name: revision
-          value: HEAD
-      workspaces:
-        - name: output
-          workspace: git-source
-          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -111,7 +108,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: snyk-test
       taskRef:
         name: snyk-test
@@ -121,7 +117,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -140,7 +135,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: build-and-push-image
       taskRef:
         name: buildkit
@@ -155,7 +149,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: snyk-container-test
       taskRef:
         name: snyk-container-test
@@ -167,30 +160,24 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-    - name: helm-package
+    - name: helm-lint
       taskRef:
-        name: helm-package
+        name: helm-lint
       runAfter:
         - version-node-package
         - clone-helm-git-repo
-      params:
-        - name: push-git
-          value: "false"
-        - name: version
-          value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-        - name: helm
-          workspace: git-source
-          subPath: helm
     - name: deploy-preview-application
       taskRef:
         name: deploy-preview-application
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       runAfter:
-        - helm-package
+        - helm-lint
         - snyk-test
         - snyk-container-test
         - ensure-preview-namespace-exists
@@ -199,18 +186,16 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
-        - name: helm-chart-version
-          value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-        - name: helm
-          workspace: git-source
-          subPath: helm
     - name: run-integration-tests
       taskRef:
         name: run-serenity-tests
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       runAfter:
         - deploy-preview-application
       params:
@@ -221,12 +206,12 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
+        - helm-lint
         - run-integration-tests
         - snyk-test
         - snyk-container-test

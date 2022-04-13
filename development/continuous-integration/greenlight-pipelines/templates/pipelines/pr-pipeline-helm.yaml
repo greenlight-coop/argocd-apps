@@ -64,19 +64,6 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-          subPath: source
-    - name: clone-helm-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
-        - name: revision
-          value: HEAD
-      workspaces:
-        - name: output
-          workspace: git-source
-          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -90,7 +77,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -109,31 +95,21 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-    - name: helm-package
+    - name: helm-lint
       taskRef:
-        name: helm-package
+        name: helm-lint
       runAfter:
         - version-node-package
         - clone-helm-git-repo
-      params:
-        - name: push-git
-          value: "false"
-        - name: version
-          value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-        - name: helm
-          workspace: git-source
-          subPath: helm
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - helm-package
+        - helm-lint
       params:
         - name: status
           value: success

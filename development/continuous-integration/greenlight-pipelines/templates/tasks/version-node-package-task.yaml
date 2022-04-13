@@ -23,7 +23,7 @@ spec:
       default: greenlightcoop/node-utils:0.1.18@sha256:1d97f3e83e5d9994fc1b4ee72e1eb24b6021ff381847c8c4c92ad2742ad45f0b
   results:
     - name: node-version
-      description: the resulting Node.js package version in
+      description: the resulting Node.js package version
     - name: github-version
       description: the tag pushed to GitHub
   workspaces:

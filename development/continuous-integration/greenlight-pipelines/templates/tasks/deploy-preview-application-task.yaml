@@ -14,9 +14,6 @@ spec:
     - name: namespace
       description: The namespace to install the preview into
       type: string
-    - name: helm-chart-version
-      description: The preview Helm chart version to deploy
-      type: string
     - name: helm-image
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
       description: Helm image
@@ -25,7 +22,6 @@ spec:
       description: Kubectl wrapper image
   workspaces:
     - name: source
-    - name: helm
   steps:
     - name: deploy-preview-application
       workingDir: $(workspaces.source.path)
@@ -34,7 +30,7 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/chart/Chart.yaml)
+        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/charts/preview/Chart.yaml)
 
         helm upgrade -i -n $(params.namespace) \
           --set debug=true,domainName={{ .Values.domainName }},subdomain=$(params.namespace) \

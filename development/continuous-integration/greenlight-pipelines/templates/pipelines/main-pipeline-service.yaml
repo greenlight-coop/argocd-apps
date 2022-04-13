@@ -135,8 +135,6 @@ spec:
         - build-and-push-image
         - snyk-monitor
       params:
-        - name: push-git
-          value: "true"
         - name: version
           value: $(tasks.version-node-package.results.node-version)
       workspaces:

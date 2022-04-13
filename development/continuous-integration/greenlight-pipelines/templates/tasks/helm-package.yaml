@@ -6,13 +6,10 @@ metadata:
 spec:
   description: >-
     Generates a versioned Helm package in a checked out copy of the Green Light Helm chart repository,
-    updates the Helm index and optionally pushes the updated Helm repository upstream to GitHub.
+    updates the Helm index and pushes the updated Helm repository upstream to GitHub.
   params:
     - name: version
       description: The version tag for the Helm package to create
-    - name: push-git
-      description: Whether to push the updated Helm repository upstream to GitHub. Set to true or false.
-      default: "true"
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
@@ -46,16 +43,13 @@ spec:
         helm package $HELM_PACKAGE_PATH --version "$(params.version)"
         helm repo index .
 
-        PUSH_GIT=$(params.push-git)
-        if [ "${PUSH_GIT,,}" = "true" ]; then
-          git config user.email "bot@greenlight.coop"
-          git config user.name "greenlight-coop-bot"
-          git add .
-          git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
-          git push origin HEAD:main
+        git config user.email "bot@greenlight.coop"
+        git config user.name "greenlight-coop-bot"
+        git add .
+        git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
+        git push origin HEAD:main
 
-          cd $(workspaces.source.path)
-          git add chart/Chart.yaml
-          git commit -m"Updated chart versions to $(params.version)"
-          git push origin HEAD:main
-        fi
+        cd $(workspaces.source.path)
+        git add chart/Chart.yaml
+        git commit -m"Updated chart versions to $(params.version)"
+        git push origin HEAD:main
