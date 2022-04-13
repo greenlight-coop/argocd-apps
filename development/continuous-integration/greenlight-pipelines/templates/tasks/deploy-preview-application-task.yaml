@@ -32,6 +32,9 @@ spec:
 
         export CHART_NAME=$(yq '.name' $(workspaces.source.path)/charts/preview/Chart.yaml)
 
+        mkdir -p $(workspaces.source.path)/charts/preview/charts
+        cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
+        ls -lR $(workspaces.source.path)/charts/preview/
         helm dependency update ./charts/preview
         helm upgrade -i -n $(params.namespace) \
           --set debug=true,domainName={{ .Values.domainName }},subdomain=$(params.namespace) \
