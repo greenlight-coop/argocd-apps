@@ -40,6 +40,7 @@ spec:
         yq -i '.appVersion = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
 
         helm lint $HELM_PACKAGE_PATH
+        helm dependency update $HELM_PACKAGE_PATH
         helm package $HELM_PACKAGE_PATH --version "$(params.version)"
         helm repo index .
 
