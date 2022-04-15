@@ -45,4 +45,4 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/$(params.project-name)
+        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/preview-$(params.project-name)
