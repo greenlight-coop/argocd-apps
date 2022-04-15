@@ -45,7 +45,6 @@ spec:
 
         git config user.email "bot@greenlight.coop"
         git config user.name "greenlight-coop-bot"
-        git pull
         git add .
         git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
         git push origin HEAD:main
