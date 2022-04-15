@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: main-pipeline-service
+  name: main-pipeline-helm
   namespace: greenlight-pipelines
 spec:
   params:
@@ -17,10 +17,10 @@ spec:
       type: string
   workspaces:
     - name: git-source
-    - name: kubeconfig-dir
-    - name: manifest-dir
     - name: status-workspace
     - name: node-modules
+    - name: kubeconfig-dir
+    - name: manifest-dir
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -100,40 +100,12 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
-    - name: build-and-push-image
-      taskRef:
-        name: buildkit
-      runAfter:
-        - version-node-package
-      params:
-        - name: IMAGE
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
-    - name: snyk-monitor
-      taskRef:
-        name: snyk-monitor
-      runAfter:
-        - build-and-push-image
-      params:
-        - name: image
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
     - name: helm-package
       taskRef:
         name: helm-package
       runAfter:
         - version-node-package
         - clone-helm-git-repo
-        - build-and-push-image
-        - snyk-monitor
       params:
         - name: version
           value: $(tasks.version-node-package.results.node-version)
@@ -149,7 +121,6 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - snyk-monitor
         - helm-package
       params:
         - name: status

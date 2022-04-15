@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: main-pipeline-service
+  name: pr-pipeline-helm
   namespace: greenlight-pipelines
 spec:
   params:
@@ -15,12 +15,16 @@ spec:
       type: string
     - name: git-branch
       type: string
+    - name: git-pr-number
+      type: string
+    - name: git-pr-commit-number
+      type: string
   workspaces:
     - name: git-source
-    - name: kubeconfig-dir
-    - name: manifest-dir
     - name: status-workspace
     - name: node-modules
+    - name: kubeconfig-dir
+    - name: manifest-dir
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -60,19 +64,6 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-          subPath: source
-    - name: clone-helm-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
-        - name: revision
-          value: HEAD
-      workspaces:
-        - name: output
-          workspace: git-source
-          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -86,7 +77,6 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
@@ -94,63 +84,31 @@ spec:
         - clone-git-repo
         - generate-npmrc
       params:
+        - name: push-git
+          value: "false"
         - name: branch-name
           value: $(params.git-branch)
+        - name: pull-request-number
+          value: $(params.git-pr-number)
+        - name: pull-request-commit-number
+          value: $(params.git-pr-commit-number)
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-    - name: build-and-push-image
+    - name: helm-lint
       taskRef:
-        name: buildkit
+        name: helm-lint
       runAfter:
-        - version-node-package
-      params:
-        - name: IMAGE
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
+        - clone-git-repo
       workspaces:
         - name: source
           workspace: git-source
-          subPath: source
-    - name: snyk-monitor
-      taskRef:
-        name: snyk-monitor
-      runAfter:
-        - build-and-push-image
-      params:
-        - name: image
-          value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
-    - name: helm-package
-      taskRef:
-        name: helm-package
-      runAfter:
-        - version-node-package
-        - clone-helm-git-repo
-        - build-and-push-image
-        - snyk-monitor
-      params:
-        - name: version
-          value: $(tasks.version-node-package.results.node-version)
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
-        - name: helm
-          workspace: git-source
-          subPath: helm
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - snyk-monitor
-        - helm-package
+        - helm-lint
       params:
         - name: status
           value: success

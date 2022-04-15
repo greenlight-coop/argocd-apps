@@ -1,0 +1,34 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-lint
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Checks a Helm chart for correctness.
+  params:
+    - name: helm-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+  workspaces:
+    - name: source
+  steps:
+    - name: helm-lint
+      workingDir: $(workspaces.source.path)
+      image: $(params.helm-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+ 
+        if [ -f "./Chart.yaml" ] 
+        then
+          export HELM_PACKAGE_PATH=.
+        elif [ -f "./charts/main/Chart.yaml" ]
+        then
+          export HELM_PACKAGE_PATH=./charts/main
+        else
+          echo 'No Helm chart found'
+          exit 1
+        fi
+
+        helm lint $HELM_PACKAGE_PATH

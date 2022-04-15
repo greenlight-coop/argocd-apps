@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: helm-package
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Generates a versioned Helm package in a checked out copy of the Green Light Helm chart repository,
+    updates the Helm index and pushes the updated Helm repository upstream to GitHub.
+  params:
+    - name: version
+      description: The version tag for the Helm package to create
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+  workspaces:
+    - name: source
+    - name: helm
+  steps:
+    - name: helm-package
+      workingDir: $(workspaces.helm.path)
+      image: $(params.node-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+ 
+        if [ -f "$(workspaces.source.path)/Chart.yaml" ] 
+        then
+          export HELM_PACKAGE_PATH=$(workspaces.source.path)
+        elif [ -f "$(workspaces.source.path)/charts/main/Chart.yaml" ]
+        then
+          export HELM_PACKAGE_PATH=$(workspaces.source.path)/charts/main
+        else
+          echo 'No Helm chart found'
+          exit 1
+        fi
+
+        export CHART_NAME=$(yq '.name' $HELM_PACKAGE_PATH/Chart.yaml)
+        yq -i '.version = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
+        yq -i '.appVersion = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
+
+        helm lint $HELM_PACKAGE_PATH
+        helm dependency update $HELM_PACKAGE_PATH
+        helm package $HELM_PACKAGE_PATH --version "$(params.version)"
+        helm repo index .
+
+        git config user.email "bot@greenlight.coop"
+        git config user.name "greenlight-coop-bot"
+        git add .
+        git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
+        git push origin HEAD:main
+
+        cd $(workspaces.source.path)
+        git add $HELM_PACKAGE_PATH/Chart.yaml
+        git commit -m"Updated chart versions to $(params.version)"
+        git push origin HEAD:main

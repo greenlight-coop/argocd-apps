@@ -14,32 +14,35 @@ spec:
     - name: namespace
       description: The namespace to install the preview into
       type: string
-    - name: git-revision
-      description: The current git-revision, used to access the preview Helm chart
-      type: string
-    - name: image-version
-      description: Version of the Docker image to deploy
-      type: string
+    - name: helm-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Helm image
     - name: kubectl-image
-      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
+      default: gcr.io/cloud-builders/kubectl@sha256:ca8521c92c9b347b8745c4603d395edbf102a6b4015f7adff775639110f308e0 #image is huge
       description: Kubectl wrapper image
   workspaces:
     - name: source
   steps:
     - name: deploy-preview-application
       workingDir: $(workspaces.source.path)
-      image: $(params.kubectl-image)
+      image: $(params.helm-image)
       script: |
         #!/usr/bin/env bash
         set -xe
 
-        export IMAGE_TAG=$(params.image-version)
-        cp -r preview preview-parsed
-        for file in `find preview-parsed -type f`
-        do 
-          sed -i "s/\${IMAGE_TAG}/${IMAGE_TAG}/g" $file
-        done
+        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/charts/preview/Chart.yaml)
 
-        kubectl apply -n $(params.namespace) -k preview-parsed
+        mkdir -p $(workspaces.source.path)/charts/preview/charts
+        cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
+        helm dependency update ./charts/preview
+        helm upgrade -i -n $(params.namespace) \
+          --set global.debug=true,global.domain={{ .Values.domainName }},global.subdomain=$(params.namespace) \
+          $CHART_NAME ./charts/preview
+    - name: wait-until-ready
+      workingDir: $(workspaces.source.path)
+      image: $(params.kubectl-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
 
         kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/$(params.project-name)

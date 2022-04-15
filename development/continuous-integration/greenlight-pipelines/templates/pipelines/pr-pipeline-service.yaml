@@ -55,9 +55,21 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
+    - name: has-preview
+      taskRef:
+        name: has-preview
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: ensure-preview-namespace-exists
       taskRef:
         name: kubernetes-actions
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       params:
         - name: script
           value: |
@@ -150,10 +162,23 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: helm-lint
+      taskRef:
+        name: helm-lint
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: deploy-preview-application
       taskRef:
         name: deploy-preview-application
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       runAfter:
+        - helm-lint
         - snyk-test
         - snyk-container-test
         - ensure-preview-namespace-exists
@@ -162,16 +187,16 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
-        - name: git-revision
-          value: $(params.git-revision)
-        - name: image-version
-          value: $(tasks.version-node-package.results.node-version)
       workspaces:
         - name: source
           workspace: git-source
     - name: run-integration-tests
       taskRef:
         name: run-serenity-tests
+      when:
+        - input: "$(tasks.has-preview.results.value)"
+          operator: in
+          values: ["true"]
       runAfter:
         - deploy-preview-application
       params:
@@ -187,6 +212,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
+        - helm-lint
         - run-integration-tests
         - snyk-test
         - snyk-container-test

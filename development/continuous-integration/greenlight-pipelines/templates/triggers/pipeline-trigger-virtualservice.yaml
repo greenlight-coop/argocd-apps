@@ -19,6 +19,14 @@ spec:
         host: el-deploy-stage-pipeline-event-listener
   - match:
     - uri:
+        exact: /webhook/helm-pipeline
+    route:
+    - destination:
+        port:
+          number: 8080
+        host: el-helm-pipeline-event-listener
+  - match:
+    - uri:
         exact: /webhook/image-pipeline
     route:
     - destination:
