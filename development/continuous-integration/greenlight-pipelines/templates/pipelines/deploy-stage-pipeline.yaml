@@ -15,7 +15,6 @@ spec:
     - name: git-source
     - name: status-workspace
     - name: node-modules
-    - name: kubeconfig-dir
     - name: manifest-dir
   tasks:
     - name: set-default-outcome
@@ -100,11 +99,6 @@ spec:
           value: $(tasks.get-namespace.results.value)
       runAfter:
         - deploy-stage
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
