@@ -28,3 +28,4 @@ spec:
         snyk config set org=greenlight
         snyk config set disableSuggestions=true
         snyk container test --fail-on=all $(params.image) --file=$(workspaces.source.path)/Dockerfile
+        exit 0
