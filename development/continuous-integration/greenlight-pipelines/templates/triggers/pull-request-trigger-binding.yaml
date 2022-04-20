@@ -22,7 +22,7 @@ spec:
     - name: git-pr-commit-number
       value: $(body.pull_request.commits)
     - name: preview-namespace
-      value: prvw-pr-$(body.number)
+      value: prvw-$(body.repository.name)-pr-$(body.number)
     - name: build-type
       value: $(extensions.build_type)
     - name: hub-organization
