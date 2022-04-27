@@ -170,9 +170,9 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: deploy-preview-application
+    - name: deploy-preview-chart
       taskRef:
-        name: deploy-preview-application
+        name: deploy-preview-chart
       when:
         - input: "$(tasks.has-preview.results.value)"
           operator: in
@@ -198,7 +198,7 @@ spec:
           operator: in
           values: ["true"]
       runAfter:
-        - deploy-preview-application
+        - deploy-preview-chart
       params:
         - name: base-url
           value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local

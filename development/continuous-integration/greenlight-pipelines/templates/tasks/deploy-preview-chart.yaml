@@ -1,12 +1,10 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-preview-application
+  name: deploy-preview-chart
 spec:
   description: >-
-    Deploys a preview version of a service for isolated integration testing. Based on tekton-catalog kuberenetes-actions
-    task. Expects a Kustomize application in the source subdirctory "preview". Makes a copy of the preview manifests
-    replacing any instance of ${IMAGE_TAG} with the value passed for the parameter image-version.
+    Deploys a preview Helm chart for a service for isolated integration testing.
   params:
     - name: project-name
       description: The project name for the application to install (should match GitHub repo and Docker image name)
@@ -23,7 +21,7 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: deploy-preview-application
+    - name: deploy-preview-chart
       workingDir: $(workspaces.source.path)
       image: $(params.helm-image)
       script: |

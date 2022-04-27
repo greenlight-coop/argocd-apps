@@ -55,18 +55,17 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-resources
+    - name: delete-preview-chart
       taskRef:
-        name: kubernetes-actions
+        name: uninstall-preview-chart
       params:
-        - name: script
-          value: |
-            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
+        - name: project-name
+          value: $(params.project-name)
+        - name: namespace
+          value: $(params.preview-namespace)
       workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
+        - name: source
+          workspace: git-source
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions
@@ -97,7 +96,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - delete-preview-resources
+        - delete-preview-chart
         - delete-pr-namespace
         - delete-pull-request-images
       params:

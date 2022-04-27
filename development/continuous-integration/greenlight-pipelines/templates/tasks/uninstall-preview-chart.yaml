@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: uninstall-preview-chart
+spec:
+  description: >-
+    Removes a previously deployed preview Helm chart.
+  params:
+    - name: project-name
+      description: The project name for the application to uninstall (should match GitHub repo and Docker image name)
+      type: string
+    - name: namespace
+      description: The namespace to remove the preview chart from
+      type: string
+    - name: helm-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Helm image
+  workspaces:
+    - name: source
+  steps:
+    - name: uninstall-preview-chart
+      workingDir: $(workspaces.source.path)
+      image: $(params.helm-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/charts/preview/Chart.yaml)
+
+        helm uninstall --debug --namespace $(params.namespace) $CHART_NAME
