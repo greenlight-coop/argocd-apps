@@ -62,6 +62,13 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+    - name: delete-preview-resources
+      taskRef:
+        name: kubernetes-actions
+      params:
+        - name: script
+          value: |
+            kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions
@@ -95,6 +102,7 @@ spec:
       runAfter:
         - set-default-outcome
         - uninstall-preview-chart
+        - delete-preview-resources
         - delete-pr-namespace
         - delete-pull-request-images
       params:
