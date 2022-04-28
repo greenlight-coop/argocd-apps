@@ -17,7 +17,6 @@ spec:
       description: Helm image
   steps:
     - name: uninstall-preview-chart
-      workingDir: $(workspaces.source.path)
       image: $(params.helm-image)
       script: |
         #!/usr/bin/env bash
