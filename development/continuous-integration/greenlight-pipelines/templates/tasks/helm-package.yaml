@@ -39,9 +39,9 @@ spec:
         yq -i '.version = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
         yq -i '.appVersion = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
 
-        helm lint $HELM_PACKAGE_PATH
-        helm dependency update $HELM_PACKAGE_PATH
-        helm package $HELM_PACKAGE_PATH --version "$(params.version)"
+        helm lint $HELM_PACKAGE_PATH --debug
+        helm dependency update $HELM_PACKAGE_PATH --debug
+        helm package $HELM_PACKAGE_PATH --debug --version "$(params.version)"
         helm repo index .
 
         git config user.email "bot@greenlight.coop"
