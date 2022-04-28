@@ -20,7 +20,6 @@ spec:
     - name: git-pr-commit-number
       type: string
   workspaces:
-    - name: git-source
     - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir

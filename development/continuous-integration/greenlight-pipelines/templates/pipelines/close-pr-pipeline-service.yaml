@@ -22,7 +22,6 @@ spec:
     - name: preview-namespace
       type: string
   workspaces:
-    - name: git-source
     - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
@@ -55,7 +54,7 @@ spec:
           value: Build started
         - name: TARGET_URL
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
-    - name: delete-preview-chart
+    - name: uninstall-preview-chart
       taskRef:
         name: uninstall-preview-chart
       params:
@@ -63,12 +62,11 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
-      workspaces:
-        - name: source
-          workspace: git-source
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions
+      runAfter:
+        - uninstall-preview-chart
       params:
         - name: script
           value: |
@@ -96,7 +94,7 @@ spec:
         name: set-outcome-status
       runAfter:
         - set-default-outcome
-        - delete-preview-chart
+        - uninstall-preview-chart
         - delete-pr-namespace
         - delete-pull-request-images
       params:
