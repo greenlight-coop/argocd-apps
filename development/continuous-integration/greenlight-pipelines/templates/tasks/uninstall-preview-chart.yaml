@@ -22,4 +22,7 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        helm uninstall --debug --namespace $(params.namespace) preview
+        if helm status --namespace $(params.namespace) preview
+        then
+          helm uninstall --debug --namespace $(params.namespace) preview
+        fi
