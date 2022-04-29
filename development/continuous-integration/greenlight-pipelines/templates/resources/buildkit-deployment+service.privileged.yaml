@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: buildkitd
-        image: moby/buildkit:v0.10.1@sha256:bd37f0b5567084cd6f4b1c73b7fed9e12258441d064cc2add29a7dd32243ff86
+        image: moby/buildkit:v0.10.2@sha256:3fbc9b9d9a74ab650eea43610ed880e51cdc05282d61f83c2e0a3b2e9ed3a344
         args:
         - --addr
         - unix:///run/buildkit/buildkitd.sock
@@ -29,6 +29,22 @@ spec:
         - /certs/cert.pem
         - --tlskey
         - /certs/key.pem
+        readinessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
+        livenessProbe:
+          exec:
+            command:
+              - buildctl
+              - debug
+              - workers
+          initialDelaySeconds: 5
+          periodSeconds: 30
         securityContext:
           privileged: true
         ports:
