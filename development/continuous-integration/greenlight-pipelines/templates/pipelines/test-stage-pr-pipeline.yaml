@@ -157,6 +157,8 @@ spec:
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: keycloak-base-url
           value: https://keycloak.{{ .Values.domainName }}
+        - name: keycloak-client-id
+          value: $(tasks.get-namespace.results.value)-worker-client
         - name: keycloak-realm
           value: $(tasks.get-namespace.results.value)-realm
         - name: results-identifier

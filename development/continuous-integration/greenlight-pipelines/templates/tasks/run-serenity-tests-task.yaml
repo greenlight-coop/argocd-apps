@@ -28,6 +28,7 @@ spec:
     - name: keycloak-client-id
       description: >-
         The Keycloak client id for authentication, passed to the tests as the environment variable KEYCLOAK_CLIENT_ID
+      default: unused
     - name: keycloak-realm
       description: >-
         The name of the Keycloak realm used for authentication, passed to the tests as the environment 
