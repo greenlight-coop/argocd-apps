@@ -48,20 +48,24 @@ spec:
     - name: certs
       readOnly: true
       mountPath: /certs
-    command: ["buildctl", "--debug",
-              "--addr=$(params.BUILDKIT_DAEMON_ADDRESS)",
-              "--tlscacert", "/certs/ca.pem",
-              "--tlscert", "/certs/cert.pem",
-              "--tlskey", "/certs/key.pem",
-              "build",
-              "--progress=plain",
-              "--frontend=dockerfile.v0",
-              "--opt", "filename=$(params.DOCKERFILE)",
-              "--local", "context=.", "--local", "dockerfile=.",
-              "--output", "type=image,name=$(params.IMAGE),push=true",
-              "--export-cache", "type=inline",
-              "--import-cache", "type=registry,ref=$(params.IMAGE)",
-              "--metadata-file", "$(results.metadata.path)/metadata.json"]
+    script: |
+      #!/usr/bin/env bash
+      set -ex
+
+      buildctl --debug \
+              --addr=$(params.BUILDKIT_DAEMON_ADDRESS) \
+              --tlscacert /certs/ca.pem \
+              --tlscert /certs/cert.pem \
+              --tlskey /certs/key.pem \
+              build \
+              --progress=plain \
+              --frontend=dockerfile.v0 \
+              --opt filename=$(params.DOCKERFILE) \
+              --local context=. --local dockerfile=. \
+              --output type=image,name=$(params.IMAGE),push=true \
+              --export-cache type=inline \
+              --import-cache type=registry,ref=$(params.IMAGE) \
+              --metadata-file $(results.metadata.path)/metadata.json
   - name: get-digest
     image: $(params.TOOLS_IMAGE)
     workingDir: $(results.metadata.path)
