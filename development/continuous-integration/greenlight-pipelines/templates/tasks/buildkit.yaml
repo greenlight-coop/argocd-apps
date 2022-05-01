@@ -34,7 +34,7 @@ spec:
   workspaces:
   - name: source
   results:
-  - name: output
+  - name: metadata
     description: location to write metadata output to
   volumes:
   - name: certs
@@ -61,10 +61,10 @@ spec:
               "--output", "type=image,name=$(params.IMAGE),push=true",
               "--export-cache", "type=inline",
               "--import-cache", "type=registry,ref=$(params.IMAGE)",
-              "--metadata-file=$(results.output.path)/metadata.json"]
+              "--metadata-file", "$(results.metadata.path)/metadata.json"]
   - name: get-digest
     image: $(params.TOOLS_IMAGE)
-    workingDir: $(results.output.path)
+    workingDir: $(results.metadata.path)
     script: |
       #!/usr/bin/env bash
       set -ex
