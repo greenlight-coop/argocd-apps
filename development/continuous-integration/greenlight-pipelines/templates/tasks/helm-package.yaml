@@ -43,7 +43,8 @@ spec:
         yq -i '.appVersion = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
 
         if [ ! -z "$(params.digest)" ]
-        then 
+        then
+          yq -i '.image.tag = "$(params.version)"' $HELM_PACKAGE_PATH/values.yaml
           yq -i '.image.digest = "$(params.digest)"' $HELM_PACKAGE_PATH/values.yaml
         fi
 
