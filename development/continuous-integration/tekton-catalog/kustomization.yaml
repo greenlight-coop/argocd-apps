@@ -1,6 +1,5 @@
 resources:
   - argocd-task-sync-and-wait/0.1/argocd-task-sync-and-wait.yaml
-  - buildkit/0.1/buildkit.yaml
   - git-cli/0.1/git-cli.yaml
   - git-clone/0.5/git-clone.yaml
   - kaniko/0.1/kaniko.yaml

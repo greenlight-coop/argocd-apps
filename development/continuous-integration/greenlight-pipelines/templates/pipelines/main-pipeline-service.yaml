@@ -108,8 +108,6 @@ spec:
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.10.2@sha256:3fbc9b9d9a74ab650eea43610ed880e51cdc05282d61f83c2e0a3b2e9ed3a344
       workspaces:
         - name: source
           workspace: git-source
@@ -137,6 +135,9 @@ spec:
       params:
         - name: version
           value: $(tasks.version-node-package.results.node-version)
+      params:
+        - name: digest
+          value: $(tasks.build-and-push-image.output.digest)
       workspaces:
         - name: source
           workspace: git-source

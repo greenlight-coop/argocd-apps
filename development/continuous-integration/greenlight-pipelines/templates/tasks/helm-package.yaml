@@ -9,7 +9,10 @@ spec:
     updates the Helm index and pushes the updated Helm repository upstream to GitHub.
   params:
     - name: version
-      description: The version tag for the Helm package to create
+      description: The version tag for the Helm package to create. If building a service package, the image version must be this version.
+    - name: digest
+      description: The digest of the image included in the package, if applicable
+      default: ""
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
@@ -38,6 +41,11 @@ spec:
         export CHART_NAME=$(yq '.name' $HELM_PACKAGE_PATH/Chart.yaml)
         yq -i '.version = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
         yq -i '.appVersion = "$(params.version)"' $HELM_PACKAGE_PATH/Chart.yaml
+
+        if [ ! -z "$(params.digest)" ]
+        then 
+          yq -i '.image.digest = "$(params.digest)"' $HELM_PACKAGE_PATH/values.yaml
+        fi
 
         helm lint $HELM_PACKAGE_PATH --debug
         helm dependency update $HELM_PACKAGE_PATH --debug
