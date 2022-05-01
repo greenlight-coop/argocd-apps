@@ -49,7 +49,7 @@ spec:
       readOnly: true
       mountPath: /certs
     script: |
-      #!/usr/bin/env bash
+      #!/bin/sh
       set -ex
 
       buildctl --debug \
