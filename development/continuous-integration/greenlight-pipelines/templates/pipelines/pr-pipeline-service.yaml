@@ -185,6 +185,10 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+        - name: image-tag
+          value: $(tasks.version-node-package.results.node-version)
+        - name: image-digest
+          value: $(tasks.build-and-push-image.results.digest)
       workspaces:
         - name: source
           workspace: git-source
@@ -198,6 +202,8 @@ spec:
       runAfter:
         - deploy-preview-chart
       params:
+        - name: base-url
+          value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
         - name: base-url
           value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
         - name: results-identifier

@@ -12,6 +12,12 @@ spec:
     - name: namespace
       description: The namespace to install the preview into
       type: string
+    - name: image-tag
+      description: The version of the image to deploy and test
+      type: string
+    - name: image-digest
+      description: The digest of the image to deploy and test
+      type: string
     - name: helm-image
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
       description: Helm image
@@ -34,7 +40,7 @@ spec:
         cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
         helm dependency update ./charts/preview
         helm upgrade --debug --install --namespace $(params.namespace) \
-          --set global.debug=true,global.domain={{ .Values.domainName }},global.subdomain=$(params.namespace) \
+          --set global.debug=true,global.domain={{ .Values.domainName }},global.subdomain=$(params.namespace),image.tag=$(params.image-tag),image.digest=$(params.image-digest) \
           $CHART_NAME ./charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
