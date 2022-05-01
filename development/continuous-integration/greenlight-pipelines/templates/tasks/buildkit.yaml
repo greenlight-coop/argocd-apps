@@ -36,6 +36,8 @@ spec:
   results:
   - name: metadata
     description: location to write metadata output to
+  - name: digest
+    description: location to write image digest to
   volumes:
   - name: certs
     secret:
@@ -65,12 +67,12 @@ spec:
               --output type=image,name=$(params.IMAGE),push=true \
               --export-cache type=inline \
               --import-cache type=registry,ref=$(params.IMAGE) \
-              --metadata-file $(results.metadata.path)/metadata.json
+              --metadata-file $(results.metadata.path)
   - name: get-digest
     image: $(params.TOOLS_IMAGE)
-    workingDir: $(results.metadata.path)
+    workingDir: $(workspaces.source.path)
     script: |
       #!/usr/bin/env bash
       set -ex
 
-      jq -r '.["containerimage.descriptor"].digest' metadata.json | tr -d "\n" > digest
+      jq -r '.["containerimage.descriptor"].digest' $(results.metadata.path) | tr -d "\n" > $(results.digest.path)
