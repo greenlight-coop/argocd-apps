@@ -39,8 +39,13 @@ spec:
         mkdir -p $(workspaces.source.path)/charts/preview/charts
         cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
         helm dependency update ./charts/preview
-        helm upgrade --debug --install --namespace $(params.namespace) \
-          --set global.debug=true,global.domain={{ .Values.domainName }},global.subdomain=$(params.namespace),main.image.tag=$(params.image-tag),main.image.digest=$(params.image-digest) \
+        helm upgrade --debug --install \
+          --namespace $(params.namespace) \
+          --set global.debug=true, \
+          --set global.domain={{ .Values.domainName }}, \
+          --set global.subdomain=$(params.namespace), \
+          --set $(params.project-name}.image.tag=$(params.image-tag), \
+          --set $(params.project-name}.image.digest=$(params.image-digest) \
           $CHART_NAME ./charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
