@@ -135,7 +135,6 @@ spec:
       params:
         - name: version
           value: $(tasks.version-node-package.results.node-version)
-      params:
         - name: digest
           value: $(tasks.build-and-push-image.results.digest)
       workspaces:
