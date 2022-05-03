@@ -44,8 +44,8 @@ spec:
           --set global.debug=true, \
           --set global.domain={{ .Values.domainName }}, \
           --set global.subdomain=$(params.namespace), \
-          --set $(params.project-name}.image.tag=$(params.image-tag), \
-          --set $(params.project-name}.image.digest=$(params.image-digest) \
+          --set $(params.project-name).image.tag=$(params.image-tag), \
+          --set $(params.project-name).image.digest=$(params.image-digest) \
           $CHART_NAME ./charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
