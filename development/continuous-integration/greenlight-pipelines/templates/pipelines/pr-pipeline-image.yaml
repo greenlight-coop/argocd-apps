@@ -113,8 +113,6 @@ spec:
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
       workspaces:
         - name: source
           workspace: git-source

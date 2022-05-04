@@ -15,6 +15,7 @@ spec:
       - "docker.io/busybox"
       - "docker.io/datastax"
       - "docker.io/grafana/"
+      - "docker.io/greenlightcoop/"
       - "docker.io/k8ssandra"
       - "docker.io/thelastpickle"
       - "docker.io/verdaccio"

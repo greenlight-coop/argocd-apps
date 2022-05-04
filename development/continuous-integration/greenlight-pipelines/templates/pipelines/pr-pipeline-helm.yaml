@@ -64,37 +64,6 @@ spec:
       workspaces:
         - name: output
           workspace: git-source
-    - name: generate-npmrc
-      taskRef:
-        name: generate-npmrc
-      runAfter:
-        - clone-git-repo
-      params:
-        - name: githubTokenSecretName
-          value: bot-github-token
-        - name: githubTokenSecretKey
-          value: botGithubTokenValue
-      workspaces:
-        - name: source
-          workspace: git-source
-    - name: version-node-package
-      taskRef:
-        name: version-node-package
-      runAfter:
-        - clone-git-repo
-        - generate-npmrc
-      params:
-        - name: push-git
-          value: "false"
-        - name: branch-name
-          value: $(params.git-branch)
-        - name: pull-request-number
-          value: $(params.git-pr-number)
-        - name: pull-request-commit-number
-          value: $(params.git-pr-commit-number)
-      workspaces:
-        - name: source
-          workspace: git-source
     - name: helm-lint
       taskRef:
         name: helm-lint

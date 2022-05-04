@@ -15,7 +15,6 @@ spec:
     - name: git-source
     - name: status-workspace
     - name: node-modules
-    - name: kubeconfig-dir
     - name: manifest-dir
   tasks:
     - name: set-default-outcome
@@ -68,6 +67,18 @@ spec:
       workspaces:
         - name: template-directory
           workspace: git-source
+    - name: get-namespace
+      taskRef:
+        name: get-namespace
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: manifest-path
+          value: $(params.project-name).yaml
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: deploy-stage
       taskRef:
         name: apply-manifest
@@ -82,22 +93,12 @@ spec:
           workspace: git-source
     - name: wait-for-stage-ready
       taskRef:
-        name: kubernetes-actions
+        name: wait-for-stage-ready
       params:
-        - name: script
-          value: |
-            sleep 20
-            for ksvc in `kubectl -n $(params.project-name) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
-            do 
-              kubectl wait -n $(params.project-name) --for=condition=Ready --timeout=60s ksvc/$ksvc
-            done
+        - name: namespace
+          value: $(tasks.get-namespace.results.value)
       runAfter:
         - deploy-stage
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status

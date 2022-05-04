@@ -1,18 +1,22 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: deploy-preview-application
+  name: deploy-preview-chart
 spec:
   description: >-
-    Deploys a preview version of a service for isolated integration testing. Based on tekton-catalog kuberenetes-actions
-    task. Expects a Kustomize application in the source subdirctory "preview". Makes a copy of the preview manifests
-    replacing any instance of ${IMAGE_TAG} with the value passed for the parameter image-version.
+    Deploys a preview Helm chart for a service for isolated integration testing.
   params:
     - name: project-name
       description: The project name for the application to install (should match GitHub repo and Docker image name)
       type: string
     - name: namespace
       description: The namespace to install the preview into
+      type: string
+    - name: image-tag
+      description: The version of the image to deploy and test
+      type: string
+    - name: image-digest
+      description: The digest of the image to deploy and test
       type: string
     - name: helm-image
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
@@ -23,7 +27,7 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: deploy-preview-application
+    - name: deploy-preview-chart
       workingDir: $(workspaces.source.path)
       image: $(params.helm-image)
       script: |
@@ -35,8 +39,13 @@ spec:
         mkdir -p $(workspaces.source.path)/charts/preview/charts
         cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
         helm dependency update ./charts/preview
-        helm upgrade -i -n $(params.namespace) \
-          --set global.debug=true,global.domain={{ .Values.domainName }},global.subdomain=$(params.namespace) \
+        helm upgrade --debug --install \
+          --namespace $(params.namespace) \
+          --set global.debug=true, \
+          --set global.domain={{ .Values.domainName }}, \
+          --set global.subdomain=$(params.namespace), \
+          --set $(params.project-name).image.tag=$(params.image-tag), \
+          --set $(params.project-name).image.digest=$(params.image-digest) \
           $CHART_NAME ./charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
@@ -45,4 +54,4 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/$(params.project-name)
+        kubectl wait -n $(params.namespace) --for=condition=Ready --timeout=240s ksvc/preview-$(params.project-name)

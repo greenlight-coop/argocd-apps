@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: get-namespace
+spec:
+  description: >-
+    Retrieves the configured destination namespace from an Argo CD application manifest.
+  params:
+    - name: manifest-path
+      description: Retrieve destination namespace from this manifest in the source workspace
+    - name: tools-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Image with yq installed
+  workspaces:
+    - name: source
+  results:
+    - name: value
+      description: the destination namespace value
+  steps:
+    - name: get-namespace
+      workingDir: $(workspaces.source.path)
+      image: $(params.tools-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        NAMESPACE=$(yq '.spec.destination.namespace' $(workspaces.source.path)/$(params.manifest-path))
+        echo -n $NAMESPACE > $(results.value.path)

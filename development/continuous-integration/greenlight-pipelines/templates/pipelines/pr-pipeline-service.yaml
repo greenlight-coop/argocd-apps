@@ -146,8 +146,6 @@ spec:
       params:
         - name: IMAGE
           value: $(params.hub-organization)/$(params.project-name):$(tasks.version-node-package.results.node-version)
-        - name: BUILDKIT_CLIENT_IMAGE
-          value: moby/buildkit:v0.9.3@sha256:d6c89b7085b106301645ddcc77cf64eb7b705ab507b72d52d130ac33f1300417
       workspaces:
         - name: source
           workspace: git-source
@@ -170,9 +168,9 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
-    - name: deploy-preview-application
+    - name: deploy-preview-chart
       taskRef:
-        name: deploy-preview-application
+        name: deploy-preview-chart
       when:
         - input: "$(tasks.has-preview.results.value)"
           operator: in
@@ -187,6 +185,10 @@ spec:
           value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+        - name: image-tag
+          value: $(tasks.version-node-package.results.node-version)
+        - name: image-digest
+          value: $(tasks.build-and-push-image.results.digest)
       workspaces:
         - name: source
           workspace: git-source
@@ -198,10 +200,12 @@ spec:
           operator: in
           values: ["true"]
       runAfter:
-        - deploy-preview-application
+        - deploy-preview-chart
       params:
         - name: base-url
-          value: http://$(params.project-name).$(params.preview-namespace).svc.cluster.local
+          value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
+        - name: base-url
+          value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
         - name: results-identifier
           value: $(params.preview-namespace)
       workspaces:

@@ -53,17 +53,6 @@ spec:
           - name: git-pr-commit-number
             value: $(tt.params.git-pr-commit-number)  
         workspaces:
-          - name: git-source
-            volumeClaimTemplate:
-              spec:
-                accessModes:
-                  - ReadWriteOnce
-                resources:
-                  requests:
-                    storage: 1Gi
-{{- if .Values.rook.enabled }}
-                storageClassName: rook-ceph-block
-{{- end }}
           - name: status-workspace
             volumeClaimTemplate:
               spec:

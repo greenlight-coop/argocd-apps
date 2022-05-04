@@ -17,7 +17,6 @@ spec:
     - name: git-source
     - name: status-workspace
     - name: node-modules
-    - name: kubeconfig-dir
     - name: manifest-dir
   tasks:
     - name: set-default-outcome
@@ -71,6 +70,18 @@ spec:
       workspaces:
         - name: template-directory
           workspace: git-source
+    - name: get-namespace
+      taskRef:
+        name: get-namespace
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: manifest-path
+          value: $(params.project-name).yaml
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
@@ -104,22 +115,12 @@ spec:
               -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
     - name: wait-for-stage-ready
       taskRef:
-        name: kubernetes-actions
+        name: wait-for-stage-ready
       params:
-        - name: script
-          value: |
-            sleep 20
-            for ksvc in `kubectl -n $(params.project-name)-pr-$(params.git-pr-number) get services.serving.knative.dev -o jsonpath='{.items[*].metadata.name}'`
-            do 
-              kubectl wait -n $(params.project-name)-pr-$(params.git-pr-number) --for=condition=Ready --timeout=60s ksvc/$ksvc
-            done
+        - name: namespace
+          value: $(tasks.get-namespace.results.value)
       runAfter:
         - deploy-test-stage
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
@@ -133,8 +134,10 @@ spec:
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: keycloak-base-url
           value: https://keycloak.{{ .Values.domainName }}
+        - name: keycloak-client-id
+          value: $(tasks.get-namespace.results.value)-worker-client
         - name: keycloak-realm
-          value: $(params.project-name)-pr-$(params.git-pr-number)-realm
+          value: $(tasks.get-namespace.results.value)-realm
         - name: results-identifier
           value: api-$(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
@@ -154,8 +157,10 @@ spec:
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: keycloak-base-url
           value: https://keycloak.{{ .Values.domainName }}
+        - name: keycloak-client-id
+          value: $(tasks.get-namespace.results.value)-worker-client
         - name: keycloak-realm
-          value: $(params.project-name)-pr-$(params.git-pr-number)-realm
+          value: $(tasks.get-namespace.results.value)-realm
         - name: results-identifier
           value: ui-$(params.project-name)-pr-$(params.git-pr-number)
       workspaces:

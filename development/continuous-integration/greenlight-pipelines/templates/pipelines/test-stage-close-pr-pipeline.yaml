@@ -52,9 +52,9 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --namespace argocd applications.argoproj.io api-$(params.project-name)-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd applications.argoproj.io ui-$(params.project-name)-pr-$(params.git-pr-number)
-            kubectl delete --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io api-$(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io ui-$(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
