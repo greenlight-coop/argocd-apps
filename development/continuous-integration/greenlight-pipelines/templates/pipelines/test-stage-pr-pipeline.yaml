@@ -85,6 +85,7 @@ spec:
     - name: ensure-namespace-exists
       taskRef:
         name: ensure-namespace-exists
+      params:
         - name: namespace
           value: $(tasks.get-namespace.results.value)
     - name: deploy-test-stage
