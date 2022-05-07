@@ -82,11 +82,17 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: ensure-namespace-exists
+      taskRef:
+        name: ensure-namespace-exists
+        - name: namespace
+          value: $(tasks.get-namespace.results.value)
     - name: deploy-test-stage
       taskRef:
         name: apply-manifest
       runAfter:
         - parse-templates
+        - ensure-namespace-exists
       params:
         - name: manifest-path
           value: $(params.project-name).yaml

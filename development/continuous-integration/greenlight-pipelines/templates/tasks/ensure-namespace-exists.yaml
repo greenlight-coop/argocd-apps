@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: ensure-namespace-exists
+spec:
+  description: >-
+    Creates a namespace if it doesn't already exists. New namespaces will be labeled with "istio-injection: enabled".
+  params:
+    - name: namespace
+      description: The namespace to create if necessary.
+      type: string
+      default: []
+    - name: kubectl-image
+      default: gcr.io/cloud-builders/kubectl@sha256:8ab94be8b2b4f3d117f02d868b39540fddd225447abf4014f7ba4765cb39f753 #image is huge
+      description: Kubectl wrapper image
+  steps:
+    - name: ensure-namespace-exists
+      image: $(params.kubectl-image)
+      script: |
+        #!/usr/bin/env bash
+        set -ex
+
+        cat <<EOF | kubectl apply -f -
+        apiVersion: v1
+        kind: Namespace
+        metadata:
+          name: $(params.namespace)
+          labels:
+            istio-injection: enabled
+        EOF
