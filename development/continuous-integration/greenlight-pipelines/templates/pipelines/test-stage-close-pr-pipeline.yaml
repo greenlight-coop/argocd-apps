@@ -82,6 +82,21 @@ spec:
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
+    - name: delete-additional-test-resources-temporary-fix
+      taskRef:
+        name: kubernetes-actions
+      runAfter:
+        - delete-test-stage-resources
+      params:
+        - name: script
+          value: |
+            kubectl delete --ignore-not-found --namespace default $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-cassandra-auth
+            kubectl delete --ignore-not-found --namespace default $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-files
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status
