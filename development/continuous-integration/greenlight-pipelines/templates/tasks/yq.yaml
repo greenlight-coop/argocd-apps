@@ -17,7 +17,7 @@ spec:
     - name: source
   results:
     - name: value
-      description: the destination namespace value
+      description: the yq query results
   steps:
     - name: get-namespace
       workingDir: $(workspaces.source.path)
@@ -26,5 +26,5 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        NAMESPACE=$(yq '$(params.query)' $(workspaces.source.path)/$(params.yaml-path))
-        echo -n $NAMESPACE > $(results.value.path)
+        RESULT=$(yq '$(params.query)' $(workspaces.source.path)/$(params.yaml-path))
+        echo -n $RESULT > $(results.value.path)
