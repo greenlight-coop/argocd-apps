@@ -60,6 +60,14 @@ spec:
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
+    - name: uninstall-application-chart
+      taskRef:
+        name: uninstall-helm-chart
+      params:
+        - name: namespace
+          value: $(params.project-name)-pr-$(params.git-pr-number)
+        - name: release-name
+          value: $(params.project-name)-pr-$(params.git-pr-number)
     - name: delete-test-stage-namespace
       taskRef:
         name: kubernetes-actions
@@ -68,7 +76,7 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found namespace $(params.project-name)-pr-$(params.git-pr-number)
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir

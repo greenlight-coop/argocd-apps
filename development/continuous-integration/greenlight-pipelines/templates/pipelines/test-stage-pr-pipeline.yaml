@@ -82,44 +82,92 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: get-helm-repo
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/helm-repo"]'
+    - name: get-application-chart
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/application-chart"]'
+    - name: get-application-version
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/application-version"]'
+    - name: get-api-functional-tests-image
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/api-functional-tests"]'
+    - name: get-ui-functional-tests-image
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/ui-functional-tests"]'
     - name: ensure-namespace-exists
       taskRef:
         name: ensure-namespace-exists
       params:
         - name: namespace
           value: $(tasks.get-namespace.results.value)
-    - name: deploy-test-stage
+    - name: deploy-application-helm-chart
+      taskRef:
+        name: deploy-helm-chart
+      params:
+        - name: repo
+          value: $(tasks.get-helm-repo.results.value)
+        - name: chart
+          value: $(tasks.get-application-chart.results.value)
+        - name: version
+          value: $(tasks.get-application-version.results.node-version)
+        - name: release-name
+          value: $(tasks.get-namespace.results.value)
+        - name: namespace
+          value: $(tasks.get-namespace.results.value)
+    - name: deploy-test-resources
       taskRef:
         name: apply-manifest
       runAfter:
-        - parse-templates
-        - ensure-namespace-exists
+        - deploy-application-helm-chart
       params:
         - name: manifest-path
           value: $(params.project-name).yaml
       workspaces:
         - name: source
           workspace: git-source
-    - name: get-api-functional-tests-image
-      taskRef:
-        name: get-command-output
-      runAfter:
-        - deploy-test-stage
-      params:
-        - name: command
-          value: |
-            kubectl get application -n argocd $(params.project-name)-pr-$(params.git-pr-number) \
-              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/api-functional-tests']}"
-    - name: get-ui-functional-tests-image
-      taskRef:
-        name: get-command-output
-      runAfter:
-        - deploy-test-stage
-      params:
-        - name: command
-          value: |
-            kubectl get application -n argocd $(params.project-name)-pr-$(params.git-pr-number) \
-              -o jsonpath="{.metadata.annotations['greenlightcoop\.dev/ui-functional-tests']}"
     - name: wait-for-stage-ready
       taskRef:
         name: wait-for-stage-ready
@@ -127,16 +175,16 @@ spec:
         - name: namespace
           value: $(tasks.get-namespace.results.value)
       runAfter:
-        - deploy-test-stage
+        - deploy-test-resources
     - name: run-api-functional-tests
       taskRef:
         name: run-serenity-tests
       runAfter:
-        - deploy-test-stage
+        - deploy-test-resources
         - wait-for-stage-ready
       params:
         - name: test-image
-          value: $(tasks.get-api-functional-tests-image.results.output)
+          value: $(tasks.get-api-functional-tests-image.results.value)
         - name: base-url
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: keycloak-base-url
@@ -154,12 +202,12 @@ spec:
       taskRef:
         name: run-serenity-tests
       runAfter:
-        - deploy-test-stage
+        - deploy-test-resources
         - run-api-functional-tests
         - wait-for-stage-ready
       params:
         - name: test-image
-          value: $(tasks.get-ui-functional-tests-image.results.output)
+          value: $(tasks.get-ui-functional-tests-image.results.value)
         - name: base-url
           value: https://$(params.project-name)-pr-$(params.git-pr-number).{{ .Values.domainName }}
         - name: keycloak-base-url
@@ -177,7 +225,7 @@ spec:
       taskRef:
         name: set-outcome-status
       runAfter:
-        - deploy-test-stage
+        - deploy-test-resources
         - run-api-functional-tests
         - run-ui-functional-tests
       params:

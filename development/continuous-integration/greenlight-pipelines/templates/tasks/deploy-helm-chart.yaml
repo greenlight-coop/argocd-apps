@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-helm-chart
+spec:
+  description: >-
+    Deploys a Helm chart into the cluster using "helm upgrade --install".
+  params:
+    - name: repo
+      description: The Helm repository to pull the chart from
+      type: string
+    - name: chart
+      description: The chart to deploy
+      type: string
+    - name: version
+      description: The version of the chart to deploy
+      type: string
+    - name: release-name
+      description: The name of the deployed chart
+      type: string
+    - name: namespace
+      description: The namespace to install the chart into
+      type: string
+    - name: helm-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Helm image
+  workspaces:
+    - name: source
+  steps:
+    - name: deploy-helm-chart
+      workingDir: $(workspaces.source.path)
+      image: $(params.helm-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        helm upgrade --debug --install \
+          --namespace $(params.namespace) \
+          --set global.debug=true \
+          --set global.domain={{ .Values.domainName }} \
+          --set global.subdomain=$(params.namespace) \
+          --repo $(params.repo) \
+          --version $(params.version) \
+          $(params.namespace) $(params.chart)
+

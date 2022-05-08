@@ -56,12 +56,12 @@ spec:
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: uninstall-preview-chart
       taskRef:
-        name: uninstall-preview-chart
+        name: uninstall-helm-chart
       params:
-        - name: project-name
-          value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+        - name: release-name
+          value: preview
     - name: delete-preview-resources
       taskRef:
         name: kubernetes-actions
