@@ -73,6 +73,7 @@ spec:
         name: kubernetes-actions
       runAfter:
         - delete-test-stage-resources
+        - uninstall-application-chart
       params:
         - name: script
           value: |
@@ -87,6 +88,7 @@ spec:
         name: kubernetes-actions
       runAfter:
         - delete-test-stage-resources
+        - uninstall-application-chart
       params:
         - name: script
           value: |
