@@ -54,7 +54,7 @@ rules:
     resources: ["virtualservices"]
     verbs: ["get", "create", "update", "patch", "list", "delete", "watch"]
   - apiGroups: ["security.istio.io"]
-    resources: ["authorizationpolicies"]
+    resources: ["authorizationpolicies", "requestauthentications"]
     verbs: ["get", "create", "update", "patch", "list", "delete", "watch"]
   - apiGroups: ["serving.knative.dev"]
     resources: ["services"]
