@@ -152,7 +152,7 @@ spec:
         - name: chart
           value: $(tasks.get-application-chart.results.value)
         - name: version
-          value: $(tasks.get-application-version.results.node-version)
+          value: $(tasks.get-application-version.results.value)
         - name: release-name
           value: $(tasks.get-namespace.results.value)
         - name: namespace
