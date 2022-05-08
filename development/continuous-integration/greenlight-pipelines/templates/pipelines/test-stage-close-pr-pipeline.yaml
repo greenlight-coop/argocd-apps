@@ -90,8 +90,9 @@ spec:
       params:
         - name: script
           value: |
-            kubectl delete --ignore-not-found --namespace default $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-cassandra-auth
-            kubectl delete --ignore-not-found --namespace default $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-files
+            set -ex
+            kubectl delete --ignore-not-found --namespace default secret $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-cassandra-auth
+            kubectl delete --ignore-not-found --namespace default configmap $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-files
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
