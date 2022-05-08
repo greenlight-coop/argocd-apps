@@ -93,6 +93,9 @@ spec:
           value: $(params.project-name).yaml
         - name: query
           value: '.metadata.annotations["greenlightcoop.dev/helm-repo"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: get-application-chart
       taskRef:
         name: yq
@@ -104,6 +107,9 @@ spec:
           value: $(params.project-name).yaml
         - name: query
           value: '.metadata.annotations["greenlightcoop.dev/application-chart"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: get-application-version
       taskRef:
         name: yq
@@ -115,6 +121,9 @@ spec:
           value: $(params.project-name).yaml
         - name: query
           value: '.metadata.annotations["greenlightcoop.dev/application-version"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: get-api-functional-tests-image
       taskRef:
         name: yq
@@ -126,6 +135,9 @@ spec:
           value: $(params.project-name).yaml
         - name: query
           value: '.metadata.annotations["greenlightcoop.dev/api-functional-tests"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: get-ui-functional-tests-image
       taskRef:
         name: yq
@@ -137,6 +149,9 @@ spec:
           value: $(params.project-name).yaml
         - name: query
           value: '.metadata.annotations["greenlightcoop.dev/ui-functional-tests"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: ensure-namespace-exists
       taskRef:
         name: ensure-namespace-exists
