@@ -65,6 +65,8 @@ spec:
     - name: delete-preview-resources
       taskRef:
         name: kubernetes-actions
+      runAfter:
+        - uninstall-preview-chart
       params:
         - name: script
           value: |
