@@ -55,7 +55,7 @@ spec:
             set -ex            
             kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io api-$(params.project-name)-pr-$(params.git-pr-number)
             kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io ui-$(params.project-name)-pr-$(params.git-pr-number)
-            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)-runner
+            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)-deployment
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
