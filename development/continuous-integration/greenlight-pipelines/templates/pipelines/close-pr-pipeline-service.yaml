@@ -71,8 +71,8 @@ spec:
         - name: script
           value: |
             kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
-            kubectl delete --namespace default --ignore-not-found secret $(params.preview-namespace)-$(params.project-name)-cooperatives-cassandra-auth
-            kubectl delete --namespace default --ignore-not-found configmap $(params.preview-namespace)-$(params.project-name)-cooperatives-files
+            kubectl delete --namespace default --ignore-not-found secret $(params.preview-namespace)-$(params.project-name)-cassandra-auth
+            kubectl delete --namespace default --ignore-not-found configmap $(params.preview-namespace)-$(params.project-name)-files
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions

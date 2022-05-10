@@ -124,6 +124,20 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: get-keycloak-client-id
+      taskRef:
+        name: yq
+      runAfter:
+        - clone-git-repo
+        - parse-templates
+      params:
+        - name: yaml-path
+          value: $(params.project-name).yaml
+        - name: query
+          value: '.metadata.annotations["greenlightcoop.dev/keycloak-client-id"]'
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: get-api-functional-tests-image
       taskRef:
         name: yq
@@ -211,7 +225,7 @@ spec:
         - name: keycloak-base-url
           value: https://keycloak.{{ .Values.domainName }}
         - name: keycloak-client-id
-          value: $(tasks.get-namespace.results.value)-worker-client
+          value: $(tasks.get-keycloak-client-id.results.value)
         - name: keycloak-realm
           value: $(tasks.get-namespace.results.value)-realm
         - name: results-identifier
