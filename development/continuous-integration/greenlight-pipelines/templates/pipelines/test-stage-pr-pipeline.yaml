@@ -176,7 +176,7 @@ spec:
           value:
             - "global.debug=true"
             - "global.domain={{ .Values.domainName }}"
-            - "global.subdomain=$(params.namespace)"
+            - "global.subdomain=$(tasks.get-namespace.results.value)"
             - "greenlight-application-resources.keycloak.directAccess.enabled=true"
     - name: deploy-test-resources
       taskRef:
