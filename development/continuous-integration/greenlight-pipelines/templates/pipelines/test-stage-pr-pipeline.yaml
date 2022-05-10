@@ -172,6 +172,12 @@ spec:
           value: $(tasks.get-namespace.results.value)
         - name: namespace
           value: $(tasks.get-namespace.results.value)
+        - name: set-values
+          value:
+            - "global.debug=true"
+            - "global.domain={{ .Values.domainName }}"
+            - "global.subdomain=$(params.namespace)"
+            - "greenlight-application-resources.keycloak.directAccess.enabled=true"
     - name: deploy-test-resources
       taskRef:
         name: apply-manifest
