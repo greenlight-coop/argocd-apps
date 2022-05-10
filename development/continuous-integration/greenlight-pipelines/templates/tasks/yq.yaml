@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: yq
+spec:
+  description: >-
+    Get the results of a yq YAML query.
+  params:
+    - name: query
+      description: yq query
+    - name: yaml-path
+      description: Retrieve results from this YAML file in the source workspace
+    - name: tools-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Image with yq installed
+  workspaces:
+    - name: source
+  results:
+    - name: value
+      description: the yq query results
+  steps:
+    - name: get-namespace
+      workingDir: $(workspaces.source.path)
+      image: $(params.tools-image)
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        RESULT=$(yq '$(params.query)' $(workspaces.source.path)/$(params.yaml-path))
+        echo -n $RESULT > $(results.value.path)

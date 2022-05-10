@@ -65,27 +65,14 @@ spec:
           workspace: git-source
     - name: ensure-preview-namespace-exists
       taskRef:
-        name: kubernetes-actions
+        name: ensure-namespace-exists
       when:
         - input: "$(tasks.has-preview.results.value)"
           operator: in
           values: ["true"]
       params:
-        - name: script
-          value: |
-            cat <<EOF | kubectl apply -f -
-            apiVersion: v1
-            kind: Namespace
-            metadata:
-              name: $(params.preview-namespace)
-              labels:
-                istio-injection: enabled
-            EOF
-      workspaces:
-        - name: kubeconfig-dir
-          workspace: kubeconfig-dir
-        - name: manifest-dir
-          workspace: manifest-dir    
+        - name: namespace
+          value: $(params.preview-namespace)
     - name: clone-git-repo
       taskRef:
         name: git-clone

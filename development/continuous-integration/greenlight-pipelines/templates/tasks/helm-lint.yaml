@@ -31,5 +31,5 @@ spec:
           exit 1
         fi
 
-        helm lint $HELM_PACKAGE_PATH --debug
         helm dependency update $HELM_PACKAGE_PATH --debug
+        helm lint $HELM_PACKAGE_PATH --debug

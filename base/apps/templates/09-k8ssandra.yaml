@@ -56,8 +56,8 @@ spec:
           enabled: false
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false
+      selfHeal: false
     retry:
       limit: 5
       backoff:

@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: deploy-helm-chart
+spec:
+  description: >-
+    Deploys a Helm chart into the cluster using "helm upgrade --install".
+  params:
+    - name: repo
+      description: The Helm repository to pull the chart from
+      type: string
+    - name: chart
+      description: The chart to deploy
+      type: string
+    - name: version
+      description: The version of the chart to deploy
+      type: string
+    - name: release-name
+      description: The name of the deployed chart
+      type: string
+    - name: namespace
+      description: The namespace to install the chart into
+      type: string
+    - name: set-values
+      description: name/value pairs to set as overrides when deploying the chart
+      default: []
+    - name: helm-image
+      default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+      description: Helm image
+  steps:
+    - name: deploy-helm-chart
+      image: $(params.helm-image)
+      args:
+        - $(params.set-values[*])
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        if [ -z "$@" ]
+        then
+            SET_VALUES_FLAG=""
+        else
+          SET_VALUES_FLAG=" --set "
+          for arg in "$@"
+          do
+            SET_VALUES_FLAG=$SET_VALUES_FLAG$arg,
+          done
+          SET_VALUES_FLAG=$(echo $SET_VALUES_FLAG | sed 's/,*$//g')
+        fi
+
+        helm upgrade --debug --install \
+          --namespace $(params.namespace) \
+          --repo $(params.repo) \
+          --version $(params.version) \
+          $SET_VALUES_FLAG \
+          $(params.namespace) $(params.chart)
+

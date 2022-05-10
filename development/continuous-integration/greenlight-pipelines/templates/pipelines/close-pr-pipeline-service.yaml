@@ -56,19 +56,23 @@ spec:
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: uninstall-preview-chart
       taskRef:
-        name: uninstall-preview-chart
+        name: uninstall-helm-chart
       params:
-        - name: project-name
-          value: $(params.project-name)
         - name: namespace
           value: $(params.preview-namespace)
+        - name: release-name
+          value: preview
     - name: delete-preview-resources
       taskRef:
         name: kubernetes-actions
+      runAfter:
+        - uninstall-preview-chart
       params:
         - name: script
           value: |
             kubectl delete --namespace argocd --ignore-not-found applications.argoproj.io $(params.preview-namespace)
+            kubectl delete --namespace default --ignore-not-found secret $(params.preview-namespace)-$(params.project-name)-cooperatives-cassandra-auth
+            kubectl delete --namespace default --ignore-not-found configmap $(params.preview-namespace)-$(params.project-name)-cooperatives-files
     - name: delete-pr-namespace
       taskRef:
         name: kubernetes-actions

@@ -52,23 +52,50 @@ spec:
       params:
         - name: script
           value: |
+            set -ex            
             kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io api-$(params.project-name)-pr-$(params.git-pr-number)
             kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io ui-$(params.project-name)-pr-$(params.git-pr-number)
-            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found --namespace argocd applications.argoproj.io $(params.project-name)-pr-$(params.git-pr-number)-runner
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
+    - name: uninstall-application-chart
+      taskRef:
+        name: uninstall-helm-chart
+      params:
+        - name: namespace
+          value: $(params.project-name)-pr-$(params.git-pr-number)
+        - name: release-name
+          value: $(params.project-name)-pr-$(params.git-pr-number)
     - name: delete-test-stage-namespace
       taskRef:
         name: kubernetes-actions
       runAfter:
         - delete-test-stage-resources
+        - uninstall-application-chart
       params:
         - name: script
           value: |
-            kubectl delete --ignore-not-found namespace test-pr-$(params.git-pr-number)
+            kubectl delete --ignore-not-found namespace $(params.project-name)-pr-$(params.git-pr-number)
+      workspaces:
+        - name: kubeconfig-dir
+          workspace: kubeconfig-dir
+        - name: manifest-dir
+          workspace: manifest-dir
+    - name: delete-additional-test-resources-temporary-fix
+      taskRef:
+        name: kubernetes-actions
+      runAfter:
+        - delete-test-stage-resources
+        - uninstall-application-chart
+      params:
+        - name: script
+          value: |
+            set -ex
+            kubectl delete --ignore-not-found --namespace default secret $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-cassandra-auth
+            kubectl delete --ignore-not-found --namespace default configmap $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-files
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
