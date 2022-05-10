@@ -134,7 +134,7 @@ spec:
         - name: yaml-path
           value: $(params.project-name).yaml
         - name: query
-          value: '.metadata.annotations["greenlightcoop.dev/get-keycloak-client"]'
+          value: '.metadata.annotations["greenlightcoop.dev/keycloak-client-id"]'
       workspaces:
         - name: source
           workspace: git-source
