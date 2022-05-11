@@ -9,7 +9,7 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: istio-system
+    namespace: k8ssandra-operator
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
@@ -30,4 +30,6 @@ spec:
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m 
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=true

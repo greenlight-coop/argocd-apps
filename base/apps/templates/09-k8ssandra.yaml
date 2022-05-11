@@ -10,7 +10,7 @@ metadata:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
+    namespace: k8ssandra-operator
     server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
@@ -40,4 +40,6 @@ spec:
         duration: 5s
         factor: 2
         maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=true
 {{- end }}
