@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Values.baseName }}-k8ssandra-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: k8ssandra-operator
+    server: {{ .Values.spec.destination.server }}
+  project: {{ .Values.spec.project }}
+  source:
+    repoURL: https://helm.k8ssandra.io/
+    chart: k8ssandra-operator
+    targetRevision: 0.37.2
+    helm:
+      releaseName: k8ssandra-operator
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+    syncOptions:
+      - CreateNamespace=true
+      - Replace=true

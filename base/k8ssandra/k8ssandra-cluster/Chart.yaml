@@ -1,0 +1,7 @@
+apiVersion: v2
+name: k8ssandra-cluster
+description: >-
+  Helm chart that the K8ssandra cluster for the Kubernetes cluster.
+type: application
+version: 0.1.0
+appVersion: 0.1.0

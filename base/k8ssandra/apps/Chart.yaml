@@ -1,0 +1,7 @@
+apiVersion: v2
+name: k8ssandra
+description: >-
+  Helm chart that installs and configures K8ssandra
+type: application
+version: 0.1.0
+appVersion: 0.1.0
