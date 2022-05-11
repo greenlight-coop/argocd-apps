@@ -1,26 +1,24 @@
-{{- if .Values.cassandra.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ .Values.baseName }}-k8ssandra
+  name: {{ .Values.baseName }}-k8ssandra-cluster
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "9"
+    argocd.argoproj.io/sync-wave: "1"
   finalizers:
-  - resources-finalizer.argocd.argoproj.io
+    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: default
-    server: https://kubernetes.default.svc
+    namespace: istio-system
+    server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    path: base/k8ssandra/apps
+    path: base/k8ssandra/k8ssandra-cluster
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
-      releaseName: k8ssandra
+      releaseName: k8ssandra-cluster
       values: |
-        baseName: {{ .Values.baseName }}
         rook:
           enabled: {{ .Values.rook.enabled }}
   syncPolicy:
@@ -32,6 +30,4 @@ spec:
       backoff:
         duration: 5s
         factor: 2
-        maxDuration: 3m
-
-{{- end }}
+        maxDuration: 3m 
