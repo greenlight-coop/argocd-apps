@@ -23,8 +23,8 @@ spec:
           enabled: {{ .Values.rook.enabled }}
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false
+      selfHeal: false
     retry:
       limit: 5
       backoff:
