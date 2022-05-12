@@ -5,6 +5,8 @@ metadata:
 spec:
   cassandra:
     serverVersion: "4.0.1"
+    superuserSecretRef:
+      name: k8ssandra-superuser
     datacenters:
       - metadata:
           name: dc1
