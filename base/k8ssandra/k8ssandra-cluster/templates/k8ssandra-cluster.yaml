@@ -26,6 +26,3 @@ spec:
         config:
           jvmOptions:
             heapSize: 512M
-        stargate:
-          size: 1
-          heapSize: 256M
