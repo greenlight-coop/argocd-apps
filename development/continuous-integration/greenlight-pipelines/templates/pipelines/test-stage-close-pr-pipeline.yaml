@@ -84,18 +84,6 @@ spec:
           workspace: kubeconfig-dir
         - name: manifest-dir
           workspace: manifest-dir
-    - name: delete-additional-test-resources-temporary-fix
-      taskRef:
-        name: kubernetes-actions
-      runAfter:
-        - delete-test-stage-resources
-        - uninstall-application-chart
-      params:
-        - name: script
-          value: |
-            set -ex
-            kubectl delete --ignore-not-found --namespace k8ssandra-operator secret $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-cassandra-auth
-            kubectl delete --ignore-not-found --namespace k8ssandra-operator configmap $(params.project-name)-pr-$(params.git-pr-number)-cooperatives-files
       workspaces:
         - name: kubeconfig-dir
           workspace: kubeconfig-dir
