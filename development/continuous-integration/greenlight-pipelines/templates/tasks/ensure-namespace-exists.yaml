@@ -25,5 +25,6 @@ spec:
         metadata:
           name: $(params.namespace)
           labels:
+            greenlightcoop.dev/k8ssandra: enabled
             istio-injection: enabled
         EOF

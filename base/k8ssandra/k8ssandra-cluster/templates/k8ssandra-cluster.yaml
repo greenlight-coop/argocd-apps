@@ -5,6 +5,8 @@ metadata:
 spec:
   cassandra:
     serverVersion: "4.0.1"
+    superuserSecretRef:
+      name: k8ssandra-superuser
     datacenters:
       - metadata:
           name: dc1
@@ -24,6 +26,6 @@ spec:
         config:
           jvmOptions:
             heapSize: 512M
-        stargate:
-          size: 1
-          heapSize: 256M
+    telemetry:
+      prometheus:
+        enabled: true
