@@ -26,3 +26,6 @@ spec:
         config:
           jvmOptions:
             heapSize: 512M
+    telemetry:
+      prometheus:
+        enabled: true
