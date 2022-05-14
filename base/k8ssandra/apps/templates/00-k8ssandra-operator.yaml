@@ -19,9 +19,6 @@ spec:
     helm:
       releaseName: k8ssandra-operator
   syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
     retry:
       limit: 5
       backoff:

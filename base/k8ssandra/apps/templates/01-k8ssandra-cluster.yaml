@@ -22,9 +22,6 @@ spec:
         rook:
           enabled: {{ .Values.rook.enabled }}
   syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
     retry:
       limit: 5
       backoff:
