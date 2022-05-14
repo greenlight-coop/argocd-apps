@@ -31,9 +31,6 @@ spec:
             repoURL: {{ .Values.spec.source.repoURL }}
             targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:
-    automated:
-      prune: false
-      selfHeal: false
     retry:
       limit: 5
       backoff:
