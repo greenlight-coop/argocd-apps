@@ -24,7 +24,7 @@ spec:
               key: token
       script: |
         #!/usr/bin/env bash
-        set -ex
+        set -x
         snyk config set org=greenlight
         snyk config set disableSuggestions=true
         if [ -f "$(workspaces.source.path)/package.json" ] 
@@ -39,3 +39,4 @@ spec:
         else
           echo 'No Dockerfile, skipping snyk container monitor'
         fi
+        exit 0
