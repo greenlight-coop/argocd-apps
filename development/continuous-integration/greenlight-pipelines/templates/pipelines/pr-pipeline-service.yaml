@@ -191,6 +191,12 @@ spec:
       params:
         - name: base-url
           value: https://$(params.preview-namespace).{{ .Values.domainName }}
+        - name: keycloak-base-url
+          value: https://keycloak.{{ .Values.domainName }}
+        - name: keycloak-client-id
+          value: $(params.preview-namespace)-worker-client
+        - name: keycloak-realm
+          value: $(params.preview-namespace)-realm
         - name: results-identifier
           value: $(params.preview-namespace)
       workspaces:
