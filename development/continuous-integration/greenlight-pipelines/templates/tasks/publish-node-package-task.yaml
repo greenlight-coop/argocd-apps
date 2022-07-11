@@ -20,5 +20,5 @@ spec:
         #!/usr/bin/env bash
         set -ex
         
-        npm run build-clean
+        npm run build:clean
         npm publish
