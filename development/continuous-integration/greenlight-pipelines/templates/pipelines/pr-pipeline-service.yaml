@@ -190,9 +190,13 @@ spec:
         - deploy-preview-chart
       params:
         - name: base-url
-          value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
-        - name: base-url
-          value: http://preview-$(params.project-name).$(params.preview-namespace).svc.cluster.local
+          value: https://$(params.preview-namespace).{{ .Values.domainName }}/api
+        - name: keycloak-base-url
+          value: https://keycloak.{{ .Values.domainName }}
+        - name: keycloak-client-id
+          value: $(params.preview-namespace)-worker-client
+        - name: keycloak-realm
+          value: $(params.preview-namespace)-realm
         - name: results-identifier
           value: $(params.preview-namespace)
       workspaces:

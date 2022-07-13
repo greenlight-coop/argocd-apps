@@ -175,6 +175,8 @@ spec:
     - name: deploy-application-helm-chart
       taskRef:
         name: deploy-helm-chart
+      runAfter:
+        - ensure-namespace-exists
       params:
         - name: repo
           value: $(tasks.get-helm-repo.results.value)
