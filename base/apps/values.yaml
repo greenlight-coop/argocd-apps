@@ -1,4 +1,7 @@
 adminEmail: ""
+cassandra:
+  datacenterSize: ""
+  enabled: ""
 certManager:
   enabled: ""
   generateCerts: ""
