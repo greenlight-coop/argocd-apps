@@ -22,6 +22,7 @@ spec:
         adminEmail: {{ .Values.adminEmail }}
         certManager:
           enabled: {{ .Values.certManager.enabled }}
+          generateCerts: {{ .Values.certManager.generateCerts }}
         domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
         httpNodePort: {{ .Values.httpNodePort }}
