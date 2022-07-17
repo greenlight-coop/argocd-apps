@@ -36,3 +36,4 @@ spec:
       - "quay.io/mittwald"
       - "quay.io/prometheus"
       - "quay.io/prometheus-operator"
+      - "registry.k8s.io/kube-state-metrics"
