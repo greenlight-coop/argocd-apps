@@ -8,14 +8,16 @@ certManager:
 domainName: ""
 externalDns:
   enabled: ""
-provider: ""
 googleProjectId: ""
 istio:
   httpNodePort: ""
   httpsNodePort: ""
   jwtPolicy: ""
+keycloak:
+  instances: ""
 metricsServer:
   enabled: ""
+provider: ""
 rook:
   enabled: ""
 spec:
