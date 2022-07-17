@@ -23,6 +23,7 @@ spec:
         baseName: {{ .Values.baseName }}
         certManager:
           enabled: {{ .Values.certManager.enabled }}
+          generateCerts: {{ .Values.certManager.generateCerts }}
         domainName: {{ .Values.domainName }}
         googleProjectId: {{ .Values.googleProjectId }}
         httpNodePort: {{ .Values.istio.httpNodePort }}

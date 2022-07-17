@@ -19,6 +19,8 @@ spec:
     helm:
       releaseName: k8ssandra-cluster
       values: |
+        cassandra:
+          datacenterSize: {{ .Values.cassandra.datacenterSize }}
         rook:
           enabled: {{ .Values.rook.enabled }}
   syncPolicy:

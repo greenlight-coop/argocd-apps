@@ -1,2 +1,4 @@
+cassandra:
+  datacenterSize: ""
 rook:
   enabled: ""

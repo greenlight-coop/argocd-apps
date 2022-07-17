@@ -1,6 +1,7 @@
 adminEmail: ""
 certManager:
   enabled: ""
+  generateCerts: ""
 domainName: ""
 googleProjectId: ""
 httpNodePort: ""

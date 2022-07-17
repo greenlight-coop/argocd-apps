@@ -19,7 +19,9 @@ spec:
     helm:
       values: |
         baseName: {{ .Values.baseName }}
-        domainName: {{ .Values.domainName }}  
+        domainName: {{ .Values.domainName }}
+        keycloak:
+          instances: {{ .Values.keycloak.instances }}
         rook:
           enabled: {{ .Values.rook.enabled }}
   syncPolicy:

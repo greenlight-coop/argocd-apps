@@ -21,6 +21,8 @@ spec:
       releaseName: k8ssandra
       values: |
         baseName: {{ .Values.baseName }}
+        cassandra:
+          datacenterSize: {{ .Values.cassandra.datacenterSize }}
         rook:
           enabled: {{ .Values.rook.enabled }}
         spec:

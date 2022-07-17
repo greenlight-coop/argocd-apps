@@ -4,13 +4,13 @@ metadata:
   name: k8ssandra
 spec:
   cassandra:
-    serverVersion: "4.0.1"
+    serverVersion: "4.0.3"
     superuserSecretRef:
       name: k8ssandra-superuser
     datacenters:
       - metadata:
           name: dc1
-        size: 3
+        size: {{ .Values.cassandra.datacenterSize }}
         storageConfig:
           cassandraDataVolumeClaimSpec:
   {{- if .Values.rook.enabled }}

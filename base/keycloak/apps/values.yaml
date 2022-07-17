@@ -1,5 +1,7 @@
 baseName: ""
 domainName: ""
+keycloak:
+  instances: ""
 rook:
   enabled: ""
 spec:

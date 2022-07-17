@@ -1,17 +1,23 @@
 adminEmail: ""
+cassandra:
+  datacenterSize: ""
+  enabled: ""
 certManager:
   enabled: ""
+  generateCerts: ""
 domainName: ""
 externalDns:
   enabled: ""
-provider: ""
 googleProjectId: ""
 istio:
   httpNodePort: ""
   httpsNodePort: ""
   jwtPolicy: ""
+keycloak:
+  instances: ""
 metricsServer:
   enabled: ""
+provider: ""
 rook:
   enabled: ""
 spec:
