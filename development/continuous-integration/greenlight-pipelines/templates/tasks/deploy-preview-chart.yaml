@@ -41,6 +41,7 @@ spec:
         helm dependency update ./charts/preview
         helm upgrade --debug --install \
           --namespace $(params.namespace) \
+          --set global.cassandra.replicationFactor={{- if eq .Values.cassandra.datacenterSize "1") -}} 1 {{- else -}} 3 {{- end }} \
           --set global.debug=true \
           --set global.domain={{ .Values.domainName }} \
           --set global.subdomain=$(params.namespace) \

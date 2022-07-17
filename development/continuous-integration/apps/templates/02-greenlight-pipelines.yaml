@@ -18,6 +18,8 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       values: |
+        cassandra:
+          datacenterSize: {{ .Values.cassandra.datacenterSize }}
         domainName: {{ .Values.domainName }}
         rook:
           enabled: {{ .Values.rook.enabled }}
