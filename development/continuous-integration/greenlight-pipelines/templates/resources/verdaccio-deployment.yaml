@@ -32,7 +32,7 @@ spec:
                   name: bot-github-token
             - name: VERDACCIO_PORT
               value: "4873"
-          image: 'verdaccio/verdaccio:5.8.0'
+          image: 'verdaccio/verdaccio:5.13.3'
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
