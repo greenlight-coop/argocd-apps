@@ -1,4 +1,4 @@
-# kube-prometheus-stack-34.0.0
+# kube-prometheus-stack-37.2.0
 {{- if .Values.kubePrometheusStack.enabled }}
 apiVersion: argoproj.io/v1alpha1
 kind: Application
