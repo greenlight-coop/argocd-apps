@@ -1,11 +1,11 @@
 resources:
-  - argocd-task-sync-and-wait/0.1/argocd-task-sync-and-wait.yaml
-  - git-cli/0.1/git-cli.yaml
-  - git-clone/0.5/git-clone.yaml
-  - kaniko/0.1/kaniko.yaml
+  - argocd-task-sync-and-wait/0.2/argocd-task-sync-and-wait.yaml
+  - git-cli/0.3/git-cli.yaml
+  - git-clone/0.7/git-clone.yaml
+  - github-add-comment/0.7/github-add-comment.yaml
+  - github-add-labels/0.1/github-add-labels.yaml
+  - github-set-status/0.4/github-set-status.yaml
+  - kaniko/0.6/kaniko.yaml
   - kn/0.1/kn.yaml
   - knctl-deploy/0.1/knctl-deploy.yaml
   - kubernetes-actions/0.2/kubernetes-actions.yaml
-  - github-add-comment/0.2/github-add-comment.yaml
-  - github-add-labels/0.1/github-add-labels.yaml
-  - github-set-status/0.2/github-set-status.yaml
