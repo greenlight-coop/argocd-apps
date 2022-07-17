@@ -22,7 +22,7 @@ spec:
       default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
       description: Helm image
     - name: kubectl-image
-      default: gcr.io/cloud-builders/kubectl@sha256:ca8521c92c9b347b8745c4603d395edbf102a6b4015f7adff775639110f308e0 #image is huge
+      default: gcr.io/cloud-builders/kubectl@sha256:253bbf752b78f904c1c9e9faed77526532f9d177ba9e50ca7d03cd1cfba6996f #image is huge
       description: Kubectl wrapper image
   workspaces:
     - name: source
