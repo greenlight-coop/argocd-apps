@@ -15,7 +15,7 @@ spec:
   source:
     repoURL: https://helm.k8ssandra.io/
     chart: k8ssandra-operator
-    targetRevision: 0.37.4
+    targetRevision: 0.37.3
     helm:
       releaseName: k8ssandra-operator
   syncPolicy:
