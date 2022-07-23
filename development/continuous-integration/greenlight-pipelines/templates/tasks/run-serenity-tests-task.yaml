@@ -83,7 +83,7 @@ spec:
           source:
             repoURL: https://raw.githubusercontent.com/greenlight-coop/greenlight-helm-charts/main/
             chart: expose-pipeline-workspace
-            targetRevision: 0.1.0
+            targetRevision: 0.1.1
             helm:
               values: |
                 identifier: $(params.results-identifier)
