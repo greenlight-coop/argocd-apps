@@ -1,8 +1,0 @@
-apiVersion: v2
-name: knative-eventing-kafka-channel
-description: >-
-  Helm chart that configures Knative Eventing Kafka channel components as described in these instructions:
-  https://knative.dev/docs/install/any-kubernetes-cluster/
-type: application
-version: 0.1.1
-appVersion: 1.1.2
