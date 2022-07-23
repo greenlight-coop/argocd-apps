@@ -20,6 +20,7 @@ spec:
       - "docker.io/thelastpickle"
       - "docker.io/verdaccio"
       - "gcr.io/cloud-builders"
+      - "gcr.io/knative-releases"
       - "gcr.io/tekton-releases"
       - "grafana/loki"
       - "grafana/grafana"
