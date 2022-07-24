@@ -193,6 +193,7 @@ spec:
             - "global.debug=true"
             - "global.domain={{ .Values.domainName }}"
             - "global.subdomain=$(tasks.get-namespace.results.value)"
+            - "global.cassandra.replicationFactor={{- if eq .Values.cassandra.datacenterSize 1.0 -}} 1 {{- else -}} 3 {{- end }}"
             - "greenlight-application-resources.keycloak.directAccess.enabled=true"
     - name: deploy-test-resources
       taskRef:
