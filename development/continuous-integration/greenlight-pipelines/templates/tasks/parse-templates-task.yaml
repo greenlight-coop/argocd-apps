@@ -13,7 +13,7 @@ spec:
     - name: template-directory
   steps:
     - name: parse-templates
-      image: greenlightcoop/template-processor:0.1.10@sha256:c1915cbecfde4be7f3356b75f8a730b4967d5c7f7ebc85d67b6968c9677b7d01
+      image: greenlightcoop/template-processor:0.1.11@sha256:f07dc90da636df4ef7ebcc78303a3d0ad60c0ca1972610b6032c4600a6d8801f
       workingDir: /usr/src/app
       env:
         - name: TEMPLATE_DIRECTORY

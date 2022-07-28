@@ -30,7 +30,7 @@ spec:
     description: The image tag to build and push
   - name: TOOLS_IMAGE
     description: Image used for jq
-    default: greenlightcoop/node-utils:0.1.20@sha256:f808007519871240ba6ffc587c8a86b8c657b24c843b6ec9fa99784b86b61236
+    default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
   workspaces:
   - name: source
   results:

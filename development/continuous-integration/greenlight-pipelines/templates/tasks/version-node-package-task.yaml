@@ -20,7 +20,7 @@ spec:
       default: ""
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.18@sha256:1d97f3e83e5d9994fc1b4ee72e1eb24b6021ff381847c8c4c92ad2742ad45f0b
+      default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
   results:
     - name: node-version
       description: the resulting Node.js package version
