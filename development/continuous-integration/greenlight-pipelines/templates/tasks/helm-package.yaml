@@ -53,8 +53,8 @@ spec:
         helm package $HELM_PACKAGE_PATH --debug --version "$(params.version)"
         helm repo index .
 
-        git config user.email "bot@greenlight.coop"
-        git config user.name "greenlight-coop-bot"
+        git config user.email "{{ .Values.bot.email }}"
+        git config user.name "{{ .Values.bot.username }}"
         git add .
         git commit -m"Updated chart index; added version $(params.version) of chart $CHART_NAME"
         git push origin HEAD:main

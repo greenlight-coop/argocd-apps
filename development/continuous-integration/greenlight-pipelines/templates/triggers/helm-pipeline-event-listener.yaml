@@ -57,7 +57,7 @@ spec:
             name: cel
           params:
             - name: filter
-              value: "(body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master') && body.head_commit.committer.name != 'greenlight-coop-bot'"
+              value: "(body.ref == 'refs/heads/main' || body.ref == 'refs/heads/master') && body.head_commit.committer.name != '{{ .Values.bot.username }}'"
             - name: overlays
               value:
                 - key: build_type

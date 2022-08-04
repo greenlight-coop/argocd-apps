@@ -40,8 +40,8 @@ spec:
           echo $(npm pkg get version | tr -d '"')
         }
 
-        git config user.email "bot@greenlight.coop"
-        git config user.name "greenlight-coop-bot"
+        git config user.email "{{ .Values.bot.email }}"
+        git config user.name "{{ .Values.bot.username }}"
         git fetch --tags
         CURRENT_VERSION=$(get_current_version)
         if [ $(git tag -l "v$CURRENT_VERSION") ]

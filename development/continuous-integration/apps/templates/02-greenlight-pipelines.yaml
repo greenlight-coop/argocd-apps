@@ -18,6 +18,9 @@ spec:
     targetRevision: {{ .Values.spec.source.targetRevision }}
     helm:
       values: |
+        bot:
+          email: {{ .Values.bot.email }}
+          username: {{ .Values.bot.username }}
         cassandra:
           datacenterSize: {{ .Values.cassandra.datacenterSize }}
         domainName: {{ .Values.domainName }}
