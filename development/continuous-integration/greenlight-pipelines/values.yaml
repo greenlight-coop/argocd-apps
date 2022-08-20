@@ -1,3 +1,6 @@
+bot:
+  email: ""
+  username: ""
 cassandra:
   datacenterSize: ""
 domainName: ""
