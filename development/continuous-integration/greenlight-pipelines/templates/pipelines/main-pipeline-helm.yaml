@@ -61,18 +61,6 @@ spec:
         - name: output
           workspace: git-source
           subPath: source
-    - name: clone-helm-git-repo
-      taskRef:
-        name: git-clone
-      params:
-        - name: url
-          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
-        - name: revision
-          value: HEAD
-      workspaces:
-        - name: output
-          workspace: git-source
-          subPath: helm
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -100,6 +88,20 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
+    - name: clone-helm-git-repo
+      taskRef:
+        name: git-clone
+      runAfter:
+        - version-node-package
+      params:
+        - name: url
+          value: git@github.com:greenlight-coop/greenlight-helm-charts.git
+        - name: revision
+          value: HEAD
+      workspaces:
+        - name: output
+          workspace: git-source
+          subPath: helm
     - name: helm-package
       taskRef:
         name: helm-package
