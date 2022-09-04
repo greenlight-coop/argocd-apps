@@ -57,7 +57,10 @@ spec:
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: has-preview
       taskRef:
-        name: has-preview
+        name: has-file
+      params:
+        - name: file-path
+          value: /charts/preview/Chart.yaml
       runAfter:
         - clone-git-repo
       workspaces:

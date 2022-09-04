@@ -1,30 +1,29 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: has-preview
+  name: has-file
 spec:
   description: >-
     Detemines whether a service project contains a preview Helm chart to be deployed as part of a PR build.
   params:
-    - name: helm-image
-      default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
-      description: Helm image
+    - name: file-path
+      description: Path to the file to check for
   workspaces:
     - name: source
   results:
     - name: value
-      description: whether the current service project has a preview chart; result values are either "true" or "false"
+      description: whether the current project source has the given file; result values are either "true" or "false"
   steps:
-    - name: has-preview
+    - name: has-file
       workingDir: $(workspaces.source.path)
-      image: $(params.helm-image)
+      image: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
       script: |
         #!/usr/bin/env bash
         set -xe
 
-        export CHART_PATH=$(workspaces.source.path)/charts/preview/Chart.yaml
+        export FILE_PATH=$(workspaces.source.path)/$(params.file-path)
 
-        if [ -f "$CHART_PATH" ] 
+        if [ -f "$FILE_PATH" ] 
         then
           echo -n true > $(results.value.path)
         else

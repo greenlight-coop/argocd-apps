@@ -61,6 +61,17 @@ spec:
         - name: output
           workspace: git-source
           subPath: source
+    - name: has-client
+      taskRef:
+        name: has-file
+      params:
+        - name: file-path
+          value: /client/package.json
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -100,6 +111,18 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
+    - name: publish-client
+      taskRef:
+        name: publish-node-package
+      params:
+        - name: subdirectory
+          value: client
+      when:
+        - input: "$(tasks.has-client.results.value)"
+          operator: in
+          values: ["true"]
+      runAfter:
+        - build-and-push-image
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
