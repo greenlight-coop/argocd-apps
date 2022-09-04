@@ -23,6 +23,8 @@ spec:
 
         export FILE_PATH=$(workspaces.source.path)/$(params.file-path)
 
+        ls -R $(workspaces.source.path)
+
         if [ -f "$FILE_PATH" ] 
         then
           echo -n true > $(results.value.path)

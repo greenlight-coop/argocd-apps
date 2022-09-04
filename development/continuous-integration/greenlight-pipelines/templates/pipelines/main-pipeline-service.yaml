@@ -178,6 +178,7 @@ spec:
         - set-default-outcome
         - snyk-monitor
         - helm-package
+        - publish-client
       params:
         - name: status
           value: success
