@@ -118,6 +118,10 @@ spec:
       params:
         - name: subdirectory
           value: client
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
       when:
         - input: "$(tasks.has-client.results.value)"
           operator: in
