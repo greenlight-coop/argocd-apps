@@ -43,23 +43,27 @@ spec:
           echo $(npm pkg get version | tr -d '"')
         }
 
+        PUSH_GIT=$(params.push-git)
+        if [ "${PUSH_GIT,,}" != "true" ]; then
+          NPM_VERSION_OPTIONS=--no-git-tag-version
+        fi
+
         git config user.email "{{ .Values.bot.email }}"
         git config user.name "{{ .Values.bot.username }}"
         git fetch --tags
         CURRENT_VERSION=$(get_current_version)
         if [ $(git tag -l "v$CURRENT_VERSION") ]
         then
-          npm version patch
+          npm version patch $NPM_VERSION_OPTIONS
         else
-          npm version $CURRENT_VERSION --allow-same-version
+          npm version $CURRENT_VERSION --allow-same-version $NPM_VERSION_OPTIONS
         fi
         if [ "$(params.branch-name)" != "main" ]
         then
           PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
-          npm version $PREVIEW_VERSION
+          npm version $PREVIEW_VERSION $NPM_VERSION_OPTIONS
         fi
 
-        PUSH_GIT=$(params.push-git)
         if [ "${PUSH_GIT,,}" = "true" ]; then
           git push --tags
           git push origin HEAD:main

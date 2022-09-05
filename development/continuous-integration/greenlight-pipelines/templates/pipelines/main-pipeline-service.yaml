@@ -131,11 +131,12 @@ spec:
           subPath: source
     - name: generate-openapi
       taskRef:
-        name: run-npm-scripts
+        name: run-npm-commands
       params:
         - name: scripts
           value:
-            - "tsoa:spec"
+            - "ci --omit=dev"
+            - "run tsoa:spec"
       workspaces:
         - name: source
           workspace: git-source

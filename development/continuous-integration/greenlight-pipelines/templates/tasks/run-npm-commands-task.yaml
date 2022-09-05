@@ -1,17 +1,17 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: run-npm-scripts
+  name: run-npm-commands
   namespace: greenlight-pipelines
 spec:
   description: >-
-    Runs one or more NPM scripts in a Node project.
+    Runs one or more NPM commands in a Node project.
   params:
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
-    - name: scripts
-      description: npm scripts in project package.json to execute
+    - name: commands
+      description: npm commands in project package.json to execute
       type: array
     - name: subdirectory
       description: Subdirectory within source workspace containing Node project to QC
@@ -19,15 +19,15 @@ spec:
   workspaces:
     - name: source
   steps:
-    - name: run-npm-scripts
+    - name: run-npm-commands
       workingDir: $(workspaces.source.path)/$(params.subdirectory)
       image: $(params.node-image)
-      args: ["$(params.scripts[*])"]
+      args: ["$(params.commands[*])"]
       script: |
         #!/usr/bin/env bash
         set -ex
 
-        for script in "$@" 
+        for command in "$@" 
         do
-          npm run $script
+          npm $command
         done
