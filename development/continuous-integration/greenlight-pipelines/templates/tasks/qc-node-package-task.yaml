@@ -10,11 +10,14 @@ spec:
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
+    - name: subdirectory
+      description: Subdirectory within source workspace containing Node project to QC
+      default: "."
   workspaces:
     - name: source
   steps:
     - name: qc-node-package
-      workingDir: $(workspaces.source.path)
+      workingDir: $(workspaces.source.path)/$(params.subdirectory)
       image: $(params.node-image)
       script: |
         #!/usr/bin/env bash

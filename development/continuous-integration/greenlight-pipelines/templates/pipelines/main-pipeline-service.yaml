@@ -87,12 +87,29 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
+    - name: version-client-node-package
+      taskRef:
+        name: version-node-package
+      runAfter:
+        - clone-git-repo
+      params:
+        - name: branch-name
+          value: $(params.git-branch)
+        - name: push-git
+          value: "false"
+        - name: subdirectory
+          value: client
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
       runAfter:
         - clone-git-repo
         - generate-npmrc
+        - version-client-node-package
       params:
         - name: branch-name
           value: $(params.git-branch)
@@ -112,6 +129,42 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
+    - name: generate-openapi
+      taskRef:
+        name: run-npm-scripts
+      params:
+        - name: scripts
+          value:
+            - "tsoa:spec"
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
+      when:
+        - input: "$(tasks.has-client.results.value)"
+          operator: in
+          values: ["true"]
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+    - name: qc-client-node-package
+      taskRef:
+        name: qc-node-package
+      params:
+        - name: subdirectory
+          value: client
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
+      when:
+        - input: "$(tasks.has-client.results.value)"
+          operator: in
+          values: ["true"]
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+        - generate-openapi
     - name: publish-client
       taskRef:
         name: publish-node-package
@@ -127,7 +180,7 @@ spec:
           operator: in
           values: ["true"]
       runAfter:
-        - build-and-push-image
+        - qc-client-node-package
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor

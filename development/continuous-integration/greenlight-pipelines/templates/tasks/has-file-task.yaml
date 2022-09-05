@@ -4,7 +4,7 @@ metadata:
   name: has-file
 spec:
   description: >-
-    Detemines whether a service project contains a preview Helm chart to be deployed as part of a PR build.
+    Detemines whether a project contains a specified file.
   params:
     - name: file-path
       description: Path to the file to check for
