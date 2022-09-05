@@ -72,6 +72,7 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+          subPath: source
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
