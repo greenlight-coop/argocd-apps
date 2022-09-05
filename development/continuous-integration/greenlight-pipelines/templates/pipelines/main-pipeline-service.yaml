@@ -133,7 +133,7 @@ spec:
       taskRef:
         name: run-npm-commands
       params:
-        - name: scripts
+        - name: commands
           value:
             - "ci --omit=dev"
             - "run tsoa:spec"
