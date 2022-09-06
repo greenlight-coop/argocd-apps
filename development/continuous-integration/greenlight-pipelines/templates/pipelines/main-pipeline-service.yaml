@@ -120,7 +120,7 @@ spec:
           value:
             - "ci"
             - "run build"
-            - "qc --workspace=packages/client"
+            - "run qc --workspace=packages/client"
             - "publish --workspace=packages/client"
       workspaces:
         - name: source
