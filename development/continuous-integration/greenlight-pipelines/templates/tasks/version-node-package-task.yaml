@@ -62,6 +62,7 @@ spec:
           npm version $PREVIEW_VERSION $NPM_VERSION_OPTIONS
         fi
 
+        PUSH_GIT=$(params.push-git)
         if [ "${PUSH_GIT,,}" = "true" ]; then
           git push --tags
           git push origin HEAD:main
