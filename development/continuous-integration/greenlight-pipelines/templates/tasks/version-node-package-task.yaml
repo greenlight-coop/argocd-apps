@@ -41,6 +41,7 @@ spec:
         }
 
         if [ -d "./packages" ]
+        then
           NPM_VERSION_OPTIONS=---workspaces --include-workspace-root
         fi
 
