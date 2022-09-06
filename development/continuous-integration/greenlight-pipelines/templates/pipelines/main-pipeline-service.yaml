@@ -133,6 +133,7 @@ spec:
       runAfter:
         - clone-git-repo
         - generate-npmrc
+        - version-node-package
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
