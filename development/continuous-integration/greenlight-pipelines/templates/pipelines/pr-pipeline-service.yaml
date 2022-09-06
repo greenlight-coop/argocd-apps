@@ -129,6 +129,7 @@ spec:
       runAfter:
         - clone-git-repo
         - generate-npmrc
+        - install-dependencies
       params:
         - name: push-git
           value: "false"
