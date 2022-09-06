@@ -34,11 +34,11 @@ spec:
         #!/usr/bin/env bash
         set -xe
 
-        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/charts/preview/Chart.yaml)
+        export CHART_NAME=$(yq '.name' $(workspaces.source.path)/packages/service/charts/preview/Chart.yaml)
 
         mkdir -p $(workspaces.source.path)/charts/preview/charts
-        cp -r $(workspaces.source.path)/charts/main $(workspaces.source.path)/charts/preview/charts
-        helm dependency update ./charts/preview
+        cp -r $(workspaces.source.path)/packages/service/charts/main $(workspaces.source.path)/packages/service/charts/preview/charts
+        helm dependency update ./packages/service/charts/preview
         helm upgrade --debug --install \
           --namespace $(params.namespace) \
           --set global.cassandra.replicationFactor={{- if eq .Values.cassandra.datacenterSize 1.0 -}} 1 {{- else -}} 3 {{- end }} \
@@ -47,7 +47,7 @@ spec:
           --set global.subdomain=$(params.namespace) \
           --set $(params.project-name).image.tag=$(params.image-tag) \
           --set $(params.project-name).image.digest=$(params.image-digest) \
-          $CHART_NAME ./charts/preview
+          $CHART_NAME ./packages/service/charts/preview
     - name: wait-until-ready
       workingDir: $(workspaces.source.path)
       image: $(params.kubectl-image)

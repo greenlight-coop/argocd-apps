@@ -21,9 +21,6 @@ spec:
     - name: node-image
       description: Base Node.js image to use for the build
       default: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
-    - name: subdirectory
-      description: Subdirectory within source workspace to set package version
-      default: "."
   results:
     - name: node-version
       description: the resulting Node.js package version
@@ -43,9 +40,8 @@ spec:
           echo $(npm pkg get version | tr -d '"')
         }
 
-        PUSH_GIT=$(params.push-git)
-        if [ "${PUSH_GIT,,}" != "true" ]; then
-          NPM_VERSION_OPTIONS=--no-git-tag-version
+        if [ -d "./packages" ]
+          NPM_VERSION_OPTIONS=---workspaces --include-workspace-root
         fi
 
         git config user.email "{{ .Values.bot.email }}"

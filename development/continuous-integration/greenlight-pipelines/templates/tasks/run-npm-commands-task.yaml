@@ -16,6 +16,9 @@ spec:
     - name: subdirectory
       description: Subdirectory within source workspace containing Node project to QC
       default: "."
+    - name: fail-on-error
+      description: If any of the npm commands fail exit with a non-zero status failing the build
+      default: "true"
   workspaces:
     - name: source
   steps:
@@ -25,9 +28,18 @@ spec:
       args: ["$(params.commands[*])"]
       script: |
         #!/usr/bin/env bash
-        set -ex
+
+        FAIL_ON_ERROR=$(params.fail-on-error)
+        if [ "${FAIL_ON_ERROR,,}" = "true" ]; then
+          set -ex
+        else
+          set -x
+        fi
 
         for command in "$@" 
         do
           npm $command
         done
+        if [ "${FAIL_ON_ERROR,,}" != "true" ]; then
+          exit 0
+        fi

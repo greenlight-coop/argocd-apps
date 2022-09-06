@@ -60,7 +60,7 @@ spec:
         name: has-file
       params:
         - name: file-path
-          value: /charts/preview/Chart.yaml
+          value: /service/charts/preview/Chart.yaml
       runAfter:
         - clone-git-repo
       workspaces:
@@ -102,7 +102,13 @@ spec:
           workspace: git-source
     - name: snyk-test
       taskRef:
-        name: snyk-test
+        name: run-npm-commands
+      params:
+        - name: fail-on-error
+          value: "false"
+        - name: commands
+          value:
+            - "run snyk:test"
       runAfter:
         - clone-git-repo
         - generate-npmrc

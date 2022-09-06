@@ -26,6 +26,9 @@ spec:
         elif [ -f "./charts/main/Chart.yaml" ]
         then
           export HELM_PACKAGE_PATH=./charts/main
+        elif [ -f "./packages/service/charts/main/Chart.yaml" ]
+        then
+          export HELM_PACKAGE_PATH=./packages/service/charts/main
         else
           echo 'No Helm chart found'
           exit 1

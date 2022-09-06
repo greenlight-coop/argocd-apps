@@ -66,7 +66,7 @@ spec:
         name: has-file
       params:
         - name: file-path
-          value: /client/package.json
+          value: /packages/client/package.json
       runAfter:
         - clone-git-repo
       workspaces:
@@ -87,29 +87,12 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
-    - name: version-client-node-package
-      taskRef:
-        name: version-node-package
-      runAfter:
-        - clone-git-repo
-      params:
-        - name: branch-name
-          value: $(params.git-branch)
-        - name: push-git
-          value: "false"
-        - name: subdirectory
-          value: client
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
     - name: version-node-package
       taskRef:
         name: version-node-package
       runAfter:
         - clone-git-repo
         - generate-npmrc
-        - version-client-node-package
       params:
         - name: branch-name
           value: $(params.git-branch)
@@ -129,14 +112,16 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
-    - name: generate-openapi
+    - name: publish-client
       taskRef:
         name: run-npm-commands
       params:
         - name: commands
           value:
             - "ci --omit=dev"
-            - "run tsoa:spec"
+            - "run build"
+            - "qc --workspace=packages/client"
+            - "publish --workspace=packages/client"
       workspaces:
         - name: source
           workspace: git-source
@@ -148,40 +133,6 @@ spec:
       runAfter:
         - clone-git-repo
         - generate-npmrc
-    - name: qc-client-node-package
-      taskRef:
-        name: qc-node-package
-      params:
-        - name: subdirectory
-          value: client
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
-      when:
-        - input: "$(tasks.has-client.results.value)"
-          operator: in
-          values: ["true"]
-      runAfter:
-        - clone-git-repo
-        - generate-npmrc
-        - generate-openapi
-    - name: publish-client
-      taskRef:
-        name: publish-node-package
-      params:
-        - name: subdirectory
-          value: client
-      workspaces:
-        - name: source
-          workspace: git-source
-          subPath: source
-      when:
-        - input: "$(tasks.has-client.results.value)"
-          operator: in
-          values: ["true"]
-      runAfter:
-        - qc-client-node-package
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
