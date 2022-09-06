@@ -30,7 +30,7 @@ spec:
     - name: source
   steps:
     - name: version-node-package
-      workingDir: $(workspaces.source.path)/$(params.subdirectory)
+      workingDir: $(workspaces.source.path)
       image: $(params.node-image)
       script: |
         #!/usr/bin/env bash
