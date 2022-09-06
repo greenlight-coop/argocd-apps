@@ -58,7 +58,6 @@ spec:
             npm version $CURRENT_VERSION --allow-same-version $NPM_VERSION_OPTIONS
           fi
         else
-          git status
           PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
           npm version $PREVIEW_VERSION $NPM_VERSION_OPTIONS
         fi
