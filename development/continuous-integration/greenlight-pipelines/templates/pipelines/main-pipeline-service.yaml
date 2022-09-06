@@ -118,7 +118,7 @@ spec:
       params:
         - name: commands
           value:
-            - "ci --omit=dev"
+            - "ci"
             - "run build"
             - "qc --workspace=packages/client"
             - "publish --workspace=packages/client"
