@@ -42,7 +42,7 @@ spec:
 
         if [ -d "./packages" ]
         then
-          NPM_VERSION_OPTIONS=---workspaces --include-workspace-root
+          NPM_VERSION_OPTIONS="--workspaces --include-workspace-root"
         fi
 
         git config user.email "{{ .Values.bot.email }}"
