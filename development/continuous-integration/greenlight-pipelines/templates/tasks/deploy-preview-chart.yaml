@@ -36,7 +36,7 @@ spec:
 
         export CHART_NAME=$(yq '.name' $(workspaces.source.path)/packages/service/charts/preview/Chart.yaml)
 
-        mkdir -p $(workspaces.source.path)/charts/preview/charts
+        mkdir -p $(workspaces.source.path)/packages/service/charts/preview/charts
         cp -r $(workspaces.source.path)/packages/service/charts/main $(workspaces.source.path)/packages/service/charts/preview/charts
         helm dependency update ./packages/service/charts/preview
         helm upgrade --debug --install \
