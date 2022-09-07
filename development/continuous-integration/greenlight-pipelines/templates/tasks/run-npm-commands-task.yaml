@@ -1,0 +1,45 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-npm-commands
+  namespace: greenlight-pipelines
+spec:
+  description: >-
+    Runs one or more NPM commands in a Node project.
+  params:
+    - name: node-image
+      description: Base Node.js image to use for the build
+      default: greenlightcoop/node-utils:0.1.22@sha256:82d45aa5fd047275de6688fbdbd761885bb280fa946f05796d1f55535ca5df1c
+    - name: commands
+      description: npm commands in project package.json to execute
+      type: array
+    - name: subdirectory
+      description: Subdirectory within source workspace containing Node project to QC
+      default: "."
+    - name: fail-on-error
+      description: If any of the npm commands fail exit with a non-zero status failing the build
+      default: "true"
+  workspaces:
+    - name: source
+  steps:
+    - name: run-npm-commands
+      workingDir: $(workspaces.source.path)/$(params.subdirectory)
+      image: $(params.node-image)
+      args: ["$(params.commands[*])"]
+      script: |
+        #!/usr/bin/env bash
+
+        FAIL_ON_ERROR=$(params.fail-on-error)
+        if [ "${FAIL_ON_ERROR,,}" = "true" ]; then
+          set -ex
+        else
+          set -x
+        fi
+
+        for command in "$@" 
+        do
+          npm $command
+        done
+        if [ "${FAIL_ON_ERROR,,}" != "true" ]; then
+          exit 0
+        fi

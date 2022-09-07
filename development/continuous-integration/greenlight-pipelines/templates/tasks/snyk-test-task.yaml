@@ -20,18 +20,10 @@ spec:
               key: token
       script: |
         #!/usr/bin/env bash
-        set -ex
+        set -x
+
         snyk config set org=greenlight
         snyk config set disableSuggestions=true
-        if [ -d "$(workspaces.source.path)/src" ] 
-        then
-          snyk code test --fail-on=all || echo 'snyk code test identified potential issues'
-        else
-          echo 'No src directory, skipping snyk code test'
-        fi
-        if [ -f "$(workspaces.source.path)/package.json" ] 
-        then
-          snyk test --fail-on=all
-        else
-          echo 'No package.json, skipping snyk test'
-        fi
+        
+        npm run snyk:test
+        exit 0

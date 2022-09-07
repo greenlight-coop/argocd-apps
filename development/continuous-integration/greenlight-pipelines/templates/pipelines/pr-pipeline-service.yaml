@@ -57,7 +57,10 @@ spec:
           value: https://dashboard.{{ .Values.domainName }}/#/namespaces/greenlight-pipelines/pipelineruns/$(context.pipelineRun.name)
     - name: has-preview
       taskRef:
-        name: has-preview
+        name: has-file
+      params:
+        - name: file-path
+          value: /packages/service/charts/preview/Chart.yaml
       runAfter:
         - clone-git-repo
       workspaces:
@@ -97,12 +100,26 @@ spec:
       workspaces:
         - name: source
           workspace: git-source
+    - name: install-dependencies
+      taskRef:
+        name: run-npm-commands
+      params:
+        - name: commands
+          value:
+            - "ci"
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+      workspaces:
+        - name: source
+          workspace: git-source
     - name: snyk-test
       taskRef:
         name: snyk-test
       runAfter:
         - clone-git-repo
         - generate-npmrc
+        - install-dependencies
       workspaces:
         - name: source
           workspace: git-source
@@ -112,6 +129,7 @@ spec:
       runAfter:
         - clone-git-repo
         - generate-npmrc
+        - install-dependencies
       params:
         - name: push-git
           value: "false"

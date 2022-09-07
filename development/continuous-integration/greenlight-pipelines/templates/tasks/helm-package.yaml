@@ -33,6 +33,9 @@ spec:
         elif [ -f "$(workspaces.source.path)/charts/main/Chart.yaml" ]
         then
           export HELM_PACKAGE_PATH=$(workspaces.source.path)/charts/main
+        elif [ -f "$(workspaces.source.path)/packages/service/charts/main/Chart.yaml" ]
+        then
+          export HELM_PACKAGE_PATH=$(workspaces.source.path)/packages/service/charts/main
         else
           echo 'No Helm chart found'
           exit 1

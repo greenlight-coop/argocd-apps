@@ -40,20 +40,26 @@ spec:
           echo $(npm pkg get version | tr -d '"')
         }
 
+        if [ -d "./packages" ]
+        then
+          NPM_VERSION_OPTIONS="--workspaces --include-workspace-root"
+        fi
+
         git config user.email "{{ .Values.bot.email }}"
         git config user.name "{{ .Values.bot.username }}"
         git fetch --tags
-        CURRENT_VERSION=$(get_current_version)
-        if [ $(git tag -l "v$CURRENT_VERSION") ]
+        if [ "$(params.branch-name)" = "main" ]
         then
-          npm version patch
+          CURRENT_VERSION=$(get_current_version)
+          if [ $(git tag -l "v$CURRENT_VERSION") ]
+          then
+            npm version patch $NPM_VERSION_OPTIONS
+          else
+            npm version $CURRENT_VERSION --allow-same-version $NPM_VERSION_OPTIONS
+          fi
         else
-          npm version $CURRENT_VERSION --allow-same-version
-        fi
-        if [ "$(params.branch-name)" != "main" ]
-        then
           PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
-          npm version $PREVIEW_VERSION
+          npm version $PREVIEW_VERSION $NPM_VERSION_OPTIONS
         fi
 
         PUSH_GIT=$(params.push-git)

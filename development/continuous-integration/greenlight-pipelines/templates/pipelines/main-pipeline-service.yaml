@@ -61,6 +61,18 @@ spec:
         - name: output
           workspace: git-source
           subPath: source
+    - name: has-client
+      taskRef:
+        name: has-file
+      params:
+        - name: file-path
+          value: /packages/client/package.json
+      runAfter:
+        - clone-git-repo
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
     - name: generate-npmrc
       taskRef:
         name: generate-npmrc
@@ -100,6 +112,28 @@ spec:
         - name: source
           workspace: git-source
           subPath: source
+    - name: publish-client
+      taskRef:
+        name: run-npm-commands
+      params:
+        - name: commands
+          value:
+            - "ci"
+            - "run build"
+            - "run qc --workspace=packages/client"
+            - "publish --workspace=packages/client"
+      workspaces:
+        - name: source
+          workspace: git-source
+          subPath: source
+      when:
+        - input: "$(tasks.has-client.results.value)"
+          operator: in
+          values: ["true"]
+      runAfter:
+        - clone-git-repo
+        - generate-npmrc
+        - version-node-package
     - name: snyk-monitor
       taskRef:
         name: snyk-monitor
@@ -155,6 +189,7 @@ spec:
         - set-default-outcome
         - snyk-monitor
         - helm-package
+        - publish-client
       params:
         - name: status
           value: success

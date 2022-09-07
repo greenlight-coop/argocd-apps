@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: has-file
+spec:
+  description: >-
+    Detemines whether a project contains a specified file.
+  params:
+    - name: file-path
+      description: Path to the file to check for
+  workspaces:
+    - name: source
+  results:
+    - name: value
+      description: whether the current project source has the given file; result values are either "true" or "false"
+  steps:
+    - name: has-file
+      workingDir: $(workspaces.source.path)
+      image: greenlightcoop/node-utils:0.1.21@sha256:f5b7763500c7eddb28de1b82af072c97699604f9bf46e7b4604953e1f0bb6164
+      script: |
+        #!/usr/bin/env bash
+        set -xe
+
+        export FILE_PATH=$(workspaces.source.path)/$(params.file-path)
+
+        if [ -f "$FILE_PATH" ] 
+        then
+          echo -n true > $(results.value.path)
+        else
+          echo -n false > $(results.value.path)
+        fi
