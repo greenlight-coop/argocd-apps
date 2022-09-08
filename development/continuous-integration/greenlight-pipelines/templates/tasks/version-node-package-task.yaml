@@ -40,34 +40,44 @@ spec:
           echo $(npm pkg get version | tr -d '"')
         }
 
-        if [ -d "./packages" ]
-        then
-          NPM_VERSION_OPTIONS="--workspaces --include-workspace-root"
-        fi
-
         git config user.email "{{ .Values.bot.email }}"
         git config user.name "{{ .Values.bot.username }}"
         git fetch --tags
+
+        npm config set tag-version-prefix ''
+
         if [ "$(params.branch-name)" = "main" ]
         then
           CURRENT_VERSION=$(get_current_version)
           if [ $(git tag -l "v$CURRENT_VERSION") ]
           then
-            npm version patch $NPM_VERSION_OPTIONS
+            UPDATED_VERSION=$(npm version patch --no-git-tag-version)
           else
-            npm version $CURRENT_VERSION --allow-same-version $NPM_VERSION_OPTIONS
+            UPDATED_VERSION=$(npm version $CURRENT_VERSION --allow-same-version --no-git-tag-version)
           fi
         else
           PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
-          npm version $PREVIEW_VERSION $NPM_VERSION_OPTIONS
+          UPDATED_VERSION=$(npm version $PREVIEW_VERSION --no-git-tag-version)
+        fi
+
+        if [ -d "./packages" ]
+        then
+          npm --workspaces version $UPDATED_VERSION
         fi
 
         PUSH_GIT=$(params.push-git)
         if [ "${PUSH_GIT,,}" = "true" ]; then
+          npm install  # update lockfile
+          git add package{,-lock}.json
+          if [ -d "./packages" ]
+          then
+            git add packages/**/package.json
+          fi
+          git commit --message "v$UPDATED_VERSION"
+          git tag "v$UPDATED_VERSION"
           git push --tags
           git push origin HEAD:main
         fi
 
-        UPDATED_VERSION=$(npm pkg get version | tr -d '"')
         echo -n $UPDATED_VERSION > $(results.node-version.path)
         echo -n "v$UPDATED_VERSION" > $(results.github-version.path)
