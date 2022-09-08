@@ -45,19 +45,19 @@ spec:
         git fetch --tags
 
         npm config set tag-version-prefix ''
-        
+
         if [ "$(params.branch-name)" = "main" ]
         then
           CURRENT_VERSION=$(get_current_version)
           if [ $(git tag -l "v$CURRENT_VERSION") ]
           then
-            UPDATED_VERSION=npm version patch --no-git-tag-version
+            UPDATED_VERSION=$(npm version patch --no-git-tag-version)
           else
-            UPDATED_VERSION=npm version $CURRENT_VERSION --allow-same-version --no-git-tag-version
+            UPDATED_VERSION=$(npm version $CURRENT_VERSION --allow-same-version --no-git-tag-version)
           fi
         else
           PREVIEW_VERSION=$(echo -n "$(get_current_version)-$(params.branch-name)-pr-$(params.pull-request-number)-commit-$(params.pull-request-commit-number)" | tr '/' '-')
-          UPDATED_VERSION=npm version $PREVIEW_VERSION --no-git-tag-version
+          UPDATED_VERSION=$(npm version $PREVIEW_VERSION --no-git-tag-version)
         fi
 
         if [ -d "./packages" ]
