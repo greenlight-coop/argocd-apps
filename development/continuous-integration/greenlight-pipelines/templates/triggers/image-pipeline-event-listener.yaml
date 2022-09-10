@@ -35,6 +35,8 @@ spec:
                   expression: "'image'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
+                - key: short_repository_identifier
+                  expression: "body.repository.name.replace('-service', '')"
     - name: close-pr-pipeline-trigger
       template:
         ref: close-pr-pipeline-trigger-template
@@ -64,6 +66,8 @@ spec:
                   expression: "'image'"
                 - key: hub_organization
                   expression: "body.organization.login.replace('-', '')"
+                - key: short_repository_identifier
+                  expression: "body.repository.name.replace('-service', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
