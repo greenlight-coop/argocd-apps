@@ -9,19 +9,10 @@ metadata:
     app.kubernetes.io/instance: default
     app.kubernetes.io/name: dashboard
     app.kubernetes.io/part-of: tekton-dashboard
-    app.kubernetes.io/version: v0.21.0
+    app.kubernetes.io/version: v0.29.2
     argocd.argoproj.io/instance: tekton-dashboard
-    dashboard.tekton.dev/release: v0.21.0
-    version: v0.21.0
-spec:
-  gateways:
-  - istio-system/istio-gateway
-  hosts:
-  - dashboard.{{ .Values.domainName }}
-  http:
-  - match:
-    - uri:
-        prefix: /
+    dashboard.tekton.dev/release: v0.29.2
+    version: v0.29.2ek
     route:
     - destination:
         port:
