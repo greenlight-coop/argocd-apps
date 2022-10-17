@@ -33,6 +33,7 @@ spec:
       - "kiwigrid/k8s-sidecar"
       - "moby/buildkit"
       - "nginx"
+      - "quay.io/external_storage"
       - "quay.io/kiwigrid"
       - "quay.io/mittwald"
       - "quay.io/prometheus"

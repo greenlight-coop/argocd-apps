@@ -13,11 +13,9 @@ spec:
     server: {{ .Values.spec.destination.server }}
   project: {{ .Values.spec.project }}
   source:
-    repoURL: https://helm.k8ssandra.io/
-    chart: k8ssandra-operator
-    targetRevision: 0.37.3
-    helm:
-      releaseName: k8ssandra-operator
+    repoURL: https://github.com/k8ssandra/k8ssandra-operator/
+    path: config/deployments/control-plane
+    targetRevision: v1.3.0
   syncPolicy:
     retry:
       limit: 5
