@@ -25,4 +25,3 @@ spec:
         maxDuration: 3m
     syncOptions:
       - CreateNamespace=true
-      - Replace=true
