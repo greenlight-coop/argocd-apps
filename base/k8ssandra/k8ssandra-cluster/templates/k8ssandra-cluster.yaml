@@ -4,6 +4,9 @@ metadata:
   name: k8ssandra
 spec:
   cassandra:
+    resources:
+      limits:
+        memory: 1Gi
     serverVersion: "4.0.3"
     superuserSecretRef:
       name: k8ssandra-superuser
