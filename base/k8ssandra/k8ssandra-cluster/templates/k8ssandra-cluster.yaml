@@ -4,14 +4,14 @@ metadata:
   name: k8ssandra
 spec:
   cassandra:
-    resources:
-      limits:
-        memory: 1Gi
     serverVersion: "4.0.3"
     superuserSecretRef:
       name: k8ssandra-superuser
     datacenters:
-      - metadata:
+      - config:
+          jvmOptions:
+            heap_max_size: 512M
+        metadata:
           name: dc1
         size: {{ .Values.cassandra.datacenterSize }}
         storageConfig:
