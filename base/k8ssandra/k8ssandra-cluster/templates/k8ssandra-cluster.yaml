@@ -23,9 +23,9 @@ spec:
             resources:
               requests:
                 storage: 5Gi
-        # config:
-        #   jvmOptions:
-        #     heap_max_size: 512M
+        config:
+          jvmOptions:
+            heap_max_size: 512M
     telemetry:
       prometheus:
         enabled: true
