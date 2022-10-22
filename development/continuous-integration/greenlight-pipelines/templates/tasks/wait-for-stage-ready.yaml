@@ -10,7 +10,7 @@ spec:
       description: The namespace the stage is deployed in.
       type: string
     - name: kubectl-image
-      default: gcr.io/cloud-builders/kubectl@sha256:253bbf752b78f904c1c9e9faed77526532f9d177ba9e50ca7d03cd1cfba6996f #image is huge
+      default: gcr.io/cloud-builders/kubectl@sha256:d8048f6806a3d5808e0c721852aa2448b609597d853a3418ca5d7af92ee30fe9 #image is huge
       description: Kubectl wrapper image
   steps:
     - name: wait-for-stage-ready
