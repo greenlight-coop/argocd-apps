@@ -15,13 +15,13 @@ spec:
   source:
     repoURL: https://grafana.github.io/helm-charts
     chart: promtail
-    targetRevision: 6.2.1
+    targetRevision: 6.5.1
     helm:
       releaseName: promtail
       values: |
         config:
           clients:
-            - url: http://loki:3100/loki/api/v1/push
+            - url: http://loki-loki-distributed-gateway/loki/api/v1/push
   syncPolicy:
     automated:
       prune: true

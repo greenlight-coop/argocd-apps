@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: buildkitd
-        image: moby/buildkit:v0.10.3@sha256:0dc312b04eac1b44cd2cad566deb1e886c753109208affbbec8384f381ff7f38
+        image: moby/buildkit:v0.10.5@sha256:46e7907bf9cdced1af7e45f1f07f69cb30560574d85d636a17ce6f97cc4844b4
         args:
         - --addr
         - unix:///run/buildkit/buildkitd.sock
