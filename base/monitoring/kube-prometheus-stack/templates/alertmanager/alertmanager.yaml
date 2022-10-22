@@ -2,7 +2,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
-  name: {{ template "kube-prometheus-stack.fullname" . }}-alertmanager
+  name: {{ template "kube-prometheus-stack.alertmanager.crname" . }}
   namespace: {{ template "kube-prometheus-stack.namespace" . }}
   labels:
     app: {{ template "kube-prometheus-stack.name" . }}-alertmanager
@@ -89,7 +89,7 @@ spec:
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.storage }}
   storage:
-{{ toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4 }}
+{{ tpl (toYaml .Values.alertmanager.alertmanagerSpec.storage | indent 4) . }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.podMetadata }}
   podMetadata:
@@ -108,7 +108,7 @@ spec:
         labelSelector:
           matchExpressions:
             - {key: app.kubernetes.io/name, operator: In, values: [alertmanager]}
-            - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-alertmanager]}
+            - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.alertmanager.crname" . }}]}
 {{- else if eq .Values.alertmanager.alertmanagerSpec.podAntiAffinity "soft" }}
     podAntiAffinity:
       preferredDuringSchedulingIgnoredDuringExecution:
@@ -118,7 +118,7 @@ spec:
           labelSelector:
             matchExpressions:
               - {key: app.kubernetes.io/name, operator: In, values: [alertmanager]}
-              - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.fullname" . }}-alertmanager]}
+              - {key: alertmanager, operator: In, values: [{{ template "kube-prometheus-stack.alertmanager.crname" . }}]}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.tolerations }}
   tolerations:
@@ -161,5 +161,8 @@ spec:
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
   forceEnableClusterMode: {{ .Values.alertmanager.alertmanagerSpec.forceEnableClusterMode }}
+{{- end }}
+{{- if .Values.alertmanager.alertmanagerSpec.minReadySeconds }}
+  minReadySeconds: {{ .Values.alertmanager.alertmanagerSpec.minReadySeconds }}
 {{- end }}
 {{- end }}
