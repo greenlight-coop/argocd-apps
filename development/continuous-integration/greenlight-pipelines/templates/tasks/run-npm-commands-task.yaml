@@ -9,7 +9,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.22@sha256:82d45aa5fd047275de6688fbdbd761885bb280fa946f05796d1f55535ca5df1c
+      default: greenlightcoop/node-utils:0.1.23@sha256:7a2904768b6adffffd4ee43344a84cef10d7f548bc5cccf245abc4c925a2d09f
     - name: commands
       description: npm commands in project package.json to execute
       type: array
