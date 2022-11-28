@@ -26,6 +26,7 @@ spec:
   steps:
     - name: delete-pull-request-images
       image: $(params.node-image)
+      workingDir: /usr/src/app
       script: |
         #!/usr/bin/env node
         
