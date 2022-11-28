@@ -12,7 +12,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.23@sha256:7a2904768b6adffffd4ee43344a84cef10d7f548bc5cccf245abc4c925a2d09f
+      default: greenlightcoop/node-utils:0.1.24@sha256:ba9cf4e4985824c39ef671fcd04c7413391dd12b81320a99906d5ac737a42e5a
     - name: docker-hub-domain
       description: Docker Hub API
       default: hub.docker.com
@@ -28,30 +28,27 @@ spec:
       image: $(params.node-image)
       script: |
         #!/usr/bin/env node
-        const fs = require('fs')
-        const _ = require('lodash')
-        const docker = require('$(workspaces.node-modules.path)/docker-functions')
+        
+        const { DockerHubApi, getDockerCredentials } = require('@greenlight-coop/greenlight-build-utils')
 
-        const dockerHubDomain = '$(params.docker-hub-domain)'
-        const dockerHubUrl = `https://${dockerHubDomain}/v2/`
+        const domain = '$(params.docker-hub-domain)'
+        const dockerHubUrl = `https://${domain}/v2/`
 
         const organization = '$(params.organization)'
         const repository = '$(params.repository)'
         const pullRequestNumber = '$(params.pull-request-number)'
 
-        deletePullRequestImages()
-
         async function deletePullRequestImages () {
           try {
-            const auth = await getAuth(dockerHubUrl)
-            const config = {
-              dockerHubDomain, 
-              organization, 
-              repository, 
-              username: auth.username, 
+            const auth = await getDockerCredentials(dockerHubUrl)
+            const properties = {
+              domain,
+              organization,
+              repository,
+              username: auth.username,
               password: auth.password
             }
-            const api = docker.getHubAPI(config)
+            const api = new DockerHubApi(properties)
 
             const tags = await api.getPullRequestTags(pullRequestNumber)
             for (const tag of tags) {
@@ -63,7 +60,4 @@ spec:
           }
         }
         
-        async function getAuth (apiUrl) {
-          const config = JSON.parse(fs.readFileSync('/tekton/creds-secrets/docker-registry-credentials/.dockerconfigjson', 'utf8'))
-          return config.auths[apiUrl]
-        } 
+        deletePullRequestImages()
