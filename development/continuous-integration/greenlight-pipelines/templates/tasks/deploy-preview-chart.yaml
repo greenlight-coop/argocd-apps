@@ -19,7 +19,7 @@ spec:
       description: The digest of the image to deploy and test
       type: string
     - name: helm-image
-      default: greenlightcoop/node-utils:0.1.24@sha256:ba9cf4e4985824c39ef671fcd04c7413391dd12b81320a99906d5ac737a42e5a
+      default: greenlightcoop/node-utils:0.1.25@sha256:ac291a4a1346e3e5938cf89818a71e093c05cd94e00f3ee49bbd5aa2fa985b77
       description: Helm image
     - name: kubectl-image
       default: gcr.io/cloud-builders/kubectl@sha256:d8048f6806a3d5808e0c721852aa2448b609597d853a3418ca5d7af92ee30fe9 #image is huge
