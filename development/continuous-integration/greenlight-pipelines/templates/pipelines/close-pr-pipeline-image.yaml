@@ -23,7 +23,6 @@ spec:
     - name: status-workspace
     - name: kubeconfig-dir
     - name: manifest-dir
-    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
@@ -62,9 +61,6 @@ spec:
           value: $(params.project-name)
         - name: pull-request-number
           value: $(params.git-pr-number)
-      workspaces:
-        - name: node-modules
-          workspace: node-modules
     - name: set-success-outcome
       taskRef:
         name: set-outcome-status

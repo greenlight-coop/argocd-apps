@@ -6,9 +6,6 @@ metadata:
 spec:
   description: >-
     Removes preview application image tags generated from pull request builds.
-  workspaces:
-    - name: node-modules
-      description: modules with useful shared behavior
   params:
     - name: node-image
       description: Base Node.js image to use for the build

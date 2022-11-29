@@ -20,7 +20,6 @@ spec:
     - name: kubeconfig-dir
     - name: manifest-dir
     - name: status-workspace
-    - name: node-modules
   tasks:
     - name: set-default-outcome
       taskRef:
