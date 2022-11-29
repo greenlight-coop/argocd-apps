@@ -57,9 +57,6 @@ spec:
 {{- if .Values.rook.enabled }}
                 storageClassName: rook-ceph-block
 {{- end }}
-          - name: node-modules
-            configMap:
-              name: node-modules
           - name: kubeconfig-dir
             emptyDir: {}
           - name: manifest-dir

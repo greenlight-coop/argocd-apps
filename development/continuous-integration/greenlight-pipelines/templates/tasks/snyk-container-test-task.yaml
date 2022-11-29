@@ -14,7 +14,7 @@ spec:
     - name: source
   steps:
     - name: snyk-container-test
-      image: greenlightcoop/snyk-tools:0.1.5@sha256:d88b253f337761b08b52758154a07469b5976371bae5a0b2811e3df63074f786
+      image: greenlightcoop/snyk-tools:0.1.6@sha256:f3711ed2e09eab78ad9f699bd81e5b2827e436d71f57e223c056bf8d03966917
       workingDir: $(workspaces.source.path)
       env:
         - name: SNYK_TOKEN
