@@ -13,7 +13,7 @@ spec:
       description: The helm release to uninstall
       type: string
     - name: helm-image
-      default: greenlightcoop/node-utils:0.1.25@sha256:ac291a4a1346e3e5938cf89818a71e093c05cd94e00f3ee49bbd5aa2fa985b77
+      default: greenlightcoop/node-utils:0.1.26@sha256:7194d4351cbfa64bc4e6f9789a20e20ad8cbb6bc29c78bf921400a1497155d1f
       description: Helm image
   steps:
     - name: uninstall-helm-chart
