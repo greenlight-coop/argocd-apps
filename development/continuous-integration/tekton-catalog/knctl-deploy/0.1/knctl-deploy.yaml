@@ -24,7 +24,7 @@ spec:
   steps:
   # the first step is required as knctl doesn't support inCluster configuration.
   - name: kubeconfig
-    image: gcr.io/cloud-builders/kubectl@sha256:d8048f6806a3d5808e0c721852aa2448b609597d853a3418ca5d7af92ee30fe9  # it is huge
+    image: gcr.io/cloud-builders/kubectl@sha256:57df6708b97ea047bfbb285ee872a4e2785cfb1ce958d40240d851bb077d7c43  # it is huge
     command: ["/bin/bash"]
     args:
     - -c

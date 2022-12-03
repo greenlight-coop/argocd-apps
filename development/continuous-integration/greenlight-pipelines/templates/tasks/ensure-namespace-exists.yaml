@@ -10,7 +10,7 @@ spec:
       description: The namespace to create if necessary.
       type: string
     - name: kubectl-image
-      default: gcr.io/cloud-builders/kubectl@sha256:d8048f6806a3d5808e0c721852aa2448b609597d853a3418ca5d7af92ee30fe9 #image is huge
+      default: gcr.io/cloud-builders/kubectl@sha256:57df6708b97ea047bfbb285ee872a4e2785cfb1ce958d40240d851bb077d7c43 #image is huge
       description: Kubectl wrapper image
   steps:
     - name: ensure-namespace-exists
