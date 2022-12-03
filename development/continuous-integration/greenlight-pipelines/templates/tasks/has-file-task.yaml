@@ -16,7 +16,7 @@ spec:
   steps:
     - name: has-file
       workingDir: $(workspaces.source.path)
-      image: greenlightcoop/node-utils:0.1.25@sha256:ac291a4a1346e3e5938cf89818a71e093c05cd94e00f3ee49bbd5aa2fa985b77
+      image: greenlightcoop/node-utils:0.1.27@sha256:3fa9d0a4862816e9e820060396899a6de1142a6a90450c3c88b0e81af0890ad4
       script: |
         #!/usr/bin/env bash
         set -xe
