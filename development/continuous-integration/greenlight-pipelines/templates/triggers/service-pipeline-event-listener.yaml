@@ -44,30 +44,30 @@ spec:
         - kind: TriggerBinding
           ref: pull-request-trigger-binding
       interceptors:
-        - name: GitHub pull request
+        # - name: GitHub pull request
+        #   ref:
+        #     name: github
+        #   params:
+        #     - name: secretRef
+        #       value:
+        #         secretName: webhook-secret
+        #         secretKey: webhookSecretValue
+        #     - name: eventTypes
+        #       value: ["pull_request"]
+        - name: "CEL filter: PR closed"
           ref:
-            name: github
+            name: cel
           params:
-            - name: secretRef
+            - name: filter
+              value: "body.action in ['closed']"
+            - name: overlays
               value:
-                secretName: webhook-secret
-                secretKey: webhookSecretValue
-            - name: eventTypes
-              value: ["pull_request"]
-      #   - name: "CEL filter: PR closed"
-      #     ref:
-      #       name: cel
-      #     params:
-      #       - name: filter
-      #         value: "body.action in ['closed']"
-      #       - name: overlays
-      #         value:
-      #           - key: build_type
-      #             expression: "'service'"
-      #           - key: hub_organization
-      #             expression: "body.organization.login.replace('-', '')"
-      #           - key: short_repository_identifier
-      #             expression: "body.repository.name.replace('-service', '')"
+                - key: build_type
+                  expression: "'service'"
+                - key: hub_organization
+                  expression: "body.organization.login.replace('-', '')"
+                - key: short_repository_identifier
+                  expression: "body.repository.name.replace('-service', '')"
     - name: main-pipeline-trigger
       template:
         ref: main-pipeline-trigger-template
