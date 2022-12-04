@@ -10,6 +10,7 @@ rules:
       - triggers.tekton.dev
     resources:
       - eventlisteners
+      - interceptors
       - triggerbindings
       - triggertemplates
       - triggers
