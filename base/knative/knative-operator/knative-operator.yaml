@@ -19,8 +19,8 @@ metadata:
   namespace: default
   labels:
     app.kubernetes.io/component: webhook
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 # The data is populated at install time.
 
@@ -45,9 +45,9 @@ metadata:
   name: operator-webhook
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
+    operator.knative.dev/release: "v1.8.1"
     app.kubernetes.io/component: operator-webhook
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/name: knative-operator
 spec:
   selector:
@@ -62,9 +62,9 @@ spec:
       labels:
         app: operator-webhook
         role: operator-webhook
-        operator.knative.dev/release: "v1.8.0"
+        operator.knative.dev/release: "v1.8.1"
         app.kubernetes.io/component: operator-webhook
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "1.8.1"
         app.kubernetes.io/name: knative-operator
     spec:
       # To avoid node becoming SPOF, spread our replicas to different nodes.
@@ -82,7 +82,7 @@ spec:
         - name: operator-webhook
           # This is the Go import path for the binary that is containerized
           # and substituted here.
-          image: gcr.io/knative-releases/knative.dev/operator/cmd/webhook@sha256:0d1b96b684977b031d9ba09a8c0a09b55756dd37b12bd7acda5aa616440b7b97
+          image: gcr.io/knative-releases/knative.dev/operator/cmd/webhook@sha256:2232125661afc22b5bb2ad6d34f4b309ef50493cf0f0441d6cd97dcbe7a6991a
           resources:
             requests:
               cpu: 100m
@@ -165,9 +165,9 @@ kind: Service
 metadata:
   labels:
     role: operator-webhook
-    operator.knative.dev/release: "v1.8.0"
+    operator.knative.dev/release: "v1.8.1"
     app.kubernetes.io/component: operator-webhook
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/name: knative-operator
   name: operator-webhook
   namespace: default
@@ -206,8 +206,8 @@ kind: CustomResourceDefinition
 metadata:
   name: knativeeventings.operator.knative.dev
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 spec:
   group: operator.knative.dev
@@ -1629,8 +1629,8 @@ kind: CustomResourceDefinition
 metadata:
   name: knativeservings.operator.knative.dev
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 spec:
   group: operator.knative.dev
@@ -3123,8 +3123,8 @@ kind: ClusterRole
 metadata:
   name: knative-serving-operator-aggregated
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 aggregationRule:
   clusterRoleSelectors:
@@ -3140,8 +3140,8 @@ kind: ClusterRole
 metadata:
   name: knative-serving-operator-aggregated-stable
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 aggregationRule:
   clusterRoleSelectors:
@@ -3157,8 +3157,8 @@ kind: ClusterRole
 metadata:
   name: knative-eventing-operator-aggregated
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 aggregationRule:
   clusterRoleSelectors:
@@ -3174,8 +3174,8 @@ kind: ClusterRole
 metadata:
   name: knative-eventing-operator-aggregated-stable
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 aggregationRule:
   clusterRoleSelectors:
@@ -3206,8 +3206,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-serving-operator
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 rules:
   - apiGroups:
@@ -3395,8 +3395,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: knative-eventing-operator
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 rules:
   - apiGroups:
@@ -3580,6 +3580,178 @@ rules:
       - exchanges/status
     verbs:
       - get
+  # for Kafka eventing source
+  - apiGroups:
+      - keda.sh
+    resources:
+      - scaledobjects
+      - scaledobjects/finalizers
+      - scaledobjects/status
+      - triggerauthentications
+      - triggerauthentications/status
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - create
+      - delete
+  # Internal APIs
+  - apiGroups:
+      - "internal.kafka.eventing.knative.dev"
+    resources:
+      - "consumers"
+      - "consumers/status"
+      - "consumergroups"
+      - "consumergroups/status"
+    verbs:
+      - create
+      - get
+      - list
+      - watch
+      - patch
+      - update
+      - delete
+  - apiGroups:
+      - "internal.kafka.eventing.knative.dev"
+    resources:
+      - "consumers/finalizers"
+      - "consumergroups/finalizers"
+    verbs:
+      - update
+      - delete
+  - apiGroups:
+      - apps
+    resources:
+      - statefulsets/scale
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - patch
+  - apiGroups:
+      - rbac.authorization.k8s.io
+    resources:
+      - clusterrolebindings
+    verbs:
+      - watch
+  - apiGroups:
+      - "*"
+    resources:
+      - configmaps
+    verbs:
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - configmaps
+      - services
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - create
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - pods
+    verbs:
+      - list
+      - update
+      - get
+      - watch
+  - apiGroups:
+      - "*"
+    resources:
+      - pods/finalizers
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - events
+    verbs:
+      - patch
+      - create
+  - apiGroups:
+      - "*"
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - create
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - "*"
+    resources:
+      - serviceaccounts
+    verbs:
+      - get
+      - list
+      - watch
+      - update
+      - create
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - configmaps
+    resourceNames:
+      - kafka-channel-config
+    verbs:
+      - patch
+  - apiGroups:
+      - "*"
+    resources:
+      - horizontalpodautoscalers
+    resourceNames:
+      - kafka-webhook
+    verbs:
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - leases
+    verbs:
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - poddisruptionbudgets
+    resourceNames:
+      - kafka-webhook
+    verbs:
+      - delete
+  - apiGroups:
+      - "*"
+    resources:
+      - services
+    verbs:
+      - patch
+  - apiGroups:
+      - "apps"
+    resources:
+      - deployments
+    verbs:
+      - deletecollection
 
 ---
 # Copyright 2020 The Knative Authors
@@ -3602,8 +3774,8 @@ metadata:
   name: knative-operator
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 
 ---
@@ -3627,8 +3799,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-serving-operator
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3645,8 +3817,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-eventing-operator
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3679,7 +3851,7 @@ metadata:
   name: knative-operator-webhook
   labels:
     eventing.knative.dev/release: devel
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 rules:
   # For manipulating certs into secrets.
@@ -3701,7 +3873,7 @@ metadata:
   name: knative-operator-webhook
   labels:
     eventing.knative.dev/release: devel
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 rules:
   # For watching logging configuration and getting certs.
@@ -3792,8 +3964,8 @@ metadata:
   name: operator-webhook
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 
 ---
@@ -3818,7 +3990,7 @@ metadata:
   name: operator-webhook
   labels:
     eventing.knative.dev/release: devel
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 subjects:
   - kind: ServiceAccount
@@ -3834,8 +4006,8 @@ kind: ClusterRoleBinding
 metadata:
   name: operator-webhook
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3866,8 +4038,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-serving-operator-aggregated
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3883,8 +4055,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-serving-operator-aggregated-stable
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3900,8 +4072,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-eventing-operator-aggregated
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3917,8 +4089,8 @@ kind: ClusterRoleBinding
 metadata:
   name: knative-eventing-operator-aggregated-stable
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -3950,8 +4122,8 @@ metadata:
   name: config-logging
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 data:
   _example: |
@@ -4014,8 +4186,8 @@ metadata:
   name: config-observability
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
-    app.kubernetes.io/version: "1.8.0"
+    operator.knative.dev/release: "v1.8.1"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 data:
   _example: |
@@ -4118,9 +4290,9 @@ metadata:
   name: knative-operator
   namespace: default
   labels:
-    operator.knative.dev/release: "v1.8.0"
+    operator.knative.dev/release: "v1.8.1"
     app.kubernetes.io/name: knative-operator
-    app.kubernetes.io/version: "1.8.0"
+    app.kubernetes.io/version: "1.8.1"
     app.kubernetes.io/part-of: knative-operator
 spec:
   replicas: 1
@@ -4134,13 +4306,13 @@ spec:
       labels:
         name: knative-operator
         app.kubernetes.io/name: knative-operator
-        app.kubernetes.io/version: "1.8.0"
+        app.kubernetes.io/version: "1.8.1"
         app.kubernetes.io/part-of: knative-operator
     spec:
       serviceAccountName: knative-operator
       containers:
         - name: knative-operator
-          image: gcr.io/knative-releases/knative.dev/operator/cmd/operator@sha256:7df5f59ebcc5e8a1b67814e3b6301a23f6553d9b84446552372a9cb54bad018d
+          image: gcr.io/knative-releases/knative.dev/operator/cmd/operator@sha256:ca06becf37d0beb0d90a2eabfe0d70256c6b71fd47dd01d07ccac45e1a71927f
           imagePullPolicy: IfNotPresent
           env:
             - name: POD_NAME
