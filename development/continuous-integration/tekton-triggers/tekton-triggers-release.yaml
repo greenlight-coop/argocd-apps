@@ -1185,7 +1185,7 @@ data:
   # Common configuration for all knative codebase
   zap-logger-config: |
     {
-      "level": "info",
+      "level": "debug",
       "development": false,
       "disableStacktrace": true,
       "sampling": {
