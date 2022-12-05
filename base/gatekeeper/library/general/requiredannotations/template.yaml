@@ -1,10 +1,13 @@
-apiVersion: templates.gatekeeper.sh/v1beta1
+apiVersion: templates.gatekeeper.sh/v1
 kind: ConstraintTemplate
 metadata:
   name: k8srequiredannotations
   annotations:
-    description: Requires all resources to contain a specified annotation(s) with a value
-      matching a provided regular expression.
+    metadata.gatekeeper.sh/title: "Required Annotations"
+    metadata.gatekeeper.sh/version: 1.0.0
+    description: >-
+      Requires resources to contain specified annotations, with values matching
+      provided regular expressions.
 spec:
   crd:
     spec:
@@ -18,13 +21,21 @@ spec:
               type: string
             annotations:
               type: array
+              description: >-
+                A list of annotations and values the object must specify.
               items:
                 type: object
                 properties:
                   key:
                     type: string
+                    description: >-
+                      The required annotation.
                   allowedRegex:
                     type: string
+                    description: >-
+                      If specified, a regular expression the annotation's value
+                      must match. The value must contain at least one match for
+                      the regular expression.
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
