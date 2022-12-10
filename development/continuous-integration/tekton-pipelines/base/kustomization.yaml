@@ -1,0 +1,3 @@
+# tekton-pipelines v0.40.2
+resources:
+- tekton-pipelines-release.yaml
