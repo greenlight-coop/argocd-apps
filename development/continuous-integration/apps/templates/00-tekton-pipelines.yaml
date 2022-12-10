@@ -1,4 +1,4 @@
-# Tekton Pipeline v0.42.0
+# Tekton Pipeline v0.40.2
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -14,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
   project: {{ .Values.spec.project }}
   source:
-    path: development/continuous-integration/tekton-pipelines
+    path: development/continuous-integration/tekton-pipelines/install
     repoURL: {{ .Values.spec.source.repoURL }}
     targetRevision: {{ .Values.spec.source.targetRevision }}
   syncPolicy:

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tekton-pipelines-controller
+  namespace: tekton-pipelines
+spec:
+  template:
+    spec:
+      containers:
+      - name: tekton-pipelines-controller
+        args: [
+          # These images are built on-demand by `ko resolve` and are replaced
+          # by image references by digest.
+          "-kubeconfig-writer-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/kubeconfigwriter:v0.40.2@sha256:0129ea222522c861c0023d5fe4a078fa86fec11aa48faab71128b079434eb2d0", "-git-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2@sha256:28ff94e63e4058afc3f15b4c11c08cf3b54fa91faa646a4bbac90380cd7158df", "-entrypoint-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/entrypoint:v0.40.2@sha256:9dfeaaa371733189ddb97d8f1a07895356cf34e1c3c4dc5d1eb67c2caaf7f1d2", "-nop-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/nop:v0.40.2@sha256:9d12412d03a203d37f82040e0bb81c0a1d62a48b34dadabb587e007049306848", "-imagedigest-exporter-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/imagedigestexporter:v0.40.2@sha256:00f18439a37474910d29326afdada8c18af2fbb656c6ca16b7d1345bec94c7b1", "-pr-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/pullrequest-init:v0.40.2@sha256:e72aa3aff06960f007b9b59abb70fd14644f40a085e4a81bbdb058a95e272544", "-workingdirinit-image", "gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/workingdirinit:v0.40.2@sha256:677ec1dd01ea891e9bb72d5dee252f6e9c13b7914b9c57f6e9ade2508828cacf",
+          # This is gcr.io/google.com/cloudsdktool/cloud-sdk:302.0.0-slim
+          "-gsutil-image", "gcr.io/google.com/cloudsdktool/cloud-sdk@sha256:27b2c22bf259d9bc1a291e99c63791ba0c27a04d2db0a43241ba0f1f20f4067f",
+          # The shell image must allow root in order to create directories and copy files to PVCs.
+          # distroless.dev/busybox as of April 14 2022
+          # image shall not contains tag, so it will be supported on a runtime like cri-o
+          "-shell-image", "distroless.dev/busybox@sha256:19f02276bf8dbdd62f069b922f10c65262cc34b710eea26ff928129a736be791",
+          # for script mode to work with windows we need a powershell image
+          # pinning to nanoserver tag as of July 15 2021
+          "-shell-image-win", "mcr.microsoft.com/powershell:nanoserver@sha256:b6d5ff841b78bdf2dfed7550000fd4f3437385b8fa686ec0f010be24777654d6",
+          "-kube-api-qps", "50",
+          "-kube-api-burst", "50",
+          "-threads-per-controller", "32"]
