@@ -15,7 +15,7 @@ spec:
 
         Note: if the default value is updated, the reference in the run-integration-tests step must be updated as well.
       type: string
-      default: greenlightcoop/serenity-js-runner:0.1.22@sha256:3a93c42cb183fbc00d84f59a40e9376aa32fc414cc4f179dd914764853680dec
+      default: greenlightcoop/serenity-js-runner:0.1.23@sha256:96579100e4aa4e257d73ec8a14feaa69f802eb84a3d52d351a5e27994ff7af59
     - name: base-url
       description: The base URL to pass to the tests as the environment variable BASE_URL
       type: string
