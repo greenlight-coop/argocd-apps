@@ -9,7 +9,7 @@ spec:
   params:
     - name: node-image
       description: Base Node.js image to use for the build
-      default: greenlightcoop/node-utils:0.1.27@sha256:3fa9d0a4862816e9e820060396899a6de1142a6a90450c3c88b0e81af0890ad4
+      default: greenlightcoop/node-utils:0.1.28@sha256:8d89e9c6b445581374b26e7bc31443e62cf0960e2f0c22ada49238bdd6bb2317
     - name: subdirectory
       description: Subdirectory within source workspace containing Node project to QC
       default: "."
